@@ -97,12 +97,12 @@ class DataBase:
 
 
         #test
-        self.db.cursor().execute('DROP table IF EXISTS  user')
+        '''self.db.cursor().execute('DROP table IF EXISTS  user')
         self.db.cursor().execute('DROP table IF EXISTS  cookie')
         self.db.cursor().execute('DROP table IF EXISTS  description')
         self.db.cursor().execute('DROP table IF EXISTS  inventory')
         self.db.cursor().execute('DROP table IF EXISTS  item')
-        self.db.cursor().execute('DROP index IF EXISTS  item_index')
+        self.db.cursor().execute('DROP index IF EXISTS  item_index')'''
 
         self.db.cursor().execute('PRAGMA foreign_keys = ON;')
         self.db.cursor().execute(user_table)
@@ -184,6 +184,38 @@ class DataBase:
         self.db.commit()
         return
 
+    def get_contextids(self, login, appid):
+        query = 'SELECT contextid FROM item WHERE login=? and appid=? GROUP BY contextid'
+        r = self.db.cursor().execute(query, (login, appid)).fetchall()
+        return r
+
+    def get_items(self, login, appid = None, contextid = None):
+        query = 'SELECT * FROM item WHERE login=?'
+        query_params = (login,)
+        if appid is not None:
+            query += ' AND appid=?'
+            query_params += (appid,)
+
+        if contextid is not None:
+            query += ' AND contextid=?'
+            query_params += (contextid,)
+        r = self.db.cursor().execute(query, query_params).fetchall()
+        return r
+
+    def get_descriptions(self, login, appid, contextid = None):
+        query = 'SELECT * FROM description WHERE appid=?'
+        query_params = (appid,)
+
+        if contextid is not None:
+            query += ' AND classid IN (SELECT DISTINCT classid FROM item WHERE login=? AND contextid=? )'
+            query_params += (login, contextid)
+        r = self.db.cursor().execute(query, query_params).fetchall()
+        return r
+
+    def get_all_descriptions(self):
+        query = 'SELECT * FROM description'
+        r = self.db.cursor().execute(query).fetchall()
+        return r
 
     def add_descriptions(self, descs):
         query = 'INSERT OR ABORT INTO description (' + ', '.join(self._table_description) + ') VALUES(' + ''.join([r'?,' for _ in self._table_description])[0:-1] + ');'
@@ -225,7 +257,7 @@ class DataBase:
                 print('_add_inventory', e.args[0])
         self.db.commit()
 
-    def drop_inventories(self, login, appids=None):
+    def drop_inventories(self, login, appids = None):
         if appids is None:
             query = 'DELETE FROM inventory WHERE login = ?'
             self.db.cursor().execute(query, (login,))

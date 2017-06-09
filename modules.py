@@ -251,8 +251,20 @@ class SteamClient:
         return
 
     def get_inventory_from_db(self):
+        inv = self.db.get_inventories(self.login)
+        inventory = {}
+        for i in inv:
+            inventory[str(i['appid'])] = {}
+            contextids = self.db.get_contextids(self.login, i['appid'])
+            for c in contextids:
+                inventory[str(i['appid'])][str(c['contextid'])] = {}
+                inventory[str(i['appid'])][str(c['contextid'])]['assets'] = self.db.get_items(self.login, i['appid'], c['contextid'])
+                inventory[str(i['appid'])][str(c['contextid'])]['total_inventory_count'] = len(inventory[str(i['appid'])][str(c['contextid'])]['assets'])
 
-        pass
+                inventory[str(i['appid'])][str(c['contextid'])]['descriptions'] = self.db.get_descriptions(self.login, i['appid'], c['contextid'])
+                inventory[str(i['appid'])][str(c['contextid'])]['total_inventory_count'] = len(inventory[str(i['appid'])][str(c['contextid'])]['descriptions'])
+        self.inventory = inventory
+        return
 
 
     def get_inventory_from_site(self):
@@ -322,19 +334,20 @@ def parse_list_response(line):
 def test():
     db = DataBase()
     us = SteamClient(lp.USERNAME, lp.PASSWORD, db)
-    db.add_user(lp.USERNAME, lp.PASSWORD, lp.ename)
+    '''db.add_user(lp.USERNAME, lp.PASSWORD, lp.ename)
     us.db.add_cookie(lp.USERNAME, *(lp.sl))
     us.db.add_cookie(lp.USERNAME, *(lp.sls))
     us.db.add_cookie(lp.USERNAME, *(lp.sma))
-    us.db.add_cookie(lp.USERNAME, *(lp.srl))
-    us.do_login()
-    us.get_inventory_params()
-    us.get_inventory_from_site()
-    pwq = db.db.cursor().execute("select * from inventory").fetchall()
+    us.db.add_cookie(lp.USERNAME, *(lp.srl))'''
+    #us.do_login()
+    #us.get_inventory_params()
+    #us.get_inventory_from_site()
+    us.get_inventory_from_db()
+    '''pwq = db.db.cursor().execute("select * from inventory").fetchall()
     pvv = db.db.cursor().execute("select * from item").fetchall()
     db.drop_inventories('rubiroidMW2', (440,))
     fvv = db.db.cursor().execute("select * from item").fetchall()
-    fvq = db.db.cursor().execute("select * from inventory").fetchall()
+    fvq = db.db.cursor().execute("select * from inventory").fetchall()'''
 
     return
 
