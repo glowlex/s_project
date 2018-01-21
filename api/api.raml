@@ -1,0 +1,76 @@
+#%RAML 1.0
+annotationTypes:
+  key:
+title: s_project
+version: v1
+baseUri: /api
+types:
+  TestType:
+    type: object
+    properties:
+      id: number
+      optional?: string
+      expanded:
+        type: object
+        properties:
+          count: number
+/helloWorld:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: |
+              {
+                "message" : "Hello World"
+              }
+/login:
+    description: Аунтефикация
+    get:
+      description: Получение ключа шифрования
+      body:
+        application/json:
+          properties:
+            loginInfo:
+              properties:
+                login?: string
+                time: number
+                #pubKey: string тодо добавление шифрования на всё
+      responses:
+        200:
+          description: Возвращает ключ, которым шифруется пароль
+          body:
+            application/json:
+              properties:
+                loginInfo:
+                  properties:
+                    pubKey: string
+                    time: string
+    post:
+      description: Выполнить вход зашифровав ранее полученым ключём
+      body:
+        application/json:
+          type: object
+          properties:
+            loginInfo:
+              properties:
+                login: string
+                password: string
+                time: number
+                #pubKey?: string
+
+      responses:
+        200:
+          body:
+            application/json:
+              properties:
+                loginInfo:
+                  login: string
+        400:
+          body:
+            application/json:
+
+
+
+/registration:
+  post:

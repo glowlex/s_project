@@ -1,5 +1,8 @@
 *.db*
 *__pycache__
 lp.py
-s.js
+st.js
 *.idea
+*templates
+*node_modules
+api/build

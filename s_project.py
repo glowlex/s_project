@@ -1,6 +1,7 @@
 from flask import Flask
+from flask import render_template, flash, redirect, g, jsonify, request
+import s_db
 from modules import *
-from flask import render_template, flash, redirect, g
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -26,12 +27,36 @@ def login():
         title = 'Sign In',
         form = form)
 
+@app.route('/api/get_users/', methods = ['GET'])
+def get_users():
+    u = get_db().get_users()
+    for i in u:
+        i.pop('password')
+    return jsonify({'status': 'ok', 'data': u})
+
+@app.route('/api/get_inventory/', methods = ['GET'])
+def get_inventory():
+    r = request.args.get('login', None, type=str)
+    u = SteamClient(r, '', get_db()).get_inventory_from_db()
+    return jsonify({'status': 'ok', 'data': u})
+
+
+def get_db():
+    db = getattr(g, '_database', None)
+    if db is None:
+        db = g._database = s_db.DataBase()
+    return db
+
+def get_db_direct():
+    db = get_db()
+    return db.db
+
 
 @app.teardown_appcontext
 def close_connection(exception):
     db = getattr(g, '_database', None)
-    if db is not None:
-        db.close()
+    '''if db is not None:
+        db.close()'''
 
 
 

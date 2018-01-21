@@ -22,7 +22,7 @@ DATABASE = 's.db'
 class DataBase:
 
     def __init__(self):
-        self.db = self.get_db()
+        self.db = self._get_db()
         self.db.row_factory = self.dict_factory
         self._create_db_schema()
 
@@ -33,19 +33,19 @@ class DataBase:
             d[col[0]] = row[idx]
         return d
 
-    def get_db(self):
+    def _get_db(self):
         return sqlite3.connect(DATABASE)
-        db = getattr(g, '_database', None)
-        if db is None:
-            db = g._database = sqlite3.connect(DATABASE)
-        return db
+
+    def close(self):
+        self.db.close()
 
     def _create_db_schema(self):
         user_table = 'CREATE TABLE IF NOT EXISTS user (' \
                      ' login VARCHAR(32) NOT NULL,' \
                      ' password VARCHAR(32) NOT NULL,' \
                      ' email VARCHAR(255) NOT NULL,' \
-                     ' money INTEGER NOT NULL DEFAULT 0 CHECK (money >=0),' \
+                     ' money INTEGER DEFAULT 0 CHECK (money >=0),' \
+                     ' steamid INTEGER,' \
                      ' CONSTRAINT user_pk PRIMARY KEY (login));'
 
         cookie_table = 'CREATE TABLE IF NOT EXISTS cookie (' \
@@ -129,12 +129,10 @@ class DataBase:
 
 
     def add_user(self, login, password, email, money=None):
-        if money is None:
-            money = 0
-        query = 'INSERT OR REPLACE INTO user (login, password, email, money) ' \
+        query = 'INSERT OR ABORT INTO user (login, password, email, money) ' \
          'VALUES(?, ?, ?, ?)'
         query_params = (login, password, email, money)
-        self.db.cursor().execute(query, query_params)
+        #self.db.cursor().execute(query, query_params)
         try:
             self.db.cursor().execute(query, query_params)
         except sqlite3.IntegrityError as e:
@@ -142,6 +140,17 @@ class DataBase:
                 print('add_user', e.args[0])
         self.db.commit()
         return True
+
+    def update_user(self, *args, **kwargs):
+        rr = self.get_users()
+        query = 'UPDATE user SET ' + '=?,'.join([x for x in kwargs if x != 'login']) +'=?' \
+        + ' WHERE login=?;'
+        query_params = list([kwargs.get(x) for x in kwargs if x != 'login'] + [kwargs['login']])
+        self.db.cursor().execute(query, query_params)
+        self.db.commit()
+        return True
+
+
 
 
     def add_cookie(self, login, name, value, domain):

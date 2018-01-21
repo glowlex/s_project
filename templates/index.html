@@ -1,23 +1,308 @@
-<html>
-  <head>
-    {% if title %}
-    <title>{{title}} - microblog</title>
-    {% else %}
-    <title>microblog</title>
-    {% endif %}
-  </head>
-  <body>
-    <div>Microblog: <a href="/index">Home</a></div>
-    <hr>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul>
-    {% for message in messages %}
-        <li>{{ message }} </li>
-    {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
-    {% block content %}{% endblock %}
-  </body>
-</html>
+<html class=" responsive" lang="ru"><head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<meta name="theme-color" content="#171a21">
+	<title>Сообщество Steam</title>
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	<link href="http://steamcommunity-a.akamaihd.net/public/shared/css/motiva_sans.css?v=Sd0odMs2NjL1" rel="stylesheet" type="text/css">
+	<link href="http://steamcommunity-a.akamaihd.net/public/shared/css/buttons.css?v=FMXZx9fv9yp_" rel="stylesheet" type="text/css">
+	<link href="http://steamcommunity-a.akamaihd.net/public/shared/css/shared_global.css?v=aXnR3BCCrqcR" rel="stylesheet" type="text/css">
+	<link href="http://steamcommunity-a.akamaihd.net/public/css/globalv2.css?v=3X1Hz39cVBqV" rel="stylesheet" type="text/css">
+	<link href="http://steamcommunity-a.akamaihd.net/public/css/skin_1/economy.css?v=lMsOsN-xd6Nr" rel="stylesheet" type="text/css">
+	<link href="http://steamcommunity-a.akamaihd.net/public/css/skin_1/economy_inventory.css?v=afWFL_X26fim" rel="stylesheet" type="text/css">
+	<link href="http://steamcommunity-a.akamaihd.net/public/css/skin_1/profilev2.css?v=kyN2q22Ie6W1" rel="stylesheet" type="text/css">
+	<link href="http://steamcommunity-a.akamaihd.net/public/css/skin_1/gamecard_crafting.css?v=lbKmgBuJB4KB" rel="stylesheet" type="text/css">
+	<link href="http://steamcommunity-a.akamaihd.net/public/shared/css/shared_responsive.css?v=Dm6dKxyudx2Y" rel="stylesheet" type="text/css">
+	<link href="http://steamcommunity-a.akamaihd.net/public/css/skin_1/header.css?v=tZYBxDBV1D4c" rel="stylesheet" type="text/css">
+	<script src="static/jquery-3.2.1.min.js" type="text/javascript"></script>
+	<script src="/static/s.js" type="text/javascript"> </script>
+	<link rel="image_src" href="http://steamcommunity-a.akamaihd.net/public/shared/images/responsive/share_steam_logo.png">
+	<meta property="og:image" content="http://steamcommunity-a.akamaihd.net/public/shared/images/responsive/share_steam_logo.png">
+	<meta property="og:image:secure" content="https://steamcommunity-a.akamaihd.net/public/shared/images/responsive/share_steam_logo.png">
+</head>
+<body class="flat_page migrated_profile_page inventory_page responsive_page">
+
+	<div class="responsive_page_frame with_header">
+
+
+
+
+
+
+
+
+
+
+
+		<div class="responsive_page_content_overlay">
+
+		</div>
+
+		<div class="responsive_fixonscroll_ctn nonresponsive_hidden " style="top: 0px;">
+		</div>
+
+		<div class="responsive_page_content">
+
+
+
+			<div class="responsive_page_template_content">
+
+
+				<div class="pagecontent no_header no_footerpad">
+
+					<div class="profile_small_header_bg" style="
+					padding-top: 10px;
+					height: 195;
+					">
+					<div class="profile_small_header_texture">
+
+						<div class="profile_small_header_text">
+							<span class="profile_small_header_name"><a class="whiteLink" href="http://steamcommunity.com/profiles/76561198016431200">RubiroiD</a></span>
+							<span class="profile_small_header_arrow">»</span>
+							<a class="whiteLink" href="http://steamcommunity.com/profiles/76561198016431200/inventory/"><span class="profile_small_header_location">Инвентарь</span></a>
+
+						</div>
+						<a href="http://steamcommunity.com/profiles/76561198016431200">
+							<div class="profile_small_header_avatar">
+								<div class="playerAvatar medium offline">
+									<img src="http://cdn.akamai.steamstatic.com/steamcommunity/public/images/avatars/9d/9d8465def195c5dfce75d8df5369d72d1d7d6494_medium.jpg">
+								</div>
+							</div>
+						</a>
+					</div>
+				</div>	<!-- main body -->
+				<div id="BG_bottom" class="maincontent">
+					<div id="mainContents">
+
+
+						<div class="inventory_links" style="
+						margin-bottom: 10px;
+						">
+						<div class="inventory_rightnav">
+							<a class="btn_darkblue_white_innerfade btn_medium new_trade_offer_btn" href="http://steamcommunity.com/profiles/76561198016431200/tradeoffers/"><span>Предложения обмена</span></a>
+							<div class="btn_grey_black btn_medium" id="inventory_more_link" onclick="ShowMenu( this, 'inventory_more_dropdown', 'right' );"><span>Еще… <span class="popup_menu_pulldown_indicator"></span></span></div>
+							<div class="popup_block_new" id="inventory_more_dropdown" style="display: none;">
+								<div class="popup_body popup_menu">
+									<a class="popup_menu_item" href="http://steamcommunity.com/profiles/76561198016431200/inventoryhistory/">История инвентаря</a>
+									<a class="popup_menu_item" href="javascript:ShowGiftHistory();">История подарков</a>
+									<a class="popup_menu_item" href="http://steamcommunity.com/profiles/76561198016431200/edit/settings/">Настройки приватности</a>
+								</div>
+							</div>
+
+						</div>
+						<div style="clear: both;"></div>
+					</div>
+
+
+
+					<div class="games_list_tabs_ctn responsive_hidden">
+						<div class="games_list_tabs">
+							<a id="inventory_link_753" href="#753" onclick="ShowItemInventory( 753 ); return true;" class="games_list_tab first_tab active">
+								<span class="games_list_tab_icon item_desc_game_icon">
+									<img src="http://cdn.akamai.steamstatic.com/steamcommunity/public/images/apps/753/135dc1ac1cd9763dfc8ad52f4e880d2ac058a36c.jpg">&nbsp;
+								</span>
+								<span class="games_list_tab_name">Steam</span>
+								<span class="games_list_tab_number">(34)</span>
+							</a>
+							<div class="games_list_tab_separator"></div>
+							<a id="inventory_link_440" href="#440" onclick="ShowItemInventory( 440 ); return true;" class="games_list_tab">
+								<span class="games_list_tab_icon item_desc_game_icon">
+									<img src="http://cdn.akamai.steamstatic.com/steamcommunity/public/images/apps/440/e3f595a92552da3d664ad00277fad2107345f743.jpg">&nbsp;
+								</span>
+								<span class="games_list_tab_name">Team Fortress 2</span>
+								<span class="games_list_tab_number">(10)</span>
+							</a>
+							<div class="games_list_tab_separator"></div>
+							<!-- height: 0px to work around an ie layout bug -->
+							<div style="clear: both; height: 0px;" class=""></div>
+						</div>
+					</div>
+					<div id="tabcontent_inventory">
+						<div class="nonresponsive_hidden responsive_fixonscroll">
+							<div class="sharedfiles_responsive_tab responsive_tab_ctn">
+								<div class="responsive_tab_control">
+									<label for="responsive_inventory_select"></label>
+									<select class="responsive_tab_select" id="responsive_inventory_select">
+										<option data-appid="753" value="#753">
+											Steam (34)
+										</option>
+										<option data-appid="440" value="#440">
+											Team Fortress 2 (10)
+										</option>
+									</select>
+								</div>
+							</div>
+							<div class="responsive_tab_baseline"></div>
+						</div>
+						<div class="view_inventory_logo" id="inventory_logos" style="
+						padding-top: 0.5vh;
+						margin-bottom: 5px;
+						">
+						<img id="inventory_applogo" src="http://cdn.akamai.steamstatic.com/steamcommunity/public/images/apps/753/db8ca9e130b7b37685ab2229bf5a288aefc3f0fa.png">
+					</div>
+
+					<div class="responsive_fixonscroll">
+						<div id="context_selector">
+							<div class="appselect" id="contextselect" onclick="ShowMenu( 'contextselect', 'contextselect_options', 'left' );">
+								<div id="contextselect_activecontext" class="option"><div class="popup_item context_name" id="context_option_753_0">Все предметы Steam</div></div>
+								<div id="appselect_arrow"></div>
+							</div>
+							<div id="contextselect_options" class="popup_block" style="display: none;">
+								<div class="shadow_ul"></div><div class="shadow_top"></div><div class="shadow_ur"></div><div class="shadow_left"></div><div class="shadow_right"></div><div class="shadow_bl"></div><div class="shadow_bottom"></div><div class="shadow_br"></div>								<div id="contextselect_options_contexts" class="popup_body popup_menu shadow_content"><div class="popup_item context_name" id="context_option_753_0">Все предметы Steam</div><div class="popup_item context_name" id="context_option_753_1">Подарки</div><div class="popup_item context_name" id="context_option_753_6">Сообщество</div><div class="popup_item context_name" id="context_option_753_7">Награды</div></div>
+							</div>
+						</div>
+					</div>
+
+					<div class="filter_ctn inventory_filters">
+						<div class="filter_label">Ищете конкретный предмет?</div>
+						<div class="filter_control_ctn">
+							<div id="filter_clear_btn" style="display: none;"></div>
+							<input class="selectableText filter_search_box" type="text" id="filter_control" value="" placeholder="Начните вводить его название для фильтрации" name="filter" autocomplete="off">
+						</div>
+						<div class="filter_tag_button_ctn">
+							<div class="btn_black btn_details btn_small" id="filter_tag_show" onclick="ShowTagFilters();">
+								<span>Показать доп. фильтры… <span class="btn_details_arrow down"></span></span>
+							</div>
+							<div class="btn_black btn_details btn_small" id="filter_tag_hide" onclick="HideTagFilters();" style="display: none;">
+								<span>Скрыть фильтры… <span class="btn_details_arrow up"></span></span>
+							</div>
+						</div>
+						<div style="clear: left;"></div>
+					</div>
+					<div style="clear: left;"></div>
+
+					<div style="clear: left;"></div>
+
+					<div id="inventory_load_error_ctn">
+					</div>
+
+					<div class="view_inventory_page" id="active_inventory_page">
+						<div class="inventory_page_right">
+
+							<div class="inventory_iteminfo" id="iteminfo0" style="z-index: 1; opacity: 1;">
+								<div class="item_desc_content app753 context6" id="iteminfo0_content">
+									<div class="item_desc_icon">
+										<div class="item_desc_icon_center">
+											<img id="iteminfo0_item_icon" src="http://steamcommunity-a.akamaihd.net/economy/image/IzMF03bi9WpSBq-S-ekoE33L-iLqGFHVaU25ZzQNQcXdA3g5gMEPvUZZEaiHLrVJRsl8q3CWTo7Qi89ehDNVzDMBeXK-yX15aeAxGcXH0gbzqPGZWn36aTDBcnCBSg06G7JdNT7f9zX347uTS27PRegoEQkGLPNSoWBANcjYOBI7hYEVu2u_0UZyDBItYPpPfQ68zykWNeUgnXBGJskAnyahLsWIgQ4xa0Q_Ury0ULzLO4H3k313Cx0yHKMaesvL7zOq9ZaDsHc2pg/330x192" alt="Anarchist">
+										</div>
+									</div>
+									<div class="item_desc_description">
+										<h1 class="hover_item_name" id="iteminfo0_item_name">Anarchist</h1>
+										<div class="fraud_warning" id="iteminfo0_fraud_warnings" style="display: none;"></div>
+										<div class="item_desc_game_info" id="iteminfo0_game_info">
+											<div class="item_desc_game_icon">
+												<img id="iteminfo0_game_icon" src="http://cdn.akamai.steamstatic.com/steamcommunity/public/images/apps/753/135dc1ac1cd9763dfc8ad52f4e880d2ac058a36c.jpg" alt="Steam">
+											</div>
+											<div id="iteminfo0_game_name" class="ellipsis">Steam</div>
+											<div id="iteminfo0_item_type" class="">Коллекционная карточка из Counter-Strike: Global Offensive</div>
+										</div>
+										<div class="item_desc_descriptors" id="iteminfo0_item_descriptors"></div>
+										<div class="item_actions" id="iteminfo0_item_actions" style="display: none;"></div>
+										<div class="item_desc_descriptors" id="iteminfo0_item_owner_descriptors" style="display: none;"></div>
+										<div class="item_owner_actions" id="iteminfo0_item_owner_actions"><a class="btn_small btn_grey_white_innerfade" href="http://steamcommunity.com/my/gamecards/730/"><span>Прогресс значка</span></a></div>
+									</div>
+									<div class="item_desc_descriptors" id="iteminfo0_item_tags">
+										Метки: <span class="item_desc_descriptors" id="iteminfo0_item_tags_content">Обычный, Counter-Strike: Global Offensive, Обычная, Коллекционная карточка, Можно обменивать, Можно продать</span>
+									</div>
+								</div>
+								<div class="item_market_content" id="iteminfo0_market_content">
+									<div class="item_market_actions" id="iteminfo0_item_market_actions"><div><div style="height: 24px;"><a href="http://steamcommunity.com/market/listings/753/730-Anarchist">Найти на Торговой площадке</a></div><div style="min-height: 3em; margin-left: 1em;">От $0.08 USD<br>Продано: 9,358 за последние 24 часа<br></div></div><a class="item_market_action_button item_market_action_button_green" href="javascript:SellCurrentSelection()"><span class="item_market_action_button_edge item_market_action_button_left"></span><span class="item_market_action_button_contents">Продать</span><span class="item_market_action_button_edge item_market_action_button_right"></span><span class="item_market_action_button_preload"></span></a></div>
+								</div>
+							</div>
+							<div class="inventory_iteminfo" id="iteminfo1" style="opacity: 1; z-index: 1; display:none">
+								<div class="item_desc_content app753 context1" id="iteminfo1_content">
+									<div class="item_desc_icon">
+										<div class="item_desc_icon_center">
+											<img id="iteminfo1_item_icon" src="http://steamcommunity-a.akamaihd.net/economy/image/v5fUV_PIdKlX5Ebn7CO3LgHCW4VYI9BucBjNPL8eSpgVwo-lYcJN4nUkuAp6Cy9iZl6_GRLGgiNYM043olg_XzdOQ5U-beOiPk7pFW9ELmcZ-XFVTA/330x192" alt="Steam Trading Card Beta Access - Extra Copy">
+										</div>
+									</div>
+									<div class="item_desc_description">
+										<h1 class="hover_item_name" id="iteminfo1_item_name">Steam Trading Card Beta Access - Extra Copy</h1>
+										<div class="fraud_warning" id="iteminfo1_fraud_warnings" style="display: none;"></div>
+										<div class="item_desc_game_info" id="iteminfo1_game_info">
+											<div class="item_desc_game_icon">
+												<img id="iteminfo1_game_icon" src="http://cdn.akamai.steamstatic.com/steamcommunity/public/images/apps/753/135dc1ac1cd9763dfc8ad52f4e880d2ac058a36c.jpg" alt="Steam">
+											</div>
+											<div id="iteminfo1_game_name" class="ellipsis">Steam</div>
+											<div id="iteminfo1_item_type" class="">Подарок</div>
+										</div>
+										<div class="item_desc_descriptors" id="iteminfo1_item_descriptors" style="display: none;"></div>
+										<div class="item_actions" id="iteminfo1_item_actions" style="display: none;"></div>
+										<div class="item_desc_descriptors" id="iteminfo1_item_owner_descriptors" style="display: none;"></div>
+										<div class="item_owner_actions" id="iteminfo1_item_owner_actions"><a class="btn_small btn_grey_white_innerfade" href="https://store.steampowered.com/checkout/sendgift/1405400851537951108"><span>Отправить</span></a><a class="btn_small btn_grey_white_innerfade" href="javascript:UnpackGift( '1405400851537951108' );"><span>Добавить в библиотеку</span></a></div>
+									</div>
+									<div class="item_desc_descriptors" id="iteminfo1_item_tags">
+										Метки: <span class="item_desc_descriptors" id="iteminfo1_item_tags_content">Можно обменивать, Нельзя продавать</span>
+									</div>
+								</div>
+								<div class="item_market_content" id="iteminfo1_scrap_content">
+									<div class="item_scrap_actions" id="iteminfo1_item_scrap_actions" style="display: none">
+										<div>Стоимость предмета:														<span class="item_scrap_value" id="iteminfo1_item_scrap_value"></span>
+										</div>
+										<div>
+											<a class="btn_small btn_green_white_innerfade" id="iteminfo1_item_scrap_link" href="#">
+												<span>Превратить в самоцветы…</span>
+											</a>
+										</div>
+										<div>Этот предмет можно превратить в самоцветы, из которых создаются наборы карточек. <a href="http://steamcommunity.com//tradingcards/boostercreator/ ">Узнать больше.</a></div>
+									</div>
+								</div>
+								<div class="item_market_content" id="iteminfo1_market_content">
+									<div class="item_market_actions" id="iteminfo1_item_market_actions" style="display: none;"></div>
+								</div>
+							</div>
+						</div>
+						<div class="inventory_page_left">
+							<div class="trade_item_box selectableNone" id="inventories">
+
+								<div id="inventory_pagecontrols" style="display: block;">
+									<span class="inventory_loading_indicator responsive_hidden">
+										<img src="http://steamcommunity-a.akamaihd.net/public/images/login/throbber.gif">
+									</span>
+									<a class="pagecontrol_element pagebtn" id="pagebtn_next">
+										&gt;
+									</a>
+									<div class="pagecontrol_element pagecounts">
+										<span id="pagecontrol_cur">1</span> из <span id="pagecontrol_max">2</span></div>
+										<a class="pagecontrol_element pagebtn" id="pagebtn_previous">
+											&lt;
+										</a>
+										<div style="clear: right;"></div>
+									</div>
+									<div style="clear: right;"></div>
+
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>	<!-- responsive_page_legacy_content -->
+		<div id="footer" style="
+		position: inherit; margin-top:10px;
+		">
+		<div class="footer_content">
+			<span id="footerLogo"><img src="http://steamcommunity-a.akamaihd.net/public/images/skin_1/footerLogo_valve.png?v=1" width="96" height="26" border="0" alt="Логотип Valve"></span>
+			<span id="footerText">
+				© Valve Corporation. Все права защищены. Все торговые марки являются собственностью соответствующих владельцев в США и других странах. Часть географических сведений на этом сайте предоставлена <a href="https://steamcommunity.com/linkfilter/?url=http://www.geonames.org" target="_blank" rel="noreferrer">geonames.org</a>.				<br>
+				<span class="valve_links">
+					<a href="http://store.steampowered.com/privacy_agreement/" target="_blank">Privacy Policy</a>
+					&nbsp; | &nbsp;<a href="http://www.valvesoftware.com/legal.htm" target="_blank">Legal</a>
+					&nbsp;| &nbsp;<a href="http://store.steampowered.com/subscriber_agreement/" target="_blank">Steam Subscriber Agreement</a>
+				</span>
+			</span>
+		</div>
+		<div class="responsive_optin_link">
+			<div class="btn_medium btnv6_grey_black" onclick="Responsive_RequestMobileView()">
+				<span>Мобильная версия</span>
+			</div>
+		</div>
+	</div>
+
+</div>	<!-- responsive_page_content -->
+
+</div>	<!-- responsive_page_frame -->
+
+</body></html>

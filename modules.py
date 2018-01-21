@@ -248,7 +248,7 @@ class SteamClient:
             self.g_rgAppContextData = json.loads(g_rgAppContextData)
         except:
             print('get_inventory_params error')
-        return
+        return self.g_rgAppContextData
 
     def get_inventory_from_db(self):
         inv = self.db.get_inventories(self.login)
@@ -264,7 +264,7 @@ class SteamClient:
                 inventory[str(i['appid'])][str(c['contextid'])]['descriptions'] = self.db.get_descriptions(self.login, i['appid'], c['contextid'])
                 inventory[str(i['appid'])][str(c['contextid'])]['total_inventory_count'] = len(inventory[str(i['appid'])][str(c['contextid'])]['descriptions'])
         self.inventory = inventory
-        return
+        return self.inventory
 
 
     def get_inventory_from_site(self):
@@ -278,7 +278,7 @@ class SteamClient:
                     print('get_inventory_from_site загружено не всё')
         self.inventory = inventory
         self.save_inventory(inventory)
-        return
+        return self.inventory
 
     def save_inventory(self, inventory):
         for appid in inventory:
@@ -334,14 +334,15 @@ def parse_list_response(line):
 def test():
     db = DataBase()
     us = SteamClient(lp.USERNAME, lp.PASSWORD, db)
-    '''db.add_user(lp.USERNAME, lp.PASSWORD, lp.ename)
+    db.add_user(lp.USERNAME, lp.PASSWORD, lp.ename)
     us.db.add_cookie(lp.USERNAME, *(lp.sl))
     us.db.add_cookie(lp.USERNAME, *(lp.sls))
     us.db.add_cookie(lp.USERNAME, *(lp.sma))
-    us.db.add_cookie(lp.USERNAME, *(lp.srl))'''
-    #us.do_login()
-    #us.get_inventory_params()
-    #us.get_inventory_from_site()
+    us.db.add_cookie(lp.USERNAME, *(lp.srl))
+    us.do_login()
+    us.get_inventory_params()
+    db.update_user(login=lp.USERNAME, steamid = us.steamID)
+    us.get_inventory_from_site()
     us.get_inventory_from_db()
     '''pwq = db.db.cursor().execute("select * from inventory").fetchall()
     pvv = db.db.cursor().execute("select * from item").fetchall()
