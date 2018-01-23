@@ -5,72 +5,240 @@ title: s_project
 version: v1
 baseUri: /api
 types:
-  TestType:
-    type: object
+  rsaKey:
     properties:
-      id: number
-      optional?: string
-      expanded:
-        type: object
-        properties:
-          count: number
-/helloWorld:
-  get:
-    responses:
-      200:
-        body:
-          application/json:
-            example: |
-              {
-                "message" : "Hello World"
-              }
+      time: number
+      pubKey: string #тодо добавление шифрования на всё
+    example:
+      time: 1516618258
+      pubKey: "Cq6UA076Sv1d..."
+
+  signInfo:
+    properties:
+      login:
+        type: string
+        description: шифрованный
+      password:
+        type: string
+        description: шифрованный
+      time: number
+    example:
+      login: "9+K3xmRNTaXG9sV..."
+      time: 1516618258
+      password: "dRTCq6UA076..."
+
+  regInfo:
+    type: signInfo
+    properties:
+      email:
+        type: string
+        description: шифрованный
+    example:
+      login: "9+K3xmRNTaXG9sV..."
+      time: 1516618268
+      password: "dRTCq6UA076..."
+      email: "89C1SyUCOQm..."
+
+  accountInfoFull:
+    type: accountInfoShort
+    properties:
+      nick: string
+      email: string
+      password?: string
+      level?: number
+      money?: number
+      tradePermission?: boolean
+      closeFriends?: string[]
+
+  accountInfoShort:
+    properties:
+      login: string
+
+  item:
+    properties:
+      id: number #тодо дописать поля
+      name?: string
+
+  itemm:
+    type: item
+    properties:
+      mid: number #тодо дописать поля
+      mname?: string
+
+  bag:
+    properties:
+      name: string
+      items: (item | itemm)[]
+
+  inventory:
+    properties:
+      user: string
+      bags: bag[]
+
+  exchangeQueryLite:
+    properties:
+      bag: bag
+      userFrom?: string
+      userTo?: string
+
+  exchangeQueryComplex:
+    properties:
+      exchangeQueries:
+        type: exchangeQueryLite[]
+        description: Упорядочены строго по последовательности обмена
+
+
+resourceTypes:
+  resourceTypes:
+    basic:
+      properties:
+        <<name>>: <<item>>
+        status: <<status>>
+
+
 /login:
-    description: Аунтефикация
-    get:
-      description: Получение ключа шифрования
-      body:
-        application/json:
-          properties:
-            loginInfo:
-              properties:
-                login?: string
-                time: number
-                #pubKey: string тодо добавление шифрования на всё
-      responses:
-        200:
-          description: Возвращает ключ, которым шифруется пароль
-          body:
-            application/json:
-              properties:
-                loginInfo:
-                  properties:
-                    pubKey: string
-                    time: string
+  description: Аунтефикация
+  /post:
     post:
       description: Выполнить вход зашифровав ранее полученым ключём
       body:
         application/json:
-          type: object
           properties:
-            loginInfo:
-              properties:
-                login: string
-                password: string
-                time: number
-                #pubKey?: string
-
+            signInfo: signInfo
+            bag: bag
+          example:
+              login: "user"
+              password: "jK2TIwbHtE7GoP/Za3N..."
+              time: 1516618278
       responses:
         200:
           body:
             application/json:
               properties:
-                loginInfo:
+                signInfo:
                   login: string
+              example:
+                login: "user"
         400:
           body:
-            application/json:
+            application/json: {}
 
 
 
 /registration:
-  post:
+  description: Регистрация
+  /post:
+    post:
+      description: Отправить данные зашифрованые для регистрации
+      body:
+        application/json:
+          properties:
+            signInfo:
+              type: regInfo
+      responses:
+        200:
+          body:
+            application/json:
+              properties:
+                signInfo:
+                  login: string
+              example:
+                login: "user"
+        400:
+          body:
+            application/json: {}
+
+/getrsakey:
+  description: Получить ключ для шифрования
+  /get:
+    post:
+      description: Получение ключа шифрования, отправка своего.
+      body:
+        application/json:
+          properties:
+            rsaKey: rsaKey
+
+      responses:
+        200:
+          description: Возвращает ключ, которым потом шифруются нужные данные
+          body:
+            application/json:
+              type: rsaKey
+              example:
+                  time: 1516618268
+                  pubKey: "MIICWgIBAAKBgQC..."
+
+/account:
+  /post:
+    post:
+      description: Добавить аккаунт
+      body:
+        application/json:
+          properties:
+            accountInfo:
+              description: Поля шифруются
+              type: accountInfoFull
+      responses:
+        200:
+          body:
+            application/json:
+              type: accountInfoShort
+        400:
+          body:
+            application/json:
+              type: accountInfoShort
+
+  /get:
+    post:
+      description: Получить все аккаунты
+      body:
+        application/json: {}
+      responses:
+        200:
+          body:
+            application/json:
+              properties:
+                accountInfo:
+                  type: accountInfoFull[]
+        400:
+          body:
+            application/json: {}
+
+  /put:
+    post:
+      description: Изменить аккаунт
+      body:
+        application/json:
+          properties:
+            accountInfo:
+              type: accountInfoFull
+      responses:
+        200:
+          body:
+            application/json:
+              type: accountInfoShort
+        400:
+          body:
+            application/json:
+              type: accountInfoShort
+
+  /delete:
+    post:
+      description: Удалить аккаунт
+      body:
+        application/json:
+          properties:
+            accountInfo:
+              type: accountInfoShort
+          example:
+            accountInfo:
+              login: "user"
+      responses:
+        200:
+          body:
+            application/json:
+              type: accountInfoShort
+        400:
+          body:
+            application/json:
+              type: accountInfoShort
