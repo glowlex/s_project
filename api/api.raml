@@ -2,7 +2,7 @@
 annotationTypes:
   key:
 title: s_project
-version: v1
+version: 1.0
 baseUri: /api
 types:
   rsaKey:
@@ -26,6 +26,15 @@ types:
       login: "9+K3xmRNTaXG9sV..."
       time: 1516618258
       password: "dRTCq6UA076..."
+
+  userOptions:
+    properties:
+      tGramm: string
+      allowSendLogs: boolean
+      allowTempPass: boolean
+      tempPassDuration: number
+      curPass?: string
+      newPass?: string
 
   regInfo:
     type: signInfo
@@ -54,21 +63,20 @@ types:
     properties:
       login: string
 
-  item:
+  itemShort:
     properties:
       id: number #тодо дописать поля
-      name?: string
 
-  itemm:
-    type: item
+  item:
+    type: itemShort
     properties:
-      mid: number #тодо дописать поля
-      mname?: string
+      name?: string #тодо дописать поля
 
   bag:
     properties:
-      name: string
-      items: (item | itemm)[]
+      id?: number
+      name?: string
+      items: item[] #тодо (item | itemShort)[]
 
   inventory:
     properties:
@@ -95,6 +103,39 @@ resourceTypes:
         <<name>>: <<item>>
         status: <<status>>
 
+/inventory:
+  description: Получить инвентарь
+  /get:
+    post:
+      body:
+        application/json:
+          properties:
+            accountInfos:
+              type: accountInfoShort[]
+              description: Пустой получить всё
+
+      responses:
+        200:
+          body:
+            application/json:
+              properties:
+                inventories: inventory[]
+  /bag:
+    /get:
+      post:
+        body:
+          application/json:
+            properties:
+              accountInfos:
+                type: inventory
+                description: Передаются ид сумок и имя юзера
+
+        responses:
+          200:
+            body:
+              application/json:
+                properties:
+                  bags: bag[]
 
 /login:
   description: Аунтефикация
@@ -122,7 +163,34 @@ resourceTypes:
         400:
           body:
             application/json: {}
-
+  /put:
+    post:
+      description: Изменить настройки или пароль
+      body:
+        application/json:
+          properties:
+            userOptions: userOptions
+          example:
+            tGramm: "@gramm"
+            allowSendLogs: true
+            allowTempPass: true
+            tempPassDuration: 600
+            curPass?: "jK2TIwGoP/Za3N..."
+            newPass?: "IBAAKBgQC..."
+      responses:
+        200:
+          body:
+            application/json:
+              properties:
+                userOptions: userOptions
+              example:
+                tGramm: "@gramm"
+                allowSendLogs: true
+                allowTempPass: true
+                tempPassDuration: 600
+        400:
+          body:
+            application/json: {}
 
 
 /registration:
@@ -169,6 +237,7 @@ resourceTypes:
                   pubKey: "MIICWgIBAAKBgQC..."
 
 /account:
+  description: Управление аккаунтами
   /post:
     post:
       description: Добавить аккаунт
@@ -182,11 +251,13 @@ resourceTypes:
         200:
           body:
             application/json:
-              type: accountInfoShort
+              properties:
+                accountInfo: accountInfoShort
         400:
           body:
             application/json:
-              type: accountInfoShort
+              properties:
+                accountInfo: accountInfoShort
 
   /get:
     post:
@@ -198,7 +269,7 @@ resourceTypes:
           body:
             application/json:
               properties:
-                accountInfo:
+                accountInfos:
                   type: accountInfoFull[]
         400:
           body:
@@ -216,11 +287,13 @@ resourceTypes:
         200:
           body:
             application/json:
-              type: accountInfoShort
+              properties:
+                accountInfo: accountInfoShort
         400:
           body:
             application/json:
-              type: accountInfoShort
+              properties:
+                accountInfo: accountInfoShort
 
   /delete:
     post:
@@ -237,8 +310,10 @@ resourceTypes:
         200:
           body:
             application/json:
-              type: accountInfoShort
+              properties:
+                accountInfo: accountInfoShort
         400:
           body:
             application/json:
-              type: accountInfoShort
+              properties:
+                accountInfo: accountInfoShort
