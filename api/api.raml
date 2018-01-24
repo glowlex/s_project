@@ -11,7 +11,7 @@ types:
       time: 1516618258
       pubKey: "Cq6UA076Sv1d..."
 
-  signInfo:
+  userInfo:
     properties:
       login:
         type: string
@@ -25,17 +25,27 @@ types:
       time: 1516618258
       password: "dRTCq6UA076..."
 
+  userInfoShort:
+    properties:
+      login: string
+
   userOptions:
     properties:
-      tGramm: string
-      allowSendLogs: boolean
-      allowTempPass: boolean
-      tempPassDuration: number
+      tGramm?:
+        type: string
+        default: ""
+      allowSendLogs?:
+        type: boolean
+        default: 0
+      allowTempPass?:
+        type: boolean
+        default: 0
+      tempPassDuration?: number
       curPass?: string
       newPass?: string
 
   regInfo:
-    type: signInfo
+    type: userInfo
     properties:
       email:
         type: string
@@ -68,12 +78,20 @@ types:
   item:
     type: itemShort
     properties:
-      name?: string #тодо дописать поля
       appid?: number
       amount?: number
       classid?: number
       contextid?: number
       instanceid?: number
+      isCurrency: boolean
+
+
+  itemDescription:
+    properties:
+      appid?: number
+      classid?: number
+      instanceid?: number
+      marketFeeApp?: number
       commodity?: number
       currency?: number
       iconUrl?: string
@@ -81,14 +99,19 @@ types:
       marketHashName?: string
       marketMarketableRestriction?: number
       marketName?: string
+      marketTradableRestriction?: number
       marketable?: number
-      tradable?: number
+      name?: number
 
   bag:
     properties:
       id?: number
       name?: string
       items: item[] #тодо (item | itemShort)[]
+      itemDescriptions?: itemDescription[]
+      asap?:
+        type: boolean
+        default: 0
 
   inventory:
     properties:
@@ -97,7 +120,8 @@ types:
 
   exchangeQueryLite:
     properties:
-      bag: bag
+      id?: integer
+      bag?: bag
       userFrom?: string
       userTo?: string
 
@@ -106,6 +130,55 @@ types:
       exchangeQueries:
         type: exchangeQueryLite[]
         description: Упорядочены строго по последовательности обмена
+
+
+/exchange:
+  description: Запросить провести обмен
+  /post:
+    post:
+      body:
+        application/json:
+          properties:
+            exchangeQueries: exchangeQueryComplex
+      responses:
+        200:
+          body:
+            application/json:
+              properties:
+                exchangeQueries:
+                  type: exchangeQueryComplex
+                  description: содержит успешно принятые сервером запросы
+
+  /get:
+    post:
+      description: Вернёт все обмены юзера
+      body:
+        application/json: {}
+
+      responses:
+        200:
+          body:
+            application/json:
+              properties:
+                exchangeQueries:
+                  type: exchangeQueryComplex
+                  description: содержит активные обмены
+  /delete:
+    post:
+      description: Удалить обмен с соответствующим ид
+      body:
+        application/json:
+          properties:
+            exchangeQuery: exchangeQueryLite
+
+      responses:
+        200:
+          body:
+            application/json:
+              properties:
+                exchangeQuery:
+                  type: exchangeQueryLite
+                  description: содержит отменённый обмен
 
 
 /inventory:
@@ -150,8 +223,7 @@ types:
       body:
         application/json:
           properties:
-            signInfo: signInfo
-            bag: bag
+            userInfo: userInfo
           example:
               login: "user"
               password: "jK2TIwbHtE7GoP/Za3N..."
@@ -161,10 +233,8 @@ types:
           body:
             application/json:
               properties:
-                signInfo:
-                  login: string
-              example:
-                login: "user"
+                userInfo: userInfoShort
+                userOptions: userOptions
         400:
           body:
             application/json: {}
@@ -206,17 +276,15 @@ types:
       body:
         application/json:
           properties:
-            signInfo:
+            userInfo:
               type: regInfo
       responses:
         200:
           body:
             application/json:
               properties:
-                signInfo:
-                  login: string
-              example:
-                login: "user"
+                userInfo: userInfoShort
+                userOptions: userOptions
         400:
           body:
             application/json: {}
