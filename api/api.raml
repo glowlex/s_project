@@ -1,6 +1,4 @@
 #%RAML 1.0
-annotationTypes:
-  key:
 title: s_project
 version: 1.0
 baseUri: /api
@@ -65,12 +63,26 @@ types:
 
   itemShort:
     properties:
-      id: number #тодо дописать поля
+      assetid: number #тодо дописать поля
 
   item:
     type: itemShort
     properties:
       name?: string #тодо дописать поля
+      appid?: number
+      amount?: number
+      classid?: number
+      contextid?: number
+      instanceid?: number
+      commodity?: number
+      currency?: number
+      iconUrl?: string
+      iconUrlLarge?: string
+      marketHashName?: string
+      marketMarketableRestriction?: number
+      marketName?: string
+      marketable?: number
+      tradable?: number
 
   bag:
     properties:
@@ -95,13 +107,6 @@ types:
         type: exchangeQueryLite[]
         description: Упорядочены строго по последовательности обмена
 
-
-resourceTypes:
-  resourceTypes:
-    basic:
-      properties:
-        <<name>>: <<item>>
-        status: <<status>>
 
 /inventory:
   description: Получить инвентарь
