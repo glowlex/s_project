@@ -1,0 +1,392 @@
+#%RAML 1.0
+title: s_project
+version: 1.0
+baseUri: /api
+types:
+  rsaKey:
+    properties:
+      time: number
+      pubKey: string #тодо добавление шифрования на всё
+    example:
+      time: 1516618258
+      pubKey: "Cq6UA076Sv1d..."
+
+  userInfo:
+    properties:
+      login:
+        type: string
+        description: шифрованный
+      password:
+        type: string
+        description: шифрованный
+      time: number
+    example:
+      login: "9+K3xmRNTaXG9sV..."
+      time: 1516618258
+      password: "dRTCq6UA076..."
+
+  userInfoShort:
+    properties:
+      login: string
+
+  userOptions:
+    properties:
+      tGramm?:
+        type: string
+        default: ""
+      allowSendLogs?:
+        type: boolean
+        default: 0
+      allowTempPass?:
+        type: boolean
+        default: 0
+      tempPassDuration?: number
+      curPass?: string
+      newPass?: string
+
+  regInfo:
+    type: userInfo
+    properties:
+      email:
+        type: string
+        description: шифрованный
+    example:
+      login: "9+K3xmRNTaXG9sV..."
+      time: 1516618268
+      password: "dRTCq6UA076..."
+      email: "89C1SyUCOQm..."
+
+  accountInfoFull:
+    type: accountInfoShort
+    properties:
+      nick: string
+      email: string
+      password?: string
+      level?: number
+      money?: number
+      tradePermission?: boolean
+      closeFriends?: string[]
+
+  accountInfoShort:
+    properties:
+      login: string
+
+  itemShort:
+    properties:
+      assetid: number #тодо дописать поля
+
+  item:
+    type: itemShort
+    properties:
+      appid?: number
+      amount?: number
+      classid?: number
+      contextid?: number
+      instanceid?: number
+      isCurrency: boolean
+
+
+  itemDescription:
+    properties:
+      appid?: number
+      classid?: number
+      instanceid?: number
+      marketFeeApp?: number
+      commodity?: number
+      currency?: number
+      iconUrl?: string
+      iconUrlLarge?: string
+      marketHashName?: string
+      marketMarketableRestriction?: number
+      marketName?: string
+      marketTradableRestriction?: number
+      marketable?: number
+      name?: number
+
+  bag:
+    properties:
+      id?: number
+      name?: string
+      items: item[] #тодо (item | itemShort)[]
+      itemDescriptions?: itemDescription[]
+      asap?:
+        type: boolean
+        default: 0
+
+  inventory:
+    properties:
+      user: string
+      bags: bag[]
+
+  exchangeQueryLite:
+    properties:
+      id?: integer
+      bag?: bag
+      userFrom?: string
+      userTo?: string
+
+  exchangeQueryComplex:
+    properties:
+      exchangeQueries:
+        type: exchangeQueryLite[]
+        description: Упорядочены строго по последовательности обмена
+
+
+/exchange:
+  description: Запросить провести обмен
+  /post:
+    post:
+      body:
+        application/json:
+          properties:
+            exchangeQueries: exchangeQueryComplex
+      responses:
+        200:
+          body:
+            application/json:
+              properties:
+                exchangeQueries:
+                  type: exchangeQueryComplex
+                  description: содержит успешно принятые сервером запросы
+
+  /get:
+    post:
+      description: Вернёт все обмены юзера
+      body:
+        application/json: {}
+
+      responses:
+        200:
+          body:
+            application/json:
+              properties:
+                exchangeQueries:
+                  type: exchangeQueryComplex
+                  description: содержит активные обмены
+  /delete:
+    post:
+      description: Удалить обмен с соответствующим ид
+      body:
+        application/json:
+          properties:
+            exchangeQuery: exchangeQueryLite
+
+      responses:
+        200:
+          body:
+            application/json:
+              properties:
+                exchangeQuery:
+                  type: exchangeQueryLite
+                  description: содержит отменённый обмен
+
+
+/inventory:
+  description: Получить инвентарь
+  /get:
+    post:
+      body:
+        application/json:
+          properties:
+            accountInfos:
+              type: accountInfoShort[]
+              description: Пустой получить всё
+
+      responses:
+        200:
+          body:
+            application/json:
+              properties:
+                inventories: inventory[]
+  /bag:
+    /get:
+      post:
+        body:
+          application/json:
+            properties:
+              accountInfos:
+                type: inventory
+                description: Передаются ид сумок и имя юзера
+
+        responses:
+          200:
+            body:
+              application/json:
+                properties:
+                  bags: bag[]
+
+/login:
+  description: Аунтефикация
+  /post:
+    post:
+      description: Выполнить вход зашифровав ранее полученым ключём
+      body:
+        application/json:
+          properties:
+            userInfo: userInfo
+          example:
+              login: "user"
+              password: "jK2TIwbHtE7GoP/Za3N..."
+              time: 1516618278
+      responses:
+        200:
+          body:
+            application/json:
+              properties:
+                userInfo: userInfoShort
+                userOptions: userOptions
+        400:
+          body:
+            application/json: {}
+  /put:
+    post:
+      description: Изменить настройки или пароль
+      body:
+        application/json:
+          properties:
+            userOptions: userOptions
+          example:
+            tGramm: "@gramm"
+            allowSendLogs: true
+            allowTempPass: true
+            tempPassDuration: 600
+            curPass?: "jK2TIwGoP/Za3N..."
+            newPass?: "IBAAKBgQC..."
+      responses:
+        200:
+          body:
+            application/json:
+              properties:
+                userOptions: userOptions
+              example:
+                tGramm: "@gramm"
+                allowSendLogs: true
+                allowTempPass: true
+                tempPassDuration: 600
+        400:
+          body:
+            application/json: {}
+
+
+/registration:
+  description: Регистрация
+  /post:
+    post:
+      description: Отправить данные зашифрованые для регистрации
+      body:
+        application/json:
+          properties:
+            userInfo:
+              type: regInfo
+      responses:
+        200:
+          body:
+            application/json:
+              properties:
+                userInfo: userInfoShort
+                userOptions: userOptions
+        400:
+          body:
+            application/json: {}
+
+/getrsakey:
+  description: Получить ключ для шифрования
+  /get:
+    post:
+      description: Получение ключа шифрования, отправка своего.
+      body:
+        application/json:
+          properties:
+            rsaKey: rsaKey
+
+      responses:
+        200:
+          description: Возвращает ключ, которым потом шифруются нужные данные
+          body:
+            application/json:
+              type: rsaKey
+              example:
+                  time: 1516618268
+                  pubKey: "MIICWgIBAAKBgQC..."
+
+/account:
+  description: Управление аккаунтами
+  /post:
+    post:
+      description: Добавить аккаунт
+      body:
+        application/json:
+          properties:
+            accountInfo:
+              description: Поля шифруются
+              type: accountInfoFull
+      responses:
+        200:
+          body:
+            application/json:
+              properties:
+                accountInfo: accountInfoShort
+        400:
+          body:
+            application/json:
+              properties:
+                accountInfo: accountInfoShort
+
+  /get:
+    post:
+      description: Получить все аккаунты
+      body:
+        application/json: {}
+      responses:
+        200:
+          body:
+            application/json:
+              properties:
+                accountInfos:
+                  type: accountInfoFull[]
+        400:
+          body:
+            application/json: {}
+
+  /put:
+    post:
+      description: Изменить аккаунт
+      body:
+        application/json:
+          properties:
+            accountInfo:
+              type: accountInfoFull
+      responses:
+        200:
+          body:
+            application/json:
+              properties:
+                accountInfo: accountInfoShort
+        400:
+          body:
+            application/json:
+              properties:
+                accountInfo: accountInfoShort
+
+  /delete:
+    post:
+      description: Удалить аккаунт
+      body:
+        application/json:
+          properties:
+            accountInfo:
+              type: accountInfoShort
+          example:
+            accountInfo:
+              login: "user"
+      responses:
+        200:
+          body:
+            application/json:
+              properties:
+                accountInfo: accountInfoShort
+        400:
+          body:
+            application/json:
+              properties:
+                accountInfo: accountInfoShort
