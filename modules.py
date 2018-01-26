@@ -339,6 +339,8 @@ def test():
     us.db.add_cookie(lp.USERNAME, *(lp.sls))
     us.db.add_cookie(lp.USERNAME, *(lp.sma))
     us.db.add_cookie(lp.USERNAME, *(lp.srl))
+    us.get_email_authcode()
+    return
     us.do_login()
     us.get_inventory_params()
     db.update_user(login=lp.USERNAME, steamid = us.steamID)
