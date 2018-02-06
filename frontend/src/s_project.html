@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>S_project</title>
+</head>
+<body>
+  <nav class="navbar">
+    <a class="navbar_brand" href="#">
+      <img src="./styles/img.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+      S_project
+    </a>
+    <button type="button" class="btn btn_blue btn-secondary btn-sm" style="width:6rem; font-size: 1.1rem">EXIT</button>
+  </nav>
+  <div style="height:1vh">
+
+  </div>
+  <div class="container">
+    <nav>
+      <div class="nav nav-tabs nav-tabs_round nav-justified" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link nav-link_dark" id="nav-transactions-tab" data-toggle="tab" href="#nav-transactions" role="tab" aria-controls="nav-transactions" aria-selected="false">Операции</a>
+        <a class="nav-link_dark nav-item nav-link active" id="nav-inventory-tab" data-toggle="tab" href="#nav-inventory" role="tab" aria-controls="nav-inventory" aria-selected="true">Инвентарь</a>
+        <a class="nav-item nav-link nav-link_dark" id="nav-accounts-tab" data-toggle="tab" href="#nav-accounts" role="tab" aria-controls="nav-accounts" aria-selected="false">Аккаунты</a>
+        <a class="nav-item nav-link nav-link_dark" id="nav-options-tab" data-toggle="tab" href="#nav-options" role="tab" aria-controls="nav-options" aria-selected="false">Настройки</a>
+      </div>
+    </nav>
+    <div style="height:3vh"></div>
+    <div class="tab-content" id="nav-tabContent">
+      <div class="tab-pane fade" id="nav-transactions" role="tabpanel" aria-labelledby="nav-transactions-tab">...</div>
+      <div class="tab-pane fade  show active" id="nav-inventory" role="tabpanel" aria-labelledby="nav-inventory-tab">
+        <div class="row justify-content-between">
+          <div class="col-5">
+            <div class="" style="">
+              <ul class="nav bag-navigation row px-1">
+                <li class="nav-item col-lg-6 col-md-4">
+                  <li class="nav-item ">
+                    <button type="button" class="btn btn_blue btn-secondary btn-sm">
+                      <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
+                    </button>
+                  </li>
+                  <li class="nav-item mr-auto">
+                    <label for="bag-name">
+                      <img class="mx-2" width="32" src="./styles/img.svg" alt="">
+                      items</label>
+                    </li>
+                    <li class="nav-item">
+                      <button type="button" class="btn btn_blue btn-secondary btn-sm">
+                        <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+                <div class="w-100">
+                  <ul class="nav bag-search row px-1 mt-1">
+                    <li class="nav-item">
+                      <label class="h3" for="money">567 &#x20BD;</label>
+                    </li>
+                    <li class="nav-item w-50">
+                      <div class="input-group-sm w-100">
+                        <input type="text" class="form-control search" placeholder="search">
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="bag">
+                  <div class="bag__list row">
+                    <div class="table-scroll">
+                      <table class="">
+                        <thead class="table-scroll__head_static" style="">
+                          <tr>
+                            <td scope="col-img">Icon </td>
+                            <td scope="col-bs-amount" >П/К</td>
+                            <td scope="col-sold" >Продаж</td>
+                            <td scope="col-buy-prices" >Покупка</td>
+                            <td scope="col-sell-prices" >Продажа</td>
+                            <td scope="col-amount" >Кол-во</td>
+                            <td scope="col-trade-amount" >Обмен</td>
+                          </tr>
+                        </thead>
+                        <thead class="table-scroll__head_invisible" style="">
+                          <tr>
+                            <td scope="col-img"></td>
+                            <td scope="col-bs-amount" >6666</td>
+                            <td scope="col-sold" >7777</td>
+                            <td scope="col-buy-prices" >456.32</td>
+                            <td scope="col-sell-prices" ><div class="">
+                              555.77
+                            </div>
+                            <div class="">
+                              675.46
+                            </div>
+                            <div class="">
+                              8842.4
+                            </div>
+                          </td>
+                          <td scope="col-amount" >999</td>
+                          <td scope="col-trade-amount" >0000</td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr tabindex="1">
+                          <th scope="col-img">
+                            <img src=".\96fx96f.png"  alt=""> </th>
+                            <th scope="col-bs-amount" >
+                              <div class="">
+                                6756
+                              </div>
+                              <div class="">
+                                34
+                              </div>
+                            </th>
+                            <th scope="col-sold" >
+                              <div class="">
+                                63
+                              </div>
+                              <div class="">
+                                281
+                              </div>
+                            </th>
+                            <th scope="col-buy-prices" >
+                              <div class="">
+                                675.46
+                              </div>
+                              <div class="">
+                                542.21
+                              </div>
+                            </th>
+                            <th scope="col-sell-prices" >
+                              <div class="">
+                                555.77
+                              </div>
+                              <div class="">
+                                67546
+                              </div>
+                              <div class="">
+                                675.46
+                              </div>
+                            </th>
+                            <th scope="col-amount">
+                              <div class="">
+                                12
+                              </div>
+                              <div class="">
+                                198
+                              </div>
+                            </th>
+                            <th scope="col-trade-amount" >
+                              <div class="table-scroll__trade">
+                                <div class="table-scroll__trade__counter">
+                                  12
+                                </div>
+                                <div class="table-scroll__trade__arrows">
+                                  <div class="btn_blue">
+                                    <span class="glyphicon glyphicon-chevron-up"></span>
+                                  </div>
+
+                                  <div class="btn_blue">
+                                    <span class="glyphicon glyphicon-chevron-down"></span>
+                                  </div>
+                                </div>
+
+                              </div>
+                            </th>
+                          </tr>
+                          <tr tabindex="2">
+                            <th scope="col-img">
+                              <img src=".\96fx96f.png"  alt=""> </th>
+                              <th scope="col-bs-amount" >
+                                <div class="">
+                                  6756
+                                </div>
+                                <div class="">
+                                  34
+                                </div>
+                              </th>
+                              <th scope="col-sold" >
+                                <div class="">
+                                  63
+                                </div>
+                                <div class="">
+                                  281
+                                </div>
+                              </th>
+                              <th scope="col-buy-prices" >
+                                <div class="">
+                                  675.46
+                                </div>
+                                <div class="">
+                                  542.21
+                                </div>
+                              </th>
+                              <th scope="col-sell-prices" >
+                                <div class="">
+                                  555.77
+                                </div>
+                                <div class="">
+                                  67546
+                                </div>
+                                <div class="">
+                                  675.46
+                                </div>
+                              </th>
+                              <th scope="col-amount">
+                                <div class="">
+                                  12
+                                </div>
+                                <div class="">
+                                  198
+                                </div>
+                              </th>
+                              <th scope="col-trade-amount" >
+                                <div class="table-scroll__trade">
+                                  <div class="table-scroll__trade__counter">
+                                    12
+                                  </div>
+                                  <div class="table-scroll__trade__arrows">
+                                    <div class="btn_blue">
+                                      <span class="glyphicon glyphicon-chevron-up"></span>
+                                    </div>
+
+                                    <div class="btn_blue">
+                                      <span class="glyphicon glyphicon-chevron-down"></span>
+                                    </div>
+                                  </div>
+
+                                </div>
+                              </th>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+
+                    </div>
+                    <nav aria-label="Page navigation">
+                      <ul class="pagination justify-content-end row">
+                        <li class="page-item">
+                          <button type="button" class="btn page-link btn_blue btn-secondary btn-sm" aria-label="Previous">
+                            <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
+                          </button>
+
+                        </li>
+                        <li class="page-item"><a class="page-link btn_blue btn-sm bag__pagination__page" href="#">1 из 3</a></li>
+                        <li class="page-item">
+                          <button type="button" class="btn page-link btn_blue btn-secondary btn-sm" aria-label="Previous">
+                            <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+                          </button>
+                        </li>
+                      </ul>
+                    </nav>
+                  </div>
+
+                </div>
+                <div class="col-2 control-panel" >
+                  <div class="control-panel__user">
+                    <span class="glyphicon glyphicon-triangle-left"></span>
+                    <div class="dropdown  control-panel__user__button">
+                      <button class="btn btn_blue btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        user left
+                      </button>
+                      <div class="dropdown-menu dropdown-menu scrollable-menu" role="menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item dropdown-item_thin" href="#">Action</a>
+                        <a class="dropdown-item dropdown-item_thin" href="#">Another action</a>
+                        <a class="dropdown-item dropdown-item_thin" href="#">Something else here</a>
+                        <a class="dropdown-item dropdown-item_thin" href="#">Action</a>
+                        <a class="dropdown-item dropdown-item_thin" href="#">Another action</a>
+                        <a class="dropdown-item dropdown-item_thin" href="#">Something else here</a>
+                        <a class="dropdown-item dropdown-item_thin" href="#">Action</a>
+                        <a class="dropdown-item dropdown-item_thin" href="#">Another action</a>
+                        <a class="dropdown-item dropdown-item_thin" href="#">Something else here</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="height:2vh"></div>
+                  <div class="control-panel__user control-panel__user_right">
+                    <span class="glyphicon glyphicon-triangle-left"></span>
+                    <div class="dropdown  control-panel__user__button ">
+                      <button class="btn btn_blue btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        user right
+                      </button>
+                      <div class="dropdown-menu dropdown-menu scrollable-menu" role="menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item dropdown-item_thin" href="#">Action</a>
+                        <a class="dropdown-item dropdown-item_thin" href="#">Another action</a>
+                        <a class="dropdown-item dropdown-item_thin" href="#">Something else here</a>
+                        <a class="dropdown-item dropdown-item_thin" href="#">Action</a>
+                        <a class="dropdown-item dropdown-item_thin" href="#">Another action</a>
+                        <a class="dropdown-item dropdown-item_thin" href="#">Something else here</a>
+                        <a class="dropdown-item dropdown-item_thin" href="#">Action</a>
+                        <a class="dropdown-item dropdown-item_thin" href="#">Another action</a>
+                        <a class="dropdown-item dropdown-item_thin" href="#">Something else here</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="height:2vh; text-align: center">
+                    выроврять
+                  </div>
+                  <div class="control-panel__excange">
+                    <button type="button" class="btn page-link btn_blue btn-secondary" aria-label="Previous">
+                      <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
+                    </button>
+                    <button type="button" class="btn page-link btn_blue btn-secondary" aria-label="Previous">
+                      <span class="" aria-hidden="true">&#2000;</span>
+                    </button>
+                    <button type="button" class="btn page-link btn_blue btn-secondary" aria-label="Previous">
+                      <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+                    </button>
+                  </div>
+                  <div style="height:2vh"></div>
+                  <div class="control-panel__check">
+                    <div class="form-check ">
+                      <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input">
+                        ASAP
+                      </label>
+                      <div style="height:1vh"></div>
+                      <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input">
+                        set
+                      </label>
+                    </div>
+                  </div>
+                  <div style="height:2vh"></div>
+                  <div class="control-panel__buttons">
+                    <button class="btn btn_blue btn-secondary" type="button" id="dropdownMenuButton" aria-expanded="false">
+                      Ппод/обмен
+                    </button>
+                    <div style="height:2vh"></div>
+                    <button class="btn btn_blue btn-secondary" type="button" id="dropdownMenuButton" aria-expanded="false">
+                      Подтвердить
+                    </button>
+                  </div>
+
+
+                </div>
+                <div class="col-5">
+                  <div class="" style="">
+                    <ul class="nav bag-navigation bag-navigation_right row px-1">
+                      <li class="nav-item col-lg-6 col-md-4">
+                        <li class="nav-item ">
+                          <button type="button" class="btn btn_blue btn-secondary btn-sm">
+                            <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
+                          </button>
+                        </li>
+                        <li class="nav-item mr-auto">
+                          <label for="bag-name">
+                            <img class="mx-2" width="32" src="./styles/img.svg" alt="">
+                            items</label>
+                          </li>
+                          <li class="nav-item">
+                            <button type="button" class="btn btn_blue btn-secondary btn-sm">
+                              <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+                            </button>
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="w-100">
+                        <ul class="nav bag-search bag-search_right row px-1 mt-1">
+                          <li class="nav-item">
+                            <label class="h3" for="money">567 &#x20BD;</label>
+                          </li>
+                          <li class="nav-item w-50">
+                            <div class="input-group-sm w-100">
+                              <input type="text" class="form-control search" placeholder="search">
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="bag">
+                        <div class="bag__list row">
+                          <div class="table-scroll">
+                            <table class="">
+                              <thead class="table-scroll__head_static" style="">
+                                <tr>
+                                  <td scope="col-img">Icon </td>
+                                  <td scope="col-bs-amount" >П/К</td>
+                                  <td scope="col-sold" >Продаж</td>
+                                  <td scope="col-buy-prices" >Покупка</td>
+                                  <td scope="col-sell-prices" >Продажа</td>
+                                  <td scope="col-amount" >Кол-во</td>
+                                  <td scope="col-trade-amount" >Обмен</td>
+                                </tr>
+                              </thead>
+                              <thead class="table-scroll__head_invisible" style="">
+                                <tr>
+                                  <td scope="col-img"></td>
+                                  <td scope="col-bs-amount" >6666</td>
+                                  <td scope="col-sold" >7777</td>
+                                  <td scope="col-buy-prices" >456.32</td>
+                                  <td scope="col-sell-prices" ><div class="">
+                                    555.77
+                                  </div>
+                                  <div class="">
+                                    675.46
+                                  </div>
+                                  <div class="">
+                                    8842.4
+                                  </div>
+                                </td>
+                                <td scope="col-amount" >999</td>
+                                <td scope="col-trade-amount" >0000</td>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr tabindex="1">
+                                <th scope="col-img">
+                                  <img src=".\96fx96f.png"  alt=""> </th>
+                                  <th scope="col-bs-amount" >
+                                    <div class="">
+                                      6756
+                                    </div>
+                                    <div class="">
+                                      34
+                                    </div>
+                                  </th>
+                                  <th scope="col-sold" >
+                                    <div class="">
+                                      63
+                                    </div>
+                                    <div class="">
+                                      281
+                                    </div>
+                                  </th>
+                                  <th scope="col-buy-prices" >
+                                    <div class="">
+                                      675.46
+                                    </div>
+                                    <div class="">
+                                      542.21
+                                    </div>
+                                  </th>
+                                  <th scope="col-sell-prices" >
+                                    <div class="">
+                                      555.77
+                                    </div>
+                                    <div class="">
+                                      67546
+                                    </div>
+                                    <div class="">
+                                      675.46
+                                    </div>
+                                  </th>
+                                  <th scope="col-amount">
+                                    <div class="">
+                                      12
+                                    </div>
+                                    <div class="">
+                                      198
+                                    </div>
+                                  </th>
+                                  <th scope="col-trade-amount" >
+                                    <div class="table-scroll__trade">
+                                      <div class="table-scroll__trade__counter">
+                                        12
+                                      </div>
+                                      <div class="table-scroll__trade__arrows">
+                                        <div class="btn_blue">
+                                          <span class="glyphicon glyphicon-chevron-up"></span>
+                                        </div>
+
+                                        <div class="btn_blue">
+                                          <span class="glyphicon glyphicon-chevron-down"></span>
+                                        </div>
+                                      </div>
+
+                                    </div>
+                                  </th>
+                                </tr>
+                                <tr tabindex="2">
+                                  <th scope="col-img">
+                                    <img src=".\96fx96f.png"  alt=""> </th>
+                                    <th scope="col-bs-amount" >
+                                      <div class="">
+                                        6756
+                                      </div>
+                                      <div class="">
+                                        34
+                                      </div>
+                                    </th>
+                                    <th scope="col-sold" >
+                                      <div class="">
+                                        63
+                                      </div>
+                                      <div class="">
+                                        281
+                                      </div>
+                                    </th>
+                                    <th scope="col-buy-prices" >
+                                      <div class="">
+                                        675.46
+                                      </div>
+                                      <div class="">
+                                        542.21
+                                      </div>
+                                    </th>
+                                    <th scope="col-sell-prices" >
+                                      <div class="">
+                                        555.77
+                                      </div>
+                                      <div class="">
+                                        67546
+                                      </div>
+                                      <div class="">
+                                        675.46
+                                      </div>
+                                    </th>
+                                    <th scope="col-amount">
+                                      <div class="">
+                                        12
+                                      </div>
+                                      <div class="">
+                                        198
+                                      </div>
+                                    </th>
+                                    <th scope="col-trade-amount" >
+                                      <div class="table-scroll__trade">
+                                        <div class="table-scroll__trade__counter">
+                                          12
+                                        </div>
+                                        <div class="table-scroll__trade__arrows">
+                                          <div class="btn_blue">
+                                            <span class="glyphicon glyphicon-chevron-up"></span>
+                                          </div>
+
+                                          <div class="btn_blue">
+                                            <span class="glyphicon glyphicon-chevron-down"></span>
+                                          </div>
+                                        </div>
+
+                                      </div>
+                                    </th>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+
+                          </div>
+                          <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-start row">
+                              <li class="page-item">
+                                <button type="button" class="btn page-link btn_blue btn-secondary btn-sm" aria-label="Previous">
+                                  <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
+                                </button>
+
+                              </li>
+                              <li class="page-item"><a class="page-link btn_blue btn-sm bag__pagination__page" href="#">1 из 3</a></li>
+                              <li class="page-item">
+                                <button type="button" class="btn page-link btn_blue btn-secondary btn-sm" aria-label="Previous">
+                                  <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+                                </button>
+                              </li>
+                            </ul>
+                          </nav>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="nav-accounts" role="tabpanel" aria-labelledby="nav-accounts-tab">...</div>
+                  <div class="tab-pane fade" id="nav-options" role="tabpanel" aria-labelledby="nav-options-tab">...</div>
+                </div>
+
+                <div class="container">
+
+                </div>
+                <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+                <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+                <link rel="stylesheet" href="styles/style.css">
+              </body>
+              </html>

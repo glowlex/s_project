@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+	<meta charset="UTF-8">
+	<title>pestyle</title>
+</head>
+<body>
+	<nav class="nav nav_adjusted">
+		<div class="container">
+
+			<div class="nav-right nav-menu">
+				<a class="nav-item nav-item_adjusted" style="color:black" href="#profile_window">
+					<figure class="image is-32x32" style="margin-right: 8px;">
+
+						<img src="/pr/frontend/static/images/other/default_avatar.svg">
+
+					</figure>
+					11
+				</a>
+				<a class="nav-item nav-item_adjusted" style="color:black" href="/logout/">
+					<figure class="image is-32x32" style="margin-right: 8px;">
+						<img src="/pr/frontend/static/images/other/log_out.svg">
+					</figure>
+					Выход
+				</a>
+			</div>
+
+		</div>
+	</nav>
+
+
+<audio src="/pr/frontend/static/images/other/Mortal Kombat - Toasty.mp3"></audio>
+<div class="container" id="look_choice" style="display: flex;">
+
+  <div class="tile is-ancestor is-vertical is-parent" style="height:95vmin">
+    <div class="tile tile_no-round is-8">
+      <div class="choice-menu">
+        <a class="choice-menu__item" id="select_item_window">
+          <figure class="image is-64x64 choice-menu__item__image">
+            <img src="/pr/frontend/static/images/other/wardrobe.svg">
+          </figure>
+          <div>Гардероб</div>
+        </a>
+        <a class="choice-menu__item" id="select_look_window_c">
+          <figure class="image is-64x64 choice-menu__item__image">
+            <span class="like__choice-menu__item__image heart heart_red"><i class="fa fa-heart"></i></span>
+          </figure>
+          <div>Избранное</div>
+        </a>
+        <a class="choice-menu__item" id="select_look_window_s">
+          <figure class="image is-64x64 choice-menu__item__image">
+            <img src="/pr/frontend/static/images/other/mirror.svg">
+          </figure>
+          <div>Подбор</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="tile" id="windows">
+<div class="tile tile_no-round choice-window is-vertical" id="item_window" style="display: none;">
+  <div class="tile" style="flex:0">
+    <div class="tile is-6 choice-window__item type" id="item_type">
+      <div class="choice-window__item__image " style="">
+        <div class="choice-window__item__previous" id="item_type_prev">
+          <i class="fa fa-angle-left"></i>
+        </div>
+        <div class="choice-window__item__next" id="item_type_next">
+          <i class="fa fa-angle-right"></i>
+        </div>
+      </div>
+    </div>
+    <div class="tile">
+      <div class="control" style="margin:auto">
+        <label class="file_upload">
+          <a class="button is-medium is-light">Выбрать фото</a>
+<form method="post" enctype="multipart/form-data" id="image_form">
+            <input type="file" name="photo" id="item_photo_button">
+</form>
+
+
+      </label>
+    </div>
+    </div>
+  </div>
+  <div class="tile">
+    <div class="tile is-6 is-vertical">
+      <div class="tile" style="flex:6">
+        <div class="tile  choice-window__item dress" id="item">
+          <div class="choice-window__item__image " style="">
+            <div class="choice-window__item__previous" id="item_prev">
+              <i class="fa fa-angle-left"></i>
+            </div>
+            <div class="choice-window__item__next" id="item_next">
+              <i class="fa fa-angle-right"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tile is-6 is-vertical">
+      <form class="choice-window__item-params" id="item_selects" enctype="multipart/form-data">
+        <input type="hidden" name="csrfmiddlewaretoken" value="sTAldxfqYFj5BXOm25I0em4ZXbFFqkW4U36Ny24m7018J1JBPRXIPhFu6gzeDDqN">
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">Категория</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <p class="control">
+                <span class="select" style="width:100%">
+                  <select name="item_type" required="" id="id_item_type">
+  <option value="" selected="">тип</option>
+
+  <option value="dress">платье</option>
+
+  <option value="blouse">блузка</option>
+
+  <option value="pants">брюки</option>
+
+  <option value="outerwear">верхняя одежда</option>
+
+  <option value="umbrella">зонт</option>
+
+  <option value="glasses">очки</option>
+
+  <option value="bag">сумка</option>
+
+  <option value="skirt">юбка</option>
+
+  <option value="cap">головной убор</option>
+
+  <option value="tshirt">футболка</option>
+
+  <option value="sneakers">кроссовки</option>
+
+  <option value="shoes">туфли</option>
+
+  <option value="boots">ботинки</option>
+
+</select>
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">Цвет</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <p class="control">
+                <span class="select" style="width:100%">
+                  <select name="color" required="" id="id_color">
+  <option value="">---------</option>
+
+  <option value="black" selected="">чёрный</option>
+
+  <option value="white">белый</option>
+
+  <option value="milk">молочный</option>
+
+  <option value="beige">бежевый</option>
+
+  <option value="deep_blue">синий</option>
+
+  <option value="olivaceous">оливковый</option>
+
+  <option value="deep_green">зелёный</option>
+
+  <option value="vinous">бордовый</option>
+
+  <option value="chocolate">шоколадный</option>
+
+  <option value="blue">голубой</option>
+
+  <option value="pink">розовый</option>
+
+  <option value="coral">коралловый</option>
+
+  <option value="red">красный</option>
+
+  <option value="yellow">жёлтый</option>
+
+  <option value="purple">фиолетовый</option>
+
+  <option value="gray">серый</option>
+
+</select>
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">Стиль</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <p class="control">
+                <span class="select" style="width:100%">
+                  <select name="style" required="" id="id_style">
+  <option value="">---------</option>
+
+  <option value="C" selected="">повседневный</option>
+
+  <option value="B">деловой</option>
+
+  <option value="S">спорт</option>
+
+  <option value="P">вечеринка</option>
+
+</select>
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">Сезон</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <p class="control">
+                <span class="select" style="width:100%">
+                  <select name="season" required="" id="id_season">
+  <option value="">---------</option>
+
+  <option value="Wn" selected="">зима</option>
+
+  <option value="Sp">весна</option>
+
+  <option value="Sm">лето</option>
+
+  <option value="At">осень</option>
+
+  <option value="SS">весна-лето</option>
+
+  <option value="AW">осень-зима</option>
+
+  <option value="WY">круглый год</option>
+
+</select>
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">Температура</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <p class="control">
+                <span class="select" style="width:100%">
+                  <select name="temperature" required="" id="id_temperature">
+  <option value="">---------</option>
+
+  <option value="all" selected="">любая</option>
+
+  <option value="dubak">от -35 до +5</option>
+
+  <option value="prohladno">от +5 до +15</option>
+
+  <option value="zaebok">от +15 до +20</option>
+
+  <option value="szara">от +20 до +35</option>
+
+</select>
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">Погода</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <p class="control">
+                <span class="select" style="width:100%">
+                  <select name="sky" required="" id="id_sky">
+  <option value="">---------</option>
+
+  <option value="clouds" selected="">облачно</option>
+
+  <option value="rain">дождь</option>
+
+  <option value="clear">ясно</option>
+
+</select>
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="field is-horizontal">
+        <div class="control choice-window__item-params__button">
+  <a class="button is-medium is-success is-outlined" id="item_submit_button">
+    Отправить
+  </a>
+</div>
+<div class="control choice-window__item-params__button">
+<a class="button is-medium is-danger is-outlined" id="item_delete_button">
+Удалить
+</a>
+</div>
+
+</div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="tile tile_no-round choice-window" id="look_window" style="">
+  <div class="tile is-8 is-vertical">
+    <div class="tile choice-window__item glasses" id="glasses">
+      <div class="choice-window__item__image ">
+        <div class="choice-window__item__previous">
+          <i class="fa fa-angle-left"></i>
+        </div>
+        <div class="choice-window__item__next">
+          <i class="fa fa-angle-right"></i>
+        </div>
+      </div>
+    </div>
+    <div class="tile" style="flex:6">
+            <div class="tile  is-vertical">
+
+              <div class="tile  choice-window__item shirt" id="body">
+
+        <div class="choice-window__item__image" style="">
+          <div class="choice-window__item__previous">
+            <i class="fa fa-angle-left"></i>
+          </div>
+          <div class="choice-window__item__next">
+            <i class="fa fa-angle-right"></i>
+          </div>
+        </div>
+      </div>
+
+        <div class="tile  choice-window__item pants" id="pants" style="display: none;">
+
+        <div class="choice-window__item__image">
+          <div class="choice-window__item__previous">
+            <i class="fa fa-angle-left"></i>
+          </div>
+          <div class="choice-window__item__next">
+            <i class="fa fa-angle-right"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+      <div class="tile  is-vertical">
+        <div class="tile choice-window__item bag" id="bag">
+          <div class="choice-window__item__image">
+            <div class="choice-window__item__previous">
+              <i class="fa fa-angle-left"></i>
+            </div>
+            <div class="choice-window__item__next">
+              <i class="fa fa-angle-right"></i>
+            </div>
+          </div>
+        </div>
+        <div class="tile">
+          <div class="tile choice-window__item shoes" id="shoes">
+            <div class="choice-window__item__image ">
+              <div class="choice-window__item__previous">
+                <i class="fa fa-angle-left"></i>
+              </div>
+              <div class="choice-window__item__next">
+                <i class="fa fa-angle-right"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="tile is-4 is-vertical">
+      <div class="tile choice-window__item outerwear" id="outerwear">
+        <div class="choice-window__item__image ">
+          <div class="choice-window__item__previous">
+            <i class="fa fa-angle-left"></i>
+          </div>
+          <div class="choice-window__item__next">
+            <i class="fa fa-angle-right"></i>
+          </div>
+        </div>
+      </div>
+      <div class="tile">
+
+      </div>
+  </div>
+</div>
+
+
+      <div class="tile tile_no-round is-4 calendar-weather is-vertical">
+        <div class="tile calendar" id="calendar">
+
+<table>
+  <caption>
+    <span class="prev icon"><a class="fa fa-chevron-left" aria-hidden="true" id="month_prev"></a></span>
+    <span class="next icon"><a class="fa fa-chevron-right" aria-hidden="true" id="month_next"></a></span>
+    <div>Январь   2018</div>
+  </caption>
+  <thead>
+    <tr>
+    <th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th>Сб</th><th>Вс</th></tr>
+  </thead>
+  <tbody>
+  <tr><td class="off"><a>25</a></td><td class="off"><a>26</a></td><td class="off"><a>27</a></td><td class="off"><a>28</a></td><td class="off"><a>29</a></td><td class="off"><a>30</a></td><td class="off"><a>31</a></td></tr><tr><td><a>1</a></td><td><a>2</a></td><td><a>3</a></td><td><a>4</a></td><td><a>5</a></td><td><a>6</a></td><td><a>7</a></td></tr><tr><td><a>8</a></td><td><a>9</a></td><td><a>10</a></td><td><a>11</a></td><td><a>12</a></td><td><a>13</a></td><td><a>14</a></td></tr><tr><td><a>15</a></td><td><a>16</a></td><td><a>17</a></td><td><a>18</a></td><td><a>19</a></td><td><a>20</a></td><td><a>21</a></td></tr><tr><td><a>22</a></td><td><a>23</a></td><td><a>24</a></td><td><a>25</a></td><td><a>26</a></td><td><a>27</a></td><td class="now active"><a>28</a></td></tr><tr><td><a>29</a></td><td><a>30</a></td><td><a>31</a></td><td class="off"><a>1</a></td><td class="off"><a>2</a></td><td class="off"><a>3</a></td><td class="off"><a>4</a></td></tr></tbody>
+</table>
+
+
+        </div>
+
+<div class="tile weather is-vertical">
+  <div class="tile weather__title">
+    <figure class="image is-64x64">
+      <img src="/pr/frontend/static/images/other/weather.png">
+    </figure>
+    <h3 class="title is-4" style="font-weight:bold; margin:auto">Погода на сегодня</h3>
+  </div>
+  <div class="tile">
+    <div class="tile is-5" style="margin:auto;margin-right: 2rem;">
+      <figure class="image is-96x96" style="background-size: cover, cover; background-repeat: no-repeat, no-repeat; background-image: url(&quot;/pr/frontend/static/images/other/6.png&quot;);">
+        <img src="">
+        <div class="weather__temp">
+          <p class="weather__temp__high"> -6</p>
+          <p class="weather__temp__low"> -7</p>
+        </div>
+      </figure>
+    </div>
+    <div class="tile is-vertical weather-info">
+      <p>облачность:  75%</p>
+      <p>влажность:  85%</p>
+      <p>ветер:  5 м/с</p>
+    </div>
+
+
+  </div>
+  <div class="tile">
+  </div>
+</div>
+
+
+
+      </div>
+    </div>
+
+    <div class="tile tile_no-round is-8 like">
+      <div class="like__choice-menu" style="opacity: inherit;">
+        <div class="like__choice-menu__item" id="choice_prev">
+          <span class="like__choice-menu__item__image"><i class="fa fa-chevron-left"></i></span>
+        </div>
+        <div class="like__choice-menu__item" id="choice_like">
+          <span class="like__choice-menu__item__image heart"><i class="fa fa-heart-o"></i></span>
+        </div>
+        <div class="like__choice-menu__item" id="choice_next">
+          <span class="like__choice-menu__item__image"><i class="fa fa-chevron-right"></i></span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="container">
+
+  <form id="profile_window" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="csrfmiddlewaretoken" value="kV5EQwQxmaIC8xJT52bYsu7BPCsmK9S0M5B6b1FtvvqFgBE8SOqG3pI6YHmVXsmJ">
+  <div class="tile is-ancestor">
+    <div class="profile notification">
+      <a class="delete" href="#"></a>
+    <div class="label reg__label">Настройки</div>
+
+    <div class="field is-horizontal">
+      <div class="field-label is-normal">
+        <label class="label">Email</label>
+      </div>
+      <div class="field-body">
+        <div class="field">
+          <p class="control is-expanded ">
+            <input type="email" name="email" value="a@a.ru" class="input" id="reg_email" required="" placeholder="Email" maxlength="64">
+          </p>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="field is-horizontal">
+      <div class="field-label is-normal">
+        <label class="label">Имя</label>
+      </div>
+      <div class="field-body">
+        <div class="field">
+          <p class="control is-expanded ">
+            <input type="text" name="name" value="11" class="input" id="reg_name" required="" placeholder="name" maxlength="32">
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="field is-horizontal">
+      <div class="field-label is-normal">
+        <label class="label">Фамилия</label>
+      </div>
+      <div class="field-body">
+        <div class="field">
+          <p class="control is-expanded ">
+            <input type="text" name="last_name" value="1" class="input" id="reg_last_name" placeholder="last_name" maxlength="32">
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="field is-horizontal">
+      <div class="field-label is-normal">
+        <label class="label">День рождения</label>
+      </div>
+      <div class="field-body">
+        <div class="field">
+          <p class="control is-expanded ">
+            <input type="date" name="birthday" class="input" id="reg_birthday" placeholder="birthday">
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="field is-horizontal">
+      <div class="field-label">
+        <label class="label">Пол</label>
+      </div>
+      <div class="field-body">
+        <div class="field is-narrow">
+          <div class="control">
+
+<label class="radio">
+  <input type="radio" name="sex" value="M" id="id_sex_0" required="" checked="">
+  М
+</label>
+
+<label class="radio">
+  <input type="radio" name="sex" value="F" id="id_sex_1" required="">
+  Ж
+</label>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field is-horizontal">
+      <div class="field-label is-normal">
+        <label class="label">Город</label>
+      </div>
+      <div class="field-body">
+        <div class="field">
+          <p class="control">
+            <input type="text" name="city" value="1" class="input" id="reg_city" placeholder="city" required="">
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="field is-horizontal">
+      <div class="field-label is-normal">
+        <label class="label">Аватар</label>
+      </div>
+      <div class="field-body">
+        <div class="field">
+          <p class="control">
+            <input type="file" name="avatar" class="input" id="reg_avatar" placeholder="avatar">
+          </p>
+        </div>
+      </div>
+    </div>
+
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">Пароль</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <p class="control has-icon">
+                <input type="password" name="password" class="input" id="reg_password" required="" placeholder="password" maxlength="128">
+                <span class="icon is-small">
+                  <i class="fa fa-lock"></i>
+                </span>
+              </p>
+
+            </div>
+          </div>
+        </div>
+
+    <div class="field is-horizontal">
+      <div class="field-label is-normal">
+        <label class="label">Новый пароль</label>
+      </div>
+      <div class="field-body">
+        <div class="field">
+          <p class="control has-icon">
+          <input type="password" name="password2" class="input" id="reg_password2" placeholder="password">
+            <span class="icon is-small">
+              <i class="fa fa-lock"></i>
+            </span>
+          </p>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="field is-horizontal">
+      <div class="field-label is-normal">
+        <label class="label">Повторите пароль</label>
+      </div>
+      <div class="field-body">
+        <div class="field">
+          <p class="control has-icon">
+            <input type="password" name="password3" class="input" id="reg_password3" placeholder="password">
+            <span class="icon is-small">
+              <i class="fa fa-lock"></i>
+            </span>
+          </p>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="field is-horizontal">
+      <div class="field-label">
+      </div>
+
+      <div class="field-body">
+        <div class="field is-grouped">
+          <div class="field-label">
+          </div>
+
+          <div class="control">
+            <a class="button is-light" href="#">
+              Отмена
+            </a>
+          </div>
+          <div class="control">
+            <button class="button is-success" type="submit">
+              Изменить
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</form>
+
+
+</div>
+<div class="event-window" id="event-window" style="display: none;">
+  <div class="field is-horizontal" style="width: 20vw; max-width:200px">
+    <div class="field-label is-normal">
+      <label class="label">Стиль</label>
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <p class="control">
+          <span class="select" style="width:100%">
+            <select name="style" required="" id="event-window_id_style">
+            <option value="">-------</option><option value="C">повседневный</option><option value="B">деловой</option><option value="S">спорт</option><option value="P">вечеринка</option></select>
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<link rel="stylesheet" href="/pr/frontend/static/css/yourcss.css">
+<link rel="stylesheet" href="/pr/frontend/static/css/font-awesome.css">
+<script src="http://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>
+<script src="/pr/frontend/static/js/ajax_csrf.js" type="text/javascript"> </script>
+<script src="/pr/frontend/static/js/calendar.js" type="text/javascript"> </script>
+<script src="/pr/frontend/static/js/weather.js" type="text/javascript"> </script>
+<script src="/pr/frontend/static/js/pestyle.js" type="text/javascript"> </script>
+
+</body></html>

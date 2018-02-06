@@ -1,0 +1,327 @@
+// Required
+@import "../../node_modules/bootstrap/scss/bootstrap"
+$bootstrap-sass-asset-helper: false
+$icon-font-name: 'glyphicons-halflings-regular'
+$icon-font-svg-id: 'glyphicons_halflingsregular'
+$icon-font-path: './fonts/'
+@import "glyphicons"
+@import "./_glyphicons.scss"
+
+$my_black: #1a1d24
+$my_white: #f1f2f4
+$my_darkseagreen: #1f2f42
+$my_grey: #636c74
+$my_darkgrey: #2d2d2d
+$my_blue: #007bff
+
+body
+	background:  $my_darkseagreen
+	text-align: left
+	color: $my_white
+	font-size: 1rem
+	margin: 0
+	padding: 0
+	background-image: url(profile_bg1.jpg)
+	background-repeat: repeat
+
+.btn_blue
+	background-color: $my_black !important
+	color: $my_white
+	border-width: 0.07rem
+	border-color: $my_grey
+	&:hover
+		background-color: $my_darkgrey
+		border-color: $my_white
+	&:focus
+		border-color: $my_blue !important
+		box-shadow: 0 0 10px 0.1rem rgba($my_blue, 0.9), inset 0 0 10px 0.1rem rgba($my_blue, 0.9)
+	&:active
+		border-color: $my_blue !important
+		box-shadow: inset 0 0 10px 0.2rem rgba($my_blue, 0.9)
+		&:focus
+			animation-name: btn-glow-animation
+			animation-duration: 0.6s
+			animation-iteration-count: 1
+			animation-timing-function: linear
+			@keyframes btn-glow-animation
+				0%
+					box-shadow: 0 0 0 0.1rem rgba($my_blue, 0.9), inset 0 0 10px 0.2rem rgba($my_blue, 0.9)
+				40%
+					box-shadow: 0 0 0 0.1rem rgba($my_blue, 0.9), inset 0 0 2px 0.2rem rgba($my_blue, 0.9)
+				60%
+					box-shadow: 0 0 2px 0.1rem rgba($my_blue, 0.9), inset 0 0 0 0.2rem rgba($my_blue, 0.9)
+				100%
+					box-shadow: 0 0 10px 0.1rem rgba($my_blue, 0.9), inset 0 0 0 0.2rem rgba($my_blue, 0.9)
+
+.navbar
+	@extend .navbar
+	background-color: $my_black
+	padding-left: 10vw
+	padding-right: 10vw
+	color: inherit
+
+.navbar_brand
+	@extend .navbar-brand
+	font-weight: bold
+	color: inherit
+	&:hover
+		color: inherit
+
+.nav-link_dark
+	color: $my_white
+	font-size: 1.2rem
+	padding-top: 0.3rem
+	padding-right: 1rem
+	padding-bottom: 0.3rem
+	padding-left: 1rem
+	&.active
+		background-color: $my_white !important
+		color: $my_darkgrey !important
+	&:hover
+		color: $my_white
+
+
+.nav-tabs_round
+		border: 0.05rem solid $my_grey
+		border-bottom-width: 0.2rem
+		border-top-left-radius: 0.25rem
+		border-top-right-radius: 0.25rem
+
+.search
+		border-width: 0.05rem
+		border-color: $my_grey
+		background-color: $my_white
+		color: $my_black
+		cursor: text
+		&:focus
+			border-color: $my_blue !important
+			box-shadow: 0 0 7px 0.05rem rgba($my_blue, 0.9), inset 0 0 3px 0.01rem rgba($my_blue, 0.9)
+
+.bag__pagination__page
+	pointer-events: none
+	border-radius: 0
+
+.bag
+	height: 70vh
+
+.bag__list
+	height: 100% !important
+	border-style: solid
+	border-color: $my_black
+	margin-bottom: 1rem
+
+.table-scroll
+	height: 100%
+	width: 100%
+	overflow-x: hidden
+	overflow-y: auto
+	padding-top: 1.7rem
+	font-size: 1rem
+	table
+		width: 100%
+		max-width: 100%
+		margin-bottom: 1rem
+		background-color: transparent
+	tr
+		height: 4rem
+		border-bottom: 1px solid rgba($my_white, 1)
+		&:first-child
+			//border-top: 1px solid rgba($my_white, 1)
+		&:focus, &:hover
+			background-color: rgba(0, 0, 0, 0.1)
+			transition: all 0s linear
+			transform: scale(1.008, 1.005)
+			box-shadow: inset 0 0 0.5rem 0.1rem rgba($my_blue, 0.9), 0 0 0.5rem 0.1rem rgba($my_blue, 0.9)
+
+	th, td
+		//width: 10rem
+		padding: 0
+		margin: 0
+		margin-left: 0.1rem
+		margin-right: 0.1rem
+		vertical-align: middle
+		text-align: center
+		&:first-child
+			//padding-left: 0.1rem
+		&:last-child
+			padding-right: 0.2rem
+		&[scope="col-img"]
+			width: 4rem
+			>img
+				user-select: none
+				height: 4rem
+		&[scope="col-bs-amount"]
+			width: 4rem
+		&[scope="col-sold"]
+			width: 4rem
+		&[scope="col-buy-prices"]
+			width: 6rem
+		&[scope="col-sell-prices"]
+			width: 6rem
+			>div
+				font-size: 0.95em
+				&:first-child
+					margin-top: 0.1em
+				&:last-child
+					//margin-bottom: 0.05em
+		&[scope="col-amount"]
+			width: 4rem
+		&[scope="col-trade-amount"]
+			width: 4rem
+
+
+.table-scroll__head_static
+	width: 99%
+	position: absolute
+	top: 8.5vh
+	background-color: $my_black
+	height: 1.8rem
+	border-bottom: 1px solid rgba($my_white, 1)
+	tr
+		height: inherit
+		vertical-align: bottom
+		&:hover
+			transform: none
+			box-shadow: none
+
+	td
+		font-size: 0.9rem
+		text-align: center
+		&[scope="col-img"]
+			width: 5rem
+		&[scope="col-sold"]
+			width: 4.5rem
+
+.table-scroll__head_invisible
+	opacity: 0
+	height: 0
+	>tr
+		height: 0
+		font-size: 0rem
+		>td
+			height: 0
+			border: 0
+
+.table-scroll::-webkit-scrollbar
+	width: 0.1em
+
+
+.table-scroll::-webkit-scrollbar-track
+	-webkit-box-shadow: inset 0 0 6px rgba($my_darkgrey, 0.3)
+
+
+.table-scroll::-webkit-scrollbar-thumb
+	background-color: $my_blue
+	outline: 5px solid slategrey
+	-webkit-box-shadow: inset 0 0 1px 0.01rem rgba($my_blue, 0.9), 0 0 10px 0.1rem rgba($my_blue, 0.9)
+
+
+.table-scroll__trade
+	height: 4rem
+	display: flex
+	justify-content: flex-end
+	align-items: center
+
+.table-scroll__trade__counter
+	float: left
+	padding-right: 0.5em
+
+.table-scroll__trade__arrows
+	float: right
+	width: 1.5rem
+	>div
+		border: 1px solid rgba(0,0,0,0)
+		border-radius: 0.3em
+		align-items: center
+		padding-left: 1px
+		&:first-child
+			width: 100%
+			height: 1.5rem
+		&:last-child
+			width: 100%
+			height: 1.5rem
+		&:hover
+			border: 0.07rem solid $my_white
+			cursor: pointer
+
+.bag-navigation
+	display: flex
+	justify-content: flex-end
+	&.bag-navigation_right
+		justify-content: flex-start
+		>li
+			&:first-child
+				order: 10
+
+.bag-search
+	display: flex
+	justify-content: space-between
+	&.bag-search_right
+		>li
+			&:first-child
+				order: 10
+
+.control-panel
+	border: 0.5rem ridge $my_black
+	margin: 0
+	padding: 0.1rem
+	padding-top: 1rem
+	margin-top: 8vh
+
+.control-panel__user
+	display: flex
+	width: 100%
+	flex-direction: row
+	justify-content: space-around
+	align-items: center
+	padding-right: 1rem
+
+.control-panel__user_right
+	padding-left: 1rem
+	padding-right: 0
+	>span
+		width: 1rem
+		order: 10
+		transform: rotate(180deg)
+
+
+.control-panel__user__button
+	width: 85%
+	>button
+		width: 100%
+		&:hover
+			//border: 0.07rem solid $my_blue
+			//box-shadow: inset 0 0 0.0rem 0.05rem rgba($my_blue, 0.9), 0 0 0.1rem 0.05rem rgba($my_blue, 0.9)
+	&.dropdown-item_thin
+		padding-left: 0.1rem
+		padding-right: 0.1rem
+
+.control-panel__excange
+	display: flex
+	flex-direction: row
+	width: 100%
+	padding-left: 1rem
+	padding-right: 1rem
+	align-content: stretch
+	>button
+		width: 100%
+
+.control-panel__check
+	padding-left: 1rem
+	padding-right: 1rem
+	input
+		width: 1rem
+		height: 1rem
+
+.control-panel__buttons
+	padding-left: 1rem
+	padding-right: 1rem
+	>button
+		width: 100%
+
+
+.scrollable-menu
+	height: auto
+	max-height: 15rem
+	overflow-x: hidden
+	background-color: $my_white
