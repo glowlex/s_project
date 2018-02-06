@@ -8,7 +8,7 @@ st.js
 api/build
 Node.lnk
 .sass-cache
-./frontend/static
+frontend/static
 
 # Logs
 logs
