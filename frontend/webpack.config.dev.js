@@ -34,14 +34,25 @@ export default {
         collapseWhitespace: true
       },
       inject: true
-    })
+    }),
+    //new webpack.ProvidePlugin({
+  //"React": "react",
+//}),
   ],
   module: {
+
     rules: [
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         use: ['babel-loader']
+      },
+      {
+        test: require.resolve('react'),
+        use: [{
+          loader: 'expose-loader',
+          options: 'React'
+        }]
       },
       {
         test: /\.eot(\?v=\d+.\d+.\d+)?$/,

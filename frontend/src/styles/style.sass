@@ -32,6 +32,7 @@ body
 	&:hover
 		background-color: $my_darkgrey
 		border-color: $my_white
+		color: inherit
 	&:focus
 		border-color: $my_blue !important
 		box-shadow: 0 0 10px 0.1rem rgba($my_blue, 0.9), inset 0 0 10px 0.1rem rgba($my_blue, 0.9)
@@ -59,6 +60,8 @@ body
 	padding-left: 10vw
 	padding-right: 10vw
 	color: inherit
+	justify-content: space-between
+	flex-direction: row
 
 .navbar_brand
 	@extend .navbar-brand
@@ -161,7 +164,7 @@ body
 			>div
 				font-size: 0.95em
 				&:first-child
-					margin-top: 0.1em
+					//padding-top: 0.1em
 				&:last-child
 					//margin-bottom: 0.05em
 		&[scope="col-amount"]
@@ -173,13 +176,16 @@ body
 .table-scroll__head_static
 	width: 99%
 	position: absolute
-	top: 8.5vh
+	top: 5rem
 	background-color: $my_black
 	height: 1.8rem
 	border-bottom: 1px solid rgba($my_white, 1)
 	tr
 		height: inherit
 		vertical-align: bottom
+		overflow: hidden
+		text-overflow: ellipsis
+		white-space: nowrap
 		&:hover
 			transform: none
 			box-shadow: none
@@ -288,6 +294,7 @@ body
 .control-panel__user__button
 	width: 85%
 	>button
+		font-size: 1.2rem
 		width: 100%
 		&:hover
 			//border: 0.07rem solid $my_blue
@@ -320,7 +327,7 @@ body
 		width: 100%
 
 
-.scrollable-menu
+.control-panel__user__button__scroll
 	height: auto
 	max-height: 15rem
 	overflow-x: hidden

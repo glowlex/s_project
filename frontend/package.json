@@ -7,6 +7,7 @@
   },
   "scripts": {
     "preinstall": "node tools/nodeVersionCheck.js",
+    "remove-demo": "babel-node tools/removeDemo.js",
     "start-message": "babel-node tools/startMessage.js",
     "prestart": "npm run start-message",
     "start": "concurrently -k -r -s first \"npm run test:watch\" \"npm run open:src\" \"npm run lint:watch\"",
@@ -26,10 +27,12 @@
     "open:cover": "npm run test:cover && opn ./coverage/lcov-report/index.html",
     "analyze-bundle": "babel-node ./tools/analyzeBundle.js"
   },
-  "author": "glowlex",
+  "author": "",
   "license": "MIT",
   "dependencies": {
-    "bootstrap": "4.0.0",
+    "bootstrap": "4.0.0-alpha.6",
+    "bootstrap-sass": "3.3.7",
+    "expose-loader": "0.7.4",
     "object-assign": "4.1.0",
     "react": "16.2.0",
     "react-dom": "16.2.0",
@@ -67,7 +70,6 @@
     "eslint-watch": "3.1.2",
     "extract-text-webpack-plugin": "3.0.1",
     "file-loader": "0.11.2",
-    "font-awesome": "4.7.0",
     "history": "4.6.0",
     "html-webpack-plugin": "2.29.0",
     "identity-obj-proxy": "3.0.0",

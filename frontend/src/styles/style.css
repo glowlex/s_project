@@ -8111,7 +8111,8 @@ body {
   border-color: #636c74; }
   .btn_blue:hover {
     background-color: #2d2d2d;
-    border-color: #f1f2f4; }
+    border-color: #f1f2f4;
+    color: inherit; }
   .btn_blue:focus {
     border-color: #007bff !important;
     box-shadow: 0 0 10px 0.1rem rgba(0, 123, 255, 0.9), inset 0 0 10px 0.1rem rgba(0, 123, 255, 0.9); }
@@ -8230,8 +8231,6 @@ body {
       width: 6rem; }
       .table-scroll th[scope="col-sell-prices"] > div, .table-scroll td[scope="col-sell-prices"] > div {
         font-size: 0.95em; }
-        .table-scroll th[scope="col-sell-prices"] > div:first-child, .table-scroll td[scope="col-sell-prices"] > div:first-child {
-          margin-top: 0.1em; }
     .table-scroll th[scope="col-amount"], .table-scroll td[scope="col-amount"] {
       width: 4rem; }
     .table-scroll th[scope="col-trade-amount"], .table-scroll td[scope="col-trade-amount"] {
@@ -8240,13 +8239,16 @@ body {
 .table-scroll__head_static {
   width: 99%;
   position: absolute;
-  top: 8.5vh;
+  top: 5rem;
   background-color: #1a1d24;
   height: 1.8rem;
   border-bottom: 1px solid #f1f2f4; }
   .table-scroll__head_static tr {
     height: inherit;
-    vertical-align: bottom; }
+    vertical-align: bottom;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; }
     .table-scroll__head_static tr:hover {
       transform: none;
       box-shadow: none; }
@@ -8347,6 +8349,7 @@ body {
 .control-panel__user__button {
   width: 85%; }
   .control-panel__user__button > button {
+    font-size: 1.2rem;
     width: 100%; }
   .control-panel__user__button.dropdown-item_thin {
     padding-left: 0.1rem;
@@ -8375,7 +8378,7 @@ body {
   .control-panel__buttons > button {
     width: 100%; }
 
-.scrollable-menu {
+.control-panel__user__button__scroll {
   height: auto;
   max-height: 15rem;
   overflow-x: hidden;
