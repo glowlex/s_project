@@ -63,6 +63,10 @@ body
 	justify-content: space-between
 	flex-direction: row
 
+.navbar__link
+	&:visited
+		color: inherit
+
 .navbar_brand
 	@extend .navbar-brand
 	font-weight: bold
@@ -332,3 +336,7 @@ body
 	max-height: 15rem
 	overflow-x: hidden
 	background-color: $my_white
+
+@for $i from 1 through 4
+  .#{blank}-#{$i}
+    height: #{$i}vh
