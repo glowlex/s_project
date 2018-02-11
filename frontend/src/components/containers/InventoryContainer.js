@@ -1,6 +1,44 @@
 import React from 'react';
 import InventoryPage from '../InventoryPage';
 import InventoryPageControls from '../InventoryPageControls';
+import store from '../../index';
+import {addInventories} from '../../actions/inventory';
+
+export default class InventoryContainer extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  static defaultProps = {
+    inventories: [],
+  }
+
+  componentDidMount() {
+    this.setState({inventories: testInv.inventories});
+    store.dispatch(addInventories(testInv));
+
+  }
+  render() {
+    var t = store.getState();
+    return(
+      <div className="tab-pane fade  show active" id="nav-inventory" role="tabpanel" aria-labelledby="nav-inventory-tab">
+        <div className="row justify-content-between">
+          <div className="col-5">
+                <InventoryPage inventories={this.props.inventories} side={"left"}/>
+          </div>
+          <div className="col-2 p-0 m-0">
+            <InventoryPageControls />
+          </div>
+          <div className="col-5">
+                <InventoryPage inventories={this.props.inventories} side={"right"}/>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+
 
 const testInv = {
   inventories: [
@@ -39,34 +77,3 @@ const testInv = {
     }
   ],
 };
-
-export default class InventoryContainer extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  static defaultProps = {
-    inventories: [],
-  }
-
-  componentDidMount() {
-    this.setState({inventories: testInv.inventories});
-  }
-  render() {
-    return(
-      <div className="tab-pane fade  show active" id="nav-inventory" role="tabpanel" aria-labelledby="nav-inventory-tab">
-        <div className="row justify-content-between">
-          <div className="col-5">
-                <InventoryPage inventories={this.props.inventories} side={"left"}/>
-          </div>
-          <div className="col-2 p-0 m-0">
-            <InventoryPageControls />
-          </div>
-          <div className="col-5">
-                <InventoryPage inventories={this.props.inventories} side={"right"}/>
-          </div>
-        </div>
-      </div>
-    );
-  }
-}

@@ -10,7 +10,7 @@ export default class InventoryPageControls extends React.Component {
         <div className="control-panel__user">
           <span className="glyphicon glyphicon-triangle-left"></span>
           <div className="dropdown  control-panel__user__button">
-            <button className="btn btn_blue btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button className="btn btn_blue  dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               user left
             </button>
             <div className="dropdown-menu dropdown-menu control-panel__user__button__scroll" role="menu" aria-labelledby="dropdownMenuButton">
@@ -30,7 +30,7 @@ export default class InventoryPageControls extends React.Component {
         <div className="control-panel__user control-panel__user_right">
           <span className="glyphicon glyphicon-triangle-left"></span>
           <div className="dropdown  control-panel__user__button ">
-            <button className="btn btn_blue btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button className="btn btn_blue  dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               user right
             </button>
             <div className="dropdown-menu dropdown-menu control-panel__user__button__scroll" role="menu" aria-labelledby="dropdownMenuButton">
@@ -50,13 +50,13 @@ export default class InventoryPageControls extends React.Component {
           выроврять
         </div>
         <div className="control-panel__excange">
-          <button type="button" className="btn page-link btn_blue btn-secondary" aria-label="Previous">
+          <button type="button" className="btn page-link btn_blue " aria-label="Previous">
             <span className="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
           </button>
-          <button type="button" className="btn page-link btn_blue btn-secondary" aria-label="Previous">
+          <button type="button" className="btn page-link btn_blue " aria-label="Previous">
             <span className="" aria-hidden="true">&#2000;</span>
           </button>
-          <button type="button" className="btn page-link btn_blue btn-secondary" aria-label="Previous">
+          <button type="button" className="btn page-link btn_blue " aria-label="Previous">
             <span className="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
           </button>
         </div>
@@ -64,23 +64,23 @@ export default class InventoryPageControls extends React.Component {
         <div className="control-panel__check">
           <div className="form-check ">
             <label className="form-check-label">
-              <input type="checkbox" className="form-check-input"/>
+              <input type="checkbox" className="form-check-input mr-2"/>
               ASAP
             </label>
-            <div className="blank-2"></div>
+            <div className="blank-1"></div>
             <label className="form-check-label">
-              <input type="checkbox" className="form-check-input"/>
+              <input type="checkbox" className="form-check-input mr-2"/>
               set
             </label>
           </div>
         </div>
         <div className="blank-2"></div>
         <div className="control-panel__buttons">
-          <button className="btn btn_blue btn-secondary" type="button" id="dropdownMenuButton" aria-expanded="false">
+          <button className="btn btn_blue " type="button" id="dropdownMenuButton" aria-expanded="false">
             Ппод/обмен
           </button>
           <div className="blank-2"></div>
-          <button className="btn btn_blue btn-secondary" type="button" id="dropdownMenuButton" aria-expanded="false">
+          <button className="btn btn_blue " type="button" id="dropdownMenuButton" aria-expanded="false">
             Подтвердить
           </button>
         </div>
