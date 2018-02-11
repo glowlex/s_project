@@ -4,9 +4,13 @@ import {RouteWithSubRoutes} from './App';
 
 
 class MainPage extends Component {
+  static propTypes = {
+   routes: React.PropTypes.array,
+ }
   constructor(props) {
     super(props);
   }
+
   render() {
     return (
       <div>
@@ -17,8 +21,7 @@ class MainPage extends Component {
           </Link>
           <button type="button" className="btn btn_blue btn-secondary btn-sm" styles="width:6rem; font-size: 1.1rem">EXIT</button>
         </nav>
-        <div className="mt-4">
-        </div>
+        <div className="mt-4"/>
         <div className="container">
           <nav>
             <div className="nav nav-tabs nav-tabs_round nav-justified" id="nav-tab" role="tablist">
@@ -28,7 +31,7 @@ class MainPage extends Component {
               <Link className="nav-item nav-link nav-link_dark" id="nav-options-tab" data-toggle="tab" to="/options" role="tab" aria-controls="nav-options" aria-selected="false">Настройки</Link>
             </div>
           </nav>
-          <div className="blank-3"></div>
+          <div className="blank-3"/>
           <div className="tab-content" id="nav-tabContent">
             <Switch>
               {this.props.routes.map((route, i) => (

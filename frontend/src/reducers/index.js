@@ -4,7 +4,7 @@
  import inventoryReducer from './inventory';
 
  const rootReducer = combineReducers({
-   inventoryReducer,
+   inventoryState: inventoryReducer,
    routing: routerReducer
  });
 

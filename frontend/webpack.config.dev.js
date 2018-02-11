@@ -36,8 +36,8 @@ export default {
       inject: true
     }),
     //new webpack.ProvidePlugin({
-  //"React": "react",
-//}),
+    //"React": "react",
+    //}),
   ],
   module: {
 
@@ -45,92 +45,97 @@ export default {
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        use: ['babel-loader']
-      },
-      {
-        test: require.resolve('react'),
-        use: [{
-          loader: 'expose-loader',
-          options: 'React'
-        }]
-      },
-      {
-        test: /\.eot(\?v=\d+.\d+.\d+)?$/,
-        use: ['file-loader']
-      },
-      {
-        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              limit: 10000,
-              mimetype: 'application/font-woff'
-            }
+        use: {
+          loader: 'babel-loader',
+          options: {
+            plugins: ['transform-object-assign']
           }
-        ]
-      },
-      {
-        test: /\.[ot]tf(\?v=\d+.\d+.\d+)?$/,
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              limit: 10000,
-              mimetype: 'application/octet-stream'
-            }
-          }
-        ]
-      },
-      {
-        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              limit: 10000,
-              mimetype: 'image/svg+xml'
-            }
-          }
-        ]
-      },
-      {
-        test: /\.(jpe?g|png|gif|ico)$/i,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]'
-            }
-          }
-        ]
-      },
-      {
-        test: /(\.css|\.scss|\.sass)$/,
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              sourceMap: true
-            }
-          }, {
-            loader: 'postcss-loader',
-            options: {
-              plugins: () => [
-                require('autoprefixer')
-              ],
-              sourceMap: true
-            }
-          }, {
-            loader: 'sass-loader',
-            options: {
-              includePaths: [path.resolve(__dirname, 'src', 'scss')],
-              sourceMap: true
-            }
-          }
-        ]
       }
-    ]
-  }
+    },
+    {
+      test: require.resolve('react'),
+      use: [{
+        loader: 'expose-loader',
+        options: 'React'
+      }]
+    },
+    {
+      test: /\.eot(\?v=\d+.\d+.\d+)?$/,
+      use: ['file-loader']
+    },
+    {
+      test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+      use: [
+        {
+          loader: 'url-loader',
+          options: {
+            limit: 10000,
+            mimetype: 'application/font-woff'
+          }
+        }
+      ]
+    },
+    {
+      test: /\.[ot]tf(\?v=\d+.\d+.\d+)?$/,
+      use: [
+        {
+          loader: 'url-loader',
+          options: {
+            limit: 10000,
+            mimetype: 'application/octet-stream'
+          }
+        }
+      ]
+    },
+    {
+      test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+      use: [
+        {
+          loader: 'url-loader',
+          options: {
+            limit: 10000,
+            mimetype: 'image/svg+xml'
+          }
+        }
+      ]
+    },
+    {
+      test: /\.(jpe?g|png|gif|ico)$/i,
+      use: [
+        {
+          loader: 'file-loader',
+          options: {
+            name: '[name].[ext]'
+          }
+        }
+      ]
+    },
+    {
+      test: /(\.css|\.scss|\.sass)$/,
+      use: [
+        'style-loader',
+        {
+          loader: 'css-loader',
+          options: {
+            sourceMap: true
+          }
+        }, {
+          loader: 'postcss-loader',
+          options: {
+            plugins: () => [
+              require('autoprefixer')
+            ],
+            sourceMap: true
+          }
+        }, {
+          loader: 'sass-loader',
+          options: {
+            includePaths: [path.resolve(__dirname, 'src', 'scss')],
+            sourceMap: true
+          }
+        }
+      ]
+    }
+  ]
+}
 };
