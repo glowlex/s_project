@@ -1,7 +1,6 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
-import {isEmpty} from 'lodash';
 
 import InventoryPage from '../InventoryPage';
 import InventoryPageControls from '../InventoryPageControls';
@@ -32,7 +31,7 @@ class InventoryContainer extends React.Component {
   }
 
   render() {
-    if(!this.props.inventoryLoaded) {
+    if(!this.props.inventoryLoaded || this.props.inventoryLoading) {
       return "";
     }
     return(

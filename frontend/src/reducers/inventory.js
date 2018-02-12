@@ -1,33 +1,41 @@
 import * as types from '../actions/actionTypes';
 import objectAssign from 'object-assign';
+import deepAssign from 'assign-deep';
 
 const initialState = {
   inventories: {},
   inventoryLoading: false,
   inventoryLoaded: false,
-  inventoryLeftSideUser: "",
-  inventoryLeftSideBag: "",
-  inventoryRightSideUser: "",
-  inventoryRightSideBag: "",
+  inventoryLeftSide: {
+    user: "",
+    bag: ""
+  },
+  inventoryRightSide: {
+    user: "",
+    bag: ""
+  },
+  inventoryUsers: {}
 };
 
 const inventoryReducer = function(state = initialState, action) {
   switch (action.type) {
     case types.REQUEST_INVENTORY:
-      return objectAssign({}, state, {inventoryLoading: action.inventoryLoading});
+      return objectAssign({}, state, { inventoryLoading: action.inventoryLoading});
     case types.RECEIVE_INVENTORY:
       return objectAssign({}, state, {
         inventories: action.inventories,
         inventoryLoaded: action.inventoryLoaded
       });
-    case types.CHANGE_INVENTORY_BAG_L:
-      return objectAssign({}, state, {inventoryLeftSideBag: action.id});
-    case types.CHANGE_INVENTORY_BAG_R:
-      return objectAssign({}, state, {inventoryRightSideBag: action.id});
-    case types.CHANGE_INVENTORY_USER_L:
-      return objectAssign({}, state, {inventoryLeftSideUser: action.user});
-    case types.CHANGE_INVENTORY_USER_R:
-      return objectAssign({}, state, {inventoryRightSideUser: action.user});
+    case types.UPDATE_INVENTORY_BAG_L:
+      return deepAssign({}, state, { inventoryLeftSide: { bag: action.id}});
+    case types.UPDATE_INVENTORY_BAG_R:
+      return deepAssign({}, state, { inventoryRightSide: { bag: action.id}});
+    case types.UPDATE_INVENTORY_USER_L:
+      return deepAssign({}, state, { inventoryLeftSide: { user: action.user}});
+    case types.UPDATE_INVENTORY_USER_R:
+      return deepAssign({}, state, { inventoryRightSide: { user: action.user}});
+    case types.UPDATE_INVENTORY_USERS:
+      return objectAssign({}, state, { inventoryUsers: action.users});
     default:
       return state;
   }

@@ -1,26 +1,27 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
+import {keys} from 'lodash';
 
 import store from '../index';
 import InventoryPageNav from './views/InventoryPageNav';
+import InventoryPageSearch from './views/InventoryPageSearch';
+import InventoryPageItems from './views/InventoryPageItems';
 
 class InventoryPage extends React.Component {
   static defaultProps = {
     inventories: {},
-    inventoryLeftSideUser: "",
-    inventoryLeftSideBag: "",
-    inventoryRightSideUser: "",
-    inventoryRightSideBag: "",
+    inventoryLeftSide: {},
+    inventoryRightSide: {},
+    inventoryUsers: [],
     inventoryPageSide: "L"
   }
 
   static propTypes = {
     inventories: React.propTypes.object.isRequired,
-    inventoryLeftSideUser: React.propTypes.string,
-    inventoryLeftSideBag: React.propTypes.string,
-    inventoryRightSideUser: React.propTypes.string,
-    inventoryRightSideBag: React.propTypes.string,
+    inventoryLeftSide: React.propTypes.object,
+    inventoryRightSide: React.propTypes.object,
+    inventoryUsers: React.propTypes.array,
     inventoryPageSide: React.propTypes.string.isRequired
   }
 
@@ -33,25 +34,37 @@ class InventoryPage extends React.Component {
   }
 
   render() {
+    let nav, search, items;
+    if (this.props.inventoryPageSide === "L") {
+      let user = this.props.inventoryLeftSide.user;
+      let bags = this.props.inventories[user].bags;
+      let bagSelected = this.props.inventoryLeftSide.bag;
+      nav = (<InventoryPageNav
+        pageSide={this.props.inventoryPageSide}
+        user={user}
+        bagSelected={bagSelected}
+        bags={keys(bags)}
+         />);
+       search = <InventoryPageSearch pageSide={this.props.inventoryPageSide} user={user}/>;
+       items = <InventoryPageItems items={bags[bagSelected].items} />;
+    } else {
+      let user = this.props.inventoryRightSide.user;
+      let bags = this.props.inventories[user].bags;
+      let bagSelected = this.props.inventoryRightSide.bag;
+      nav = (<InventoryPageNav
+        pageSide={this.props.inventoryPageSide}
+        user={user}
+        bagSelected={bagSelected}
+        bags={keys(bags)}
+         />);
+       search = <InventoryPageSearch pageSide={this.props.inventoryPageSide} user={user}/>;
+       items = <InventoryPageItems items={bags[bagSelected].items} />;
+    }
+
     return(
       <div>
-        if (this.props.inventoryPageSide === "L") {
-          <InventoryPageNav bagId={this.props.inventoryLeftSideBag} user={this.props.inventoryLeftSideUser} />
-        } else {
-          <InventoryPageNav bag={this.props.inventoryRightSideBag} user={this.props.inventoryRightSideBag} />
-        }
-        <div className="w-100">
-          <ul className="nav bag-search row px-1 mt-1">
-            <li className="nav-item">
-              <label className="h3" htmlFor="money">567 ₽</label>
-            </li>
-            <li className="nav-item w-50">
-              <div className="input-group-sm w-100">
-                <input type="text" className="form-control search" placeholder="search"/>
-              </div>
-            </li>
-          </ul>
-        </div>
+        {nav}
+        {search}
         <div className="bag">
           <div className="bag__list row">
             <div className="table-scroll">
@@ -69,11 +82,12 @@ class InventoryPage extends React.Component {
                 </thead>
                 <thead className="table-scroll__head_invisible">
                   <tr>
-                    <td scope="col-img"></td>
+                    <td scope="col-img"/>
                     <td scope="col-bs-amount">6666</td>
                     <td scope="col-sold">7777</td>
                     <td scope="col-buy-prices">456.32</td>
-                    <td scope="col-sell-prices"><div>
+                    <td scope="col-sell-prices">
+                    <div>
                       555.77
                     </div>
                     <div>
@@ -87,9 +101,7 @@ class InventoryPage extends React.Component {
                   <td scope="col-trade-amount">0000</td>
                 </tr>
               </thead>
-              <tbody>
-
-              </tbody>
+              {items}
             </table>
           </div>
 
@@ -120,10 +132,8 @@ class InventoryPage extends React.Component {
 const mapStateToProps = function(store) {
   return {
     inventories: store.inventoryState.inventories,
-    inventoryLeftSideUser: store.inventoryState.inventoryLeftSideUser,
-    inventoryLeftSideBag: store.inventoryState.inventoryLeftSideBag,
-    inventoryRightSideUser: store.inventoryState.inventoryRightSideUser,
-    inventoryRightSideBag: store.inventoryState.inventoryRightSideBag
+    inventoryLeftSide: store.inventoryState.inventoryLeftSide,
+    inventoryRightSide: store.inventoryState.inventoryRightSide,
   };
 };
 export default connect(mapStateToProps)(InventoryPage);
