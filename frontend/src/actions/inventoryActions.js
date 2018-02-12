@@ -1,5 +1,7 @@
+'use strict';
 import * as types from './actionTypes';
 import {getInventoryApi} from '../api/inventoryApi';
+import {isEmpty, keys} from 'lodash';
 
 export function requestInventory(users = [], inventoryLoading = true) {
   return {
@@ -9,10 +11,39 @@ export function requestInventory(users = [], inventoryLoading = true) {
   };
 }
 
-export function receiveInventory(inventories) {
+export function receiveInventory(inventories, inventoryLoaded=false) {
   return {
     type: types.RECEIVE_INVENTORY,
-    inventories
+    inventories,
+    inventoryLoaded
+  };
+}
+
+export function changeInventoryBagLeft(id) {
+  return {
+    type: types.CHANGE_INVENTORY_BAG_L,
+    id
+  };
+}
+
+export function changeInventoryBagRight(id) {
+  return {
+    type: types.CHANGE_INVENTORY_BAG_R,
+    id
+  };
+}
+
+export function changeInventoryUserRight(user) {
+  return {
+    type: types.CHANGE_INVENTORY_USER_R,
+    user
+  };
+}
+
+export function changeInventoryUserLeft(user) {
+  return {
+    type: types.CHANGE_INVENTORY_USER_L,
+    user
   };
 }
 
@@ -21,7 +52,13 @@ export function getInventory(users = []) {
     dispatch(requestInventory(users, true));
     try {
       let data = await getInventoryApi(users);
-         dispatch(receiveInventory(data));
+      data = normalizeInventories(data);
+      dispatch(receiveInventory(data.inventories, true));
+      if (!isEmpty(data.inventories)) {
+        let key = keys(data.inventories)[0];
+        dispatch(changeInventoryUserLeft(key));
+        dispatch(changeInventoryBagLeft(keys(data.inventories[key].bags)[0]));
+      }
     } catch (e) {
 
     } finally {
@@ -29,4 +66,21 @@ export function getInventory(users = []) {
     }
 
   };
+}
+
+function normalizeInventories(data) {
+  data.inventories.forEach(i => {
+    i.bags.forEach(j => {
+      j.items = subjectsToHash(j.items, 'assetid');
+    });
+    i.bags = subjectsToHash(i.bags, 'id');
+  });
+  data.inventories = subjectsToHash(data.inventories, 'user');
+  return data;
+}
+
+function subjectsToHash(subjects, id){
+  let hash = {};
+  subjects.forEach(s => hash[s[id]] = s);
+  return hash;
 }

@@ -77,7 +77,7 @@ export default class InventoryPageControls extends React.Component {
         <div className="blank-2"/>
         <div className="control-panel__buttons">
           <button className="btn btn_blue " type="button" id="dropdownMenuButton" aria-expanded="false">
-            Ппод/обмен
+            Прод/обмен
           </button>
           <div className="blank-2"/>
           <button className="btn btn_blue " type="button" id="dropdownMenuButton" aria-expanded="false">

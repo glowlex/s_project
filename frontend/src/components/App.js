@@ -1,4 +1,4 @@
-/* eslint-disable import/no-named-as-default */
+'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Route} from 'react-router-dom';

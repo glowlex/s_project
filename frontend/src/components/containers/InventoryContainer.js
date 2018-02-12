@@ -1,3 +1,4 @@
+'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
 import {isEmpty} from 'lodash';
@@ -10,12 +11,14 @@ import {getInventory} from '../../actions/inventoryActions';
 class InventoryContainer extends React.Component {
   static defaultProps = {
     inventories: {},
-    inventoryLoading: false
+    inventoryLoading: false,
+    inventoryLoaded: false
   }
 
   static propTypes = {
     inventories: React.propTypes.object,
-    inventoryLoading: React.propTypes.boolean
+    inventoryLoading: React.propTypes.boolean,
+    inventoryLoaded: React.propTypes.boolean
   }
 
   constructor(props) {
@@ -23,23 +26,26 @@ class InventoryContainer extends React.Component {
   }
 
   componentDidMount() {
-    if(isEmpty(this.props.inventories)) {
+    if(!this.props.inventoryLoaded) {
     store.dispatch(getInventory());
   }
   }
 
   render() {
+    if(!this.props.inventoryLoaded) {
+      return "";
+    }
     return(
       <div className="tab-pane fade  show active" id="nav-inventory" role="tabpanel" aria-labelledby="nav-inventory-tab">
         <div className="row justify-content-between">
           <div className="col-5">
-                <InventoryPage inventories={this.props.inventories} side={"left"}/>
+                <InventoryPage inventoryPageSide={"L"}/>
           </div>
           <div className="col-2 p-0 m-0">
             <InventoryPageControls />
           </div>
           <div className="col-5">
-                <InventoryPage inventories={this.props.inventories} side={"right"}/>
+                <InventoryPage inventoryPageSide={"R"}/>
           </div>
         </div>
       </div>
@@ -49,8 +55,9 @@ class InventoryContainer extends React.Component {
 
 const mapStateToProps = function(store) {
   return {
-    inventories: store.inventoryState.inventories,
+    inventoryLoaded: store.inventoryState.inventoryLoaded,
     inventoryLoading: store.inventoryState.inventoryLoading
   };
-}
+};
+
 export default connect(mapStateToProps)(InventoryContainer);
