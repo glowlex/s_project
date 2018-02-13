@@ -1,50 +1,43 @@
 import React from 'react';
+import {connect} from 'react-redux';
 
-export default class InventoryPageControls extends React.Component {
+import InventoryPageControlsButtonList from './views/InventoryPageControlsButtonList';
+
+class InventoryPageControls extends React.Component {
+  static defaultProps = {
+    inventoryLeftSide: {
+      user: '!undef',
+    },
+    inventoryRightSide: {
+      user: '!undef',
+    },
+    inventoryUsersArr: [],
+    inventoryUsersObj: {}
+  }
+
+  static propTypes = {
+    inventoryLeftSide: React.propTypes.object,
+    inventoryRightSide: React.propTypes.object,
+    inventoryUsersArr: React.propTypes.arrayOf(React.propTypes.string),
+    inventoryUsersObj: React.propTypes.arrayOf(React.propTypes.object)
+  }
+
   constructor(props) {
     super(props);
   }
+
   render () {
+
     return (
       <div className="control-panel" >
         <div className="control-panel__user">
           <span className="glyphicon glyphicon-triangle-left"/>
-          <div className="dropdown  control-panel__user__button">
-            <button className="btn btn_blue  dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              user left
-            </button>
-            <div className="dropdown-menu dropdown-menu control-panel__user__button__scroll" role="menu" aria-labelledby="dropdownMenuButton">
-              <a className="dropdown-item dropdown-item_thin" href="#">Action</a>
-              <a className="dropdown-item dropdown-item_thin" href="#">Another action</a>
-              <a className="dropdown-item dropdown-item_thin" href="#">Something else here</a>
-              <a className="dropdown-item dropdown-item_thin" href="#">Action</a>
-              <a className="dropdown-item dropdown-item_thin" href="#">Another action</a>
-              <a className="dropdown-item dropdown-item_thin" href="#">Something else here</a>
-              <a className="dropdown-item dropdown-item_thin" href="#">Action</a>
-              <a className="dropdown-item dropdown-item_thin" href="#">Another action</a>
-              <a className="dropdown-item dropdown-item_thin" href="#">Something else here</a>
-            </div>
-          </div>
+              <InventoryPageControlsButtonList side={"L"} id={'InventoryPageControlsButtonLeft'} user={this.props.inventoryLeftSide.user} users={this.props.inventoryUsersArr}/>
         </div>
         <div className="blank-2"/>
         <div className="control-panel__user control-panel__user_right">
           <span className="glyphicon glyphicon-triangle-left"/>
-          <div className="dropdown  control-panel__user__button ">
-            <button className="btn btn_blue  dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              user right
-            </button>
-            <div className="dropdown-menu dropdown-menu control-panel__user__button__scroll" role="menu" aria-labelledby="dropdownMenuButton">
-              <a className="dropdown-item dropdown-item_thin" href="#">Action</a>
-              <a className="dropdown-item dropdown-item_thin" href="#">Another action</a>
-              <a className="dropdown-item dropdown-item_thin" href="#">Something else here</a>
-              <a className="dropdown-item dropdown-item_thin" href="#">Action</a>
-              <a className="dropdown-item dropdown-item_thin" href="#">Another action</a>
-              <a className="dropdown-item dropdown-item_thin" href="#">Something else here</a>
-              <a className="dropdown-item dropdown-item_thin" href="#">Action</a>
-              <a className="dropdown-item dropdown-item_thin" href="#">Another action</a>
-              <a className="dropdown-item dropdown-item_thin" href="#">Something else here</a>
-            </div>
-          </div>
+            <InventoryPageControlsButtonList side={"R"} id={'InventoryPageControlsButtonRight'} user={this.props.inventoryRightSide.user} users={this.props.inventoryUsersArr}/>
         </div>
         <div className="text-center">
           выроврять
@@ -88,3 +81,13 @@ export default class InventoryPageControls extends React.Component {
     );
   }
 }
+
+const mapStateToProps = function(store) {
+  return {
+    inventoryLeftSide: store.inventoryState.inventoryLeftSide,
+    inventoryRightSide: store.inventoryState.inventoryRightSide,
+    inventoryUsersArr: store.inventoryState.inventoryUsersArr
+  };
+};
+
+export default connect(mapStateToProps)(InventoryPageControls);

@@ -110,7 +110,7 @@ body
 	border-radius: 0
 
 .bag
-	height: 70vh
+	height: 68vh
 
 .bag__list
 	height: 100% !important
@@ -185,6 +185,7 @@ body
 	background-color: $my_black
 	height: 1.8rem
 	border-bottom: 1px solid rgba($my_white, 1)
+	z-index: 30
 	tr
 		height: inherit
 		vertical-align: bottom
@@ -338,8 +339,12 @@ body
 .control-panel__user__button__scroll
 	height: auto
 	max-height: 15rem
+	min-width: 8rem
 	overflow-x: hidden
 	background-color: $my_white
+	a
+		padding-left: 1rem
+		padding-right: 1rem
 
 @for $i from 1 through 4
   .#{blank}-#{$i}

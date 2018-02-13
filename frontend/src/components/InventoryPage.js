@@ -13,7 +13,8 @@ class InventoryPage extends React.Component {
     inventories: {},
     inventoryLeftSide: {},
     inventoryRightSide: {},
-    inventoryUsers: [],
+    inventoryUsersArr: [],
+    inventoryUsersObj: {},
     inventoryPageSide: "L"
   }
 
@@ -21,7 +22,8 @@ class InventoryPage extends React.Component {
     inventories: React.propTypes.object.isRequired,
     inventoryLeftSide: React.propTypes.object.isRequired,
     inventoryRightSide: React.propTypes.object.isRequired,
-    inventoryUsers: React.propTypes.arrayOf(React.propTypes.string).isRequired,
+    inventoryUsersArr: React.propTypes.arrayOf(React.propTypes.string).isRequired,
+    inventoryUsersObj: React.propTypes.arrayOf(React.propTypes.object).isRequired,
     inventoryPageSide: React.propTypes.string.isRequired
   }
 

@@ -14,7 +14,8 @@ const initialState = {
     user: "",
     bag: ""
   },
-  inventoryUsers: {}
+  inventoryUsersArr: [],
+  inventoryUsersObj: {}
 };
 
 const inventoryReducer = function(state = initialState, action) {
@@ -31,11 +32,13 @@ const inventoryReducer = function(state = initialState, action) {
     case types.UPDATE_INVENTORY_BAG_R:
       return deepAssign({}, state, { inventoryRightSide: { bag: action.id}});
     case types.UPDATE_INVENTORY_USER_L:
-      return deepAssign({}, state, { inventoryLeftSide: { user: action.user}});
+      return deepAssign({}, state, { inventoryLeftSide: action.user});
     case types.UPDATE_INVENTORY_USER_R:
-      return deepAssign({}, state, { inventoryRightSide: { user: action.user}});
-    case types.UPDATE_INVENTORY_USERS:
-      return objectAssign({}, state, { inventoryUsers: action.users});
+      return deepAssign({}, state, { inventoryRightSide: action.user});
+    case types.UPDATE_INVENTORY_USERS_ARR:
+      return objectAssign({}, state, { inventoryUsersArr: action.users});
+    case types.UPDATE_INVENTORY_USERS_OBJ:
+      return objectAssign({}, state, { inventoryUsersObj: action.users});
     default:
       return state;
   }

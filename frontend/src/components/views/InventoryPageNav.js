@@ -20,6 +20,14 @@ class InventoryPageNav extends React.Component {
     pageSide: React.propTypes.string.isRequired
   }
 
+
+    constructor(props){
+      super(props);
+    }
+
+    componentDidMount() {
+    }
+
   handleBagNext = (e, v=1) => {
     this._handleBag(e, v);
   }
@@ -29,7 +37,6 @@ class InventoryPageNav extends React.Component {
   }
 
   _handleBag = (e, v) => {
-    debugger;
     e.preventDefault();
     let i = indexOf(this.props.bags, this.props.bagSelected)+v;
     //время ебанутых конструкций
@@ -41,13 +48,6 @@ class InventoryPageNav extends React.Component {
     }
   }
 
-
-  constructor(props){
-    super(props);
-  }
-
-  componentDidMount() {
-  }
   render() {
     return (
       <div>
