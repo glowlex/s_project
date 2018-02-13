@@ -8,7 +8,7 @@ class InventoryPageSearch extends React.Component {
 
   static propTypes = {
     pageSide: React.propTypes.string.isRequired,
-    user: React.propTypes.string
+    user: React.propTypes.string.isRequired
   }
 
   constructor(props){
@@ -18,7 +18,7 @@ class InventoryPageSearch extends React.Component {
   render() {
     return (
       <div className="w-100">
-        <ul className={"nav bag-search row px-1 mt-1 " + (this.props.pageSide === "R" ? "bag-search_right" : "")}>
+        <ul className={"nav bag-search row px-1 mt-1 " + (this.props.pageSide === "R" && "bag-search_right")}>
           <li className="nav-item">
             <label className="h3" htmlFor="money">567 ₽</label>
           </li>

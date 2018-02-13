@@ -19,9 +19,9 @@ class InventoryPage extends React.Component {
 
   static propTypes = {
     inventories: React.propTypes.object.isRequired,
-    inventoryLeftSide: React.propTypes.object,
-    inventoryRightSide: React.propTypes.object,
-    inventoryUsers: React.propTypes.array,
+    inventoryLeftSide: React.propTypes.object.isRequired,
+    inventoryRightSide: React.propTypes.object.isRequired,
+    inventoryUsers: React.propTypes.arrayOf(React.propTypes.string).isRequired,
     inventoryPageSide: React.propTypes.string.isRequired
   }
 

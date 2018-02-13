@@ -2,7 +2,7 @@ import React from 'react';
 import {keys} from 'lodash';
 
 InventoryPageItems.propTypes = {
-  items: React.propTypes.array
+  items: React.propTypes.arrayOf(React.propTypes.object).isRequired
 };
 
 function InventoryPageItems (props) {
