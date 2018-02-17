@@ -1,26 +1,21 @@
 import React from 'react';
 
 import store from '../../index';
-import {updateInventoryUserLeft, updateInventoryUserRight} from '../../actions/inventoryActions';
+import {updateInventoryUser} from '../../actions/inventoryActions';
 
 button.propTypes = {
   id: React.propTypes.string,
-  usersArr: React.propTypes.array.isRequired,
+  users: React.propTypes.array.isRequired,
   user: React.propTypes.string.isRequired,
-  side: React.propTypes.string.isRequired
+  partNo: React.propTypes.string.isRequired
 };
 
 button.defaultProps = {
   id:"",
-  side: "L"
 };
 
-function handleButtonClick(e, user, side) {
-  if(side === "L") {
-    store.dispatch(updateInventoryUserLeft(user));
-  } else {
-    store.dispatch(updateInventoryUserRight(user));
-  }
+function handleButtonClick(e, user, partNo) {
+    store.dispatch(updateInventoryUser(user, partNo));
 }
 
 export default function button(props) {
@@ -31,7 +26,7 @@ export default function button(props) {
       </button>
       <div className="dropdown-menu dropdown-menu control-panel__user__button__scroll" role="menu" aria-labelledby="dropdownMenuButton">
         {props.users.map( user => {
-          return (<button key={user} data-user={user} data-side={props.side} className="dropdown-item dropdown-item_thin" onClick={(e) => handleButtonClick(e, user, props.side)} >{user}</button>);
+          return (<button key={user} data-user={user} data-partno={props.partNo} className="dropdown-item dropdown-item_thin" onClick={(e) => handleButtonClick(e, user, props.partNo)} >{user}</button>);
         })}
       </div>
     </div>

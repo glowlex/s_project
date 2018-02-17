@@ -3,21 +3,20 @@ import React from 'react';
 import {indexOf} from 'lodash';
 
 import store from '../../index';
-import {updateInventoryBagLeft, updateInventoryBagRight} from '../../actions/inventoryActions';
+import {updateInventoryBag} from '../../actions/inventoryActions';
 
 class InventoryPageNav extends React.Component {
   static defaultProps = {
     user: "",
     bagSelected: "",
     bags: [],
-    pageSide: "L"
   }
 
   static propTypes = {
     user: React.propTypes.string.isRequired,
     bagSelected: React.propTypes.string.isRequired,
     bags: React.propTypes.arrayOf(React.propTypes.string).isRequired,
-    pageSide: React.propTypes.string.isRequired
+    partNo: React.propTypes.string.isRequired
   }
 
 
@@ -41,17 +40,13 @@ class InventoryPageNav extends React.Component {
     let i = indexOf(this.props.bags, this.props.bagSelected)+v;
     //время ебанутых конструкций
     i += (i >= this.props.bags.length || i <= -1) ? -v : 0;
-    if (this.props.pageSide==="L") {
-      store.dispatch(updateInventoryBagLeft(this.props.bags[i]));
-    } else {
-      store.dispatch(updateInventoryBagRight(this.props.bags[i]));
-    }
+    store.dispatch(updateInventoryBag(this.props.bags[i], this.props.partNo));
   }
 
   render() {
     return (
       <div>
-        <ul className={"nav bag-navigation row px-1 "+ (this.props.pageSide==='R' && "bag-navigation_right")}>
+        <ul className={"nav bag-navigation row px-1 "+ (this.props.partNo==='R' && "bag-navigation_right")}>
           <li className="nav-item col-lg-6 col-md-4"/>
           <li className="nav-item ">
             <button type="button" className="btn btn_blue btn-secondary btn-sm" onClick={this.handleBagPrev}>

@@ -11,20 +11,17 @@ import InventoryPageItems from './views/InventoryPageItems';
 class InventoryPage extends React.Component {
   static defaultProps = {
     inventories: {},
-    inventoryLeftSide: {},
-    inventoryRightSide: {},
+    inventoryParts: {},
     inventoryUsersArr: [],
     inventoryUsersObj: {},
-    inventoryPageSide: "L"
   }
 
   static propTypes = {
     inventories: React.propTypes.object.isRequired,
-    inventoryLeftSide: React.propTypes.object.isRequired,
-    inventoryRightSide: React.propTypes.object.isRequired,
+    inventoryParts: React.propTypes.object.isRequired,
     inventoryUsersArr: React.propTypes.arrayOf(React.propTypes.string).isRequired,
     inventoryUsersObj: React.propTypes.arrayOf(React.propTypes.object).isRequired,
-    inventoryPageSide: React.propTypes.string.isRequired
+    inventoryPartNo: React.propTypes.string.isRequired
   }
 
   constructor(props) {
@@ -37,32 +34,17 @@ class InventoryPage extends React.Component {
 
   render() {
     let nav, search, items;
-    if (this.props.inventoryPageSide === "L") {
-      let user = this.props.inventoryLeftSide.user;
+      let user = this.props.inventoryParts[this.props.inventoryPartNo].user;
       let bags = this.props.inventories[user].bags;
-      let bagSelected = this.props.inventoryLeftSide.bag;
+      let bagSelected = this.props.inventoryParts[this.props.inventoryPartNo].bag;
       nav = (<InventoryPageNav
-        pageSide={this.props.inventoryPageSide}
+        partNo={this.props.inventoryPartNo}
         user={user}
         bagSelected={bagSelected}
         bags={keys(bags)}
          />);
-       search = <InventoryPageSearch pageSide={this.props.inventoryPageSide} user={user}/>;
+       search = <InventoryPageSearch partNo={this.props.inventoryPartNo} user={user}/>;
        items = <InventoryPageItems items={bags[bagSelected].items} />;
-    } else {
-      let user = this.props.inventoryRightSide.user;
-      let bags = this.props.inventories[user].bags;
-      let bagSelected = this.props.inventoryRightSide.bag;
-      nav = (<InventoryPageNav
-        pageSide={this.props.inventoryPageSide}
-        user={user}
-        bagSelected={bagSelected}
-        bags={keys(bags)}
-         />);
-       search = <InventoryPageSearch pageSide={this.props.inventoryPageSide} user={user}/>;
-       items = <InventoryPageItems items={bags[bagSelected].items} />;
-    }
-
     return(
       <div>
         {nav}
@@ -134,8 +116,9 @@ class InventoryPage extends React.Component {
 const mapStateToProps = function(store) {
   return {
     inventories: store.inventoryState.inventories,
-    inventoryLeftSide: store.inventoryState.inventoryLeftSide,
-    inventoryRightSide: store.inventoryState.inventoryRightSide,
+    inventoryParts: store.inventoryState.inventoryParts,
+    inventoryUsersArr: store.inventoryState.usersArr,
+    inventoryUsersObj: store.inventoryState.inventoryUsersObj
   };
 };
 export default connect(mapStateToProps)(InventoryPage);

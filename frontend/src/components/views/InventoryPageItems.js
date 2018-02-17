@@ -1,9 +1,19 @@
 import React from 'react';
 import {keys} from 'lodash';
 
+import store from '../../index';
+
 InventoryPageItems.propTypes = {
   items: React.propTypes.arrayOf(React.propTypes.object).isRequired
 };
+
+function changeAmountUp(e, id, v=1) {
+  _changeAmount(e, id, v);
+}
+
+function _changeAmount(e, id, v) {
+
+}
 
 function InventoryPageItems (props) {
   return (
@@ -64,7 +74,7 @@ function InventoryPageItems (props) {
                   12
                 </div>
                 <div className="table-scroll__trade__arrows">
-                  <div className="btn_blue">
+                  <div className="btn_blue" onClick={(e)=>changeAmountUp(e, v.assetid)}>
                     <span className="glyphicon glyphicon-chevron-up"/>
                   </div>
 

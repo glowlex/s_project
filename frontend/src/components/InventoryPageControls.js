@@ -5,21 +5,13 @@ import InventoryPageControlsButtonList from './views/InventoryPageControlsButton
 
 class InventoryPageControls extends React.Component {
   static defaultProps = {
-    inventoryLeftSide: {
-      user: '!undef',
-    },
-    inventoryRightSide: {
-      user: '!undef',
-    },
-    inventoryUsersArr: [],
-    inventoryUsersObj: {}
+    inventoryParts:{},
+    inventoryUsersArr: []
   }
 
   static propTypes = {
-    inventoryLeftSide: React.propTypes.object,
-    inventoryRightSide: React.propTypes.object,
-    inventoryUsersArr: React.propTypes.arrayOf(React.propTypes.string),
-    inventoryUsersObj: React.propTypes.arrayOf(React.propTypes.object)
+    inventoryParts: React.propTypes.object,
+    inventoryUsersArr: React.propTypes.arrayOf(React.propTypes.string)
   }
 
   constructor(props) {
@@ -32,12 +24,12 @@ class InventoryPageControls extends React.Component {
       <div className="control-panel" >
         <div className="control-panel__user">
           <span className="glyphicon glyphicon-triangle-left"/>
-              <InventoryPageControlsButtonList side={"L"} id={'InventoryPageControlsButtonLeft'} user={this.props.inventoryLeftSide.user} users={this.props.inventoryUsersArr}/>
+              <InventoryPageControlsButtonList partNo={'L'} id={'InventoryPageControlsButtonLeft'} user={this.props.inventoryParts['L'].user} users={this.props.inventoryUsersArr}/>
         </div>
         <div className="blank-2"/>
         <div className="control-panel__user control-panel__user_right">
           <span className="glyphicon glyphicon-triangle-left"/>
-            <InventoryPageControlsButtonList side={"R"} id={'InventoryPageControlsButtonRight'} user={this.props.inventoryRightSide.user} users={this.props.inventoryUsersArr}/>
+            <InventoryPageControlsButtonList partNo={'R'} id={'InventoryPageControlsButtonRight'} user={this.props.inventoryParts['R'].user} users={this.props.inventoryUsersArr}/>
         </div>
         <div className="text-center">
           выроврять
@@ -84,8 +76,7 @@ class InventoryPageControls extends React.Component {
 
 const mapStateToProps = function(store) {
   return {
-    inventoryLeftSide: store.inventoryState.inventoryLeftSide,
-    inventoryRightSide: store.inventoryState.inventoryRightSide,
+    inventoryParts: store.inventoryState.inventoryParts,
     inventoryUsersArr: store.inventoryState.inventoryUsersArr
   };
 };

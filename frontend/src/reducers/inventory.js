@@ -1,46 +1,46 @@
 import * as types from '../actions/actionTypes';
-import objectAssign from 'object-assign';
-import deepAssign from 'assign-deep';
+import {assign} from 'lodash';
+import {set} from 'lodash/fp';
 
 const initialState = {
   inventories: {},
   inventoryLoading: false,
   inventoryLoaded: false,
-  inventoryLeftSide: {
-    user: "",
-    bag: ""
-  },
-  inventoryRightSide: {
-    user: "",
-    bag: ""
-  },
+  inventoryParts: {},
   inventoryUsersArr: [],
   inventoryUsersObj: {}
 };
+/*
+const inventoryPartNo = {
+    user: "",
+    bag: "",
+    itemsSelected: {}
+};*/
 
 const inventoryReducer = function(state = initialState, action) {
+  let t;
   switch (action.type) {
-    case types.REQUEST_INVENTORY:
-      return objectAssign({}, state, { inventoryLoading: action.inventoryLoading});
-    case types.RECEIVE_INVENTORY:
-      return objectAssign({}, state, {
-        inventories: action.inventories,
-        inventoryLoaded: action.inventoryLoaded
-      });
-    case types.UPDATE_INVENTORY_BAG_L:
-      return deepAssign({}, state, { inventoryLeftSide: { bag: action.id}});
-    case types.UPDATE_INVENTORY_BAG_R:
-      return deepAssign({}, state, { inventoryRightSide: { bag: action.id}});
-    case types.UPDATE_INVENTORY_USER_L:
-      return deepAssign({}, state, { inventoryLeftSide: action.user});
-    case types.UPDATE_INVENTORY_USER_R:
-      return deepAssign({}, state, { inventoryRightSide: action.user});
-    case types.UPDATE_INVENTORY_USERS_ARR:
-      return objectAssign({}, state, { inventoryUsersArr: action.users});
-    case types.UPDATE_INVENTORY_USERS_OBJ:
-      return objectAssign({}, state, { inventoryUsersObj: action.users});
+    case types.INVENTORY_REQUEST:
+    return assign({}, state, { inventoryLoading: action.inventoryLoading});
+    case types.INVENTORY_RECEIVE:
+    return assign({}, state, {
+      inventories: action.inventories,
+      inventoryLoaded: action.inventoryLoaded
+    });
+    case types.INVENTORY_BAG_UPDATE:
+    //у lodash/fp аргументы идут иначе
+    t = set(['inventoryParts', action.no, 'bag'], action.bagId, assign({}, state));
+    return t;
+    case types.INVENTORY_USER_UPDATE:
+    return set(['inventoryParts', action.no], action.user, assign({}, state));
+    case types.INVENTORY_USERS_ARR_UPDATE:
+    return assign({}, state, { inventoryUsersArr: action.users});
+    case types.INVENTORY_USERS_OBJ_UPDATE:
+    return assign({}, state, { inventoryUsersObj: action.users});
+    case types.INVENTORY_ITEM_SELECT_ADD:
+    return set(['inventoryParts', action.no, action.item.assetid], action.item, assign({}, state));
     default:
-      return state;
+    return state;
   }
 };
 

@@ -6,7 +6,7 @@ import store from '../index';
 
 export function requestInventory(users = [], inventoryLoading = false) {
   return {
-    type: types.REQUEST_INVENTORY,
+    type: types.INVENTORY_REQUEST,
     users,
     inventoryLoading
   };
@@ -14,65 +14,65 @@ export function requestInventory(users = [], inventoryLoading = false) {
 
 export function receiveInventory(inventories, inventoryLoaded=false) {
   return {
-    type: types.RECEIVE_INVENTORY,
+    type: types.INVENTORY_RECEIVE,
     inventories,
     inventoryLoaded
   };
 }
 
-export function updateInventoryBagLeft(id) {
+export function updateInventoryBag(bagId, no) {
   return {
-    type: types.UPDATE_INVENTORY_BAG_L,
-    id
+    type: types.INVENTORY_BAG_UPDATE,
+    bagId,
+    no
   };
 }
 
-export function updateInventoryBagRight(id) {
-  return {
-    type: types.UPDATE_INVENTORY_BAG_R,
-    id
-  };
-}
-
-export function updateInventoryUserRight(user) {
+export function updateInventoryUser(user, no) {
   let t = store.getState();
   t = t.inventoryState.inventoryUsersObj[user][0];
   return {
-    type: types.UPDATE_INVENTORY_USER_R,
+    type: types.INVENTORY_USER_UPDATE,
     user: {
       user: user,
-      bag: t
-    }
-  };
-}
-
-export function updateInventoryUserLeft(user) {
-  let t = store.getState();
-  t = t.inventoryState.inventoryUsersObj[user][0];
-  return {
-    type: types.UPDATE_INVENTORY_USER_L,
-    user: {
-      user: user,
-      bag: t
-    }
+      bag: t,
+      itemsSelected: {}
+    },
+    no
   };
 }
 
 export function updateInventoryUsersArr(users) {
   return {
-    type: types.UPDATE_INVENTORY_USERS_ARR,
+    type: types.INVENTORY_USERS_ARR_UPDATE,
     users
   };
 }
 
 export function updateInventoryUsersObj(users) {
   return {
-    type: types.UPDATE_INVENTORY_USERS_OBJ,
+    type: types.INVENTORY_USERS_OBJ_UPDATE,
     users
   };
 }
 
-export function getInventory(users = []) {
+export function addInventoryItemSelect(item, no) {
+  return {
+    type: types.INVENTORY_ITEM_SELECT_ADD,
+    item,
+    no
+  };
+}
+
+export function deleteInventoryItemSelect(item, no) {
+  return {
+    type: types.INVENTORY_ITEM_SELECT_DELETE,
+    item,
+    no
+  };
+}
+
+export function getInventory(parts, users = []) {
   return async (dispatch) => {
     dispatch(requestInventory(users, true));
     try {
@@ -83,11 +83,13 @@ export function getInventory(users = []) {
         dispatch(updateInventoryUsersArr(data.usersArr));
         dispatch(updateInventoryUsersObj(data.usersObj));
         let u = data.usersArr[0];
-        dispatch(updateInventoryUserLeft(u));
+        dispatch(updateInventoryUser(u, parts[0]));
         if(data.usersArr.length > 1 ){
           u = data.usersArr[1];
         }
-        dispatch(updateInventoryUserRight(u));
+        if(parts.length>1){
+          dispatch(updateInventoryUser(u, parts[1]));
+      }
       }
     } catch (e) {
         console.log('getInventory error');

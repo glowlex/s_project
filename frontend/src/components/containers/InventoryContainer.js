@@ -24,7 +24,7 @@ class InventoryContainer extends React.Component {
 
   componentDidMount() {
     if(!this.props.inventoryLoaded) {
-      store.dispatch(getInventory());
+      store.dispatch(getInventory(['L', 'R']));
     }
   }
 
@@ -36,13 +36,13 @@ class InventoryContainer extends React.Component {
       <div className="tab-pane fade  show active" id="nav-inventory" role="tabpanel" aria-labelledby="nav-inventory-tab">
         <div className="row justify-content-between">
           <div className="col-5">
-            <InventoryPage inventoryPageSide={"L"}/>
+            <InventoryPage inventoryPartNo={"L"}/>
           </div>
           <div className="col-2 p-0 m-0">
             <InventoryPageControls />
           </div>
           <div className="col-5">
-            <InventoryPage inventoryPageSide={"R"}/>
+            <InventoryPage inventoryPartNo={"R"}/>
           </div>
         </div>
       </div>
