@@ -36,7 +36,8 @@ export function updateInventoryUser(user, no) {
     user: {
       user: user,
       bag: t,
-      itemsSelected: {}
+      itemsSelected: {},
+      page: 0
     },
     no
   };
@@ -56,18 +57,28 @@ export function updateInventoryUsersObj(users) {
   };
 }
 
-export function addInventoryItemSelect(item, no) {
+export function addInventoryItemSelect(item, no, amount=1) {
   return {
     type: types.INVENTORY_ITEM_SELECT_ADD,
     item,
-    no
+    no,
+    amount
   };
 }
 
-export function deleteInventoryItemSelect(item, no) {
+export function deleteInventoryItemSelect(item, no, amount=1) {
   return {
     type: types.INVENTORY_ITEM_SELECT_DELETE,
     item,
+    no,
+    amount
+  };
+}
+
+export function updateInventoryBagPage(page, no) {
+  return {
+    type: types.INVENTORY_BAG_PAGE_UPDATE,
+    page,
     no
   };
 }

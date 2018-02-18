@@ -7,6 +7,7 @@ import store from '../index';
 import InventoryPageNav from './views/InventoryPageNav';
 import InventoryPageSearch from './views/InventoryPageSearch';
 import InventoryPageItems from './views/InventoryPageItems';
+import InventoryPagePagination from './views/InventoryPagePagination';
 
 class InventoryPage extends React.Component {
   static defaultProps = {
@@ -33,25 +34,29 @@ class InventoryPage extends React.Component {
   }
 
   render() {
-    let nav, search, items;
+    let nav, search, items, pagination;
       let user = this.props.inventoryParts[this.props.inventoryPartNo].user;
       let bags = this.props.inventories[user].bags;
       let bagSelected = this.props.inventoryParts[this.props.inventoryPartNo].bag;
+      let part = this.props.inventoryPartNo;
+      let id = "InventoryPageItems_" + this.props.inventoryPartNo;
+      let page = this.props.inventoryParts[this.props.inventoryPartNo].page;
       nav = (<InventoryPageNav
-        partNo={this.props.inventoryPartNo}
+        partNo={part}
         user={user}
         bagSelected={bagSelected}
         bags={keys(bags)}
          />);
-       search = <InventoryPageSearch partNo={this.props.inventoryPartNo} user={user}/>;
-       items = <InventoryPageItems items={bags[bagSelected].items} />;
-    return(
+       search = <InventoryPageSearch partNo={part} user={user}/>;
+       items = <InventoryPageItems id={id} pageSelected={page} items={bags[bagSelected].items} itemsSelected={this.props.inventoryParts[part].itemsSelected} partNo={part} />;
+       pagination = <InventoryPagePagination pageSelected={page} partNo={part} />;
+  return(
       <div>
         {nav}
         {search}
         <div className="bag">
           <div className="bag__list row">
-            <div className="table-scroll">
+            <div className="table-scroll" id={id}>
               <table >
                 <thead className="table-scroll__head_static">
                   <tr>
@@ -90,23 +95,7 @@ class InventoryPage extends React.Component {
           </div>
 
         </div>
-        <nav aria-label="Page navigation">
-          <ul className="pagination justify-content-end row">
-            <li className="page-item">
-              <button type="button" className="btn page-link btn_blue btn-secondary btn-sm" aria-label="Previous">
-                <span className="glyphicon glyphicon-menu-left" aria-hidden="true"/>
-              </button>
-            </li>
-            <li className="page-item">
-              <a className="page-link btn_blue btn-sm bag__pagination__page" href="#">1 из 3</a>
-            </li>
-            <li className="page-item">
-              <button type="button" className="btn page-link btn_blue btn-secondary btn-sm" aria-label="Previous">
-                <span className="glyphicon glyphicon-menu-right" aria-hidden="true"/>
-              </button>
-            </li>
-          </ul>
-        </nav>
+        {pagination}
       </div>
     </div>
   );

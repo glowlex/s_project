@@ -1,27 +1,54 @@
 import React from 'react';
-import {keys} from 'lodash';
+import {keys, get} from 'lodash';
 
 import store from '../../index';
+import {addInventoryItemSelect, deleteInventoryItemSelect} from '../../actions/inventoryActions';
+import {convertRem} from '../../tools';
 
-InventoryPageItems.propTypes = {
-  items: React.propTypes.arrayOf(React.propTypes.object).isRequired
+class InventoryPageItems extends React.Component {
+
+static propTypes = {
+  items: React.propTypes.arrayOf(React.propTypes.object).isRequired,
+  partNo: React.propTypes.string.isRequired,
+  itemsSelected: React.propTypes.object,
+  id: React.propTypes.string,
+  pageSelected: React.propTypes.number
 };
 
-function changeAmountUp(e, id, v=1) {
-  _changeAmount(e, id, v);
+static defaultProps = {
+  itemsSelected: {},
+  items: {},
+  pageSelected: 0
+};
+
+constructor(props) {
+  super(props);
 }
 
-function _changeAmount(e, id, v) {
-
+componentDidUpdate() {
+  let elem = document.getElementById(this.props.id);
+  elem.scrollTo(0, this.props.pageSelected*convertRem(4));
 }
 
-function InventoryPageItems (props) {
+changeAmountUp = (e, item, no) => {
+  e.preventDefault();
+  store.dispatch(addInventoryItemSelect(item, no));
+}
+
+changeAmountDown = (e, item, no) => {
+  e.preventDefault();
+  store.dispatch(deleteInventoryItemSelect(item, no));
+}
+
+
+
+render () {
   return (
     <tbody>
-      {keys(props.items).map((k, i) => {
-        let v = props.items[k];
+      {keys(this.props.items).map((k, i) => {
+        let item = this.props.items[k];
         return (
-          <tr key={v.assetid} tabIndex={i}>
+          <tr key={item.classid} tabIndex={i}>
           <th scope="col-img">
             <img src=".\96fx96f.png"  alt=""/>
            </th>
@@ -62,7 +89,7 @@ function InventoryPageItems (props) {
             </th>
             <th scope="col-amount">
               <div >
-                {v.amount}
+                {item.amount}
               </div>
               <div >
                 198
@@ -71,14 +98,14 @@ function InventoryPageItems (props) {
             <th scope="col-trade-amount" >
               <div className="table-scroll__trade">
                 <div className="table-scroll__trade__counter">
-                  12
+                  {get(this.props, ['itemsSelected', item.classid, 'amountSelect'], 0)}
                 </div>
                 <div className="table-scroll__trade__arrows">
-                  <div className="btn_blue" onClick={(e)=>changeAmountUp(e, v.assetid)}>
+                  <div className="btn_blue" onClick={(e) => this.changeAmountUp(e, item, this.props.partNo)}>
                     <span className="glyphicon glyphicon-chevron-up"/>
                   </div>
 
-                  <div className="btn_blue">
+                  <div className="btn_blue" onClick={e => this.changeAmountDown(e, item, this.props.partNo)}>
                     <span className="glyphicon glyphicon-chevron-down"/>
                   </div>
                 </div>
@@ -91,4 +118,5 @@ function InventoryPageItems (props) {
   );
 }
 
+}
 export default InventoryPageItems;
