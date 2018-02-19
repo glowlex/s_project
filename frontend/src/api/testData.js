@@ -1,4 +1,18 @@
 
+export const testLogin = {
+  userInfo: {
+    login: "userrr"
+  },
+  userOptions: {
+    tGramm: "",
+    allowSendLogs: 0,
+    allowTempPass: 0,
+    tempPassDuration: 0,
+    curPass: "",
+    newPass: ""
+  }
+};
+
 export const testInv = {
   inventories: [
     {

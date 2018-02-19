@@ -83,6 +83,28 @@ export function updateInventoryBagPage(page, no) {
   };
 }
 
+export function requestUserLogin(status) {
+  return {
+    type: types.APP_USER_LOGIN_REQUEST,
+    status
+  };
+}
+
+export function succesUserLogin(status) {
+  return {
+    type: types.APP_USER_LOGIN_SUCCESS,
+    status
+  };
+}
+
+export function updateUser(userInfo, userOptions) {
+  return {
+    type: types.APP_USER_UPDATE,
+    userInfo,
+    userOptions
+  };
+}
+
 export function getInventory(parts, users = []) {
   return async (dispatch) => {
     dispatch(requestInventory(users, true));

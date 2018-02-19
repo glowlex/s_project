@@ -23,11 +23,15 @@ static defaultProps = {
 
 constructor(props) {
   super(props);
+  this.lastPageSelected = 0;
 }
 
 componentDidUpdate() {
+  if(this.props.pageSelected !== this.lastPageSelected) {
   let elem = document.getElementById(this.props.id);
   elem.scrollTo(0, this.props.pageSelected*convertRem(4));
+  this.lastPageSelected = this.props.pageSelected;
+}
 }
 
 changeAmountUp = (e, item, no) => {

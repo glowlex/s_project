@@ -1,15 +1,21 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Route} from 'react-router-dom';
+import {Route, Redirect} from 'react-router-dom';
 import InventoryContainer from './containers/InventoryContainer';
 import MainPage from './MainPage';
+import LoginForm from './views/LoginForm';
 
-const routes = [
-  { path: '/inventory',
+const routes = {
+  logOff: [{
+    path: '/login',
+    component: LoginForm
+  }],
+  logOn: [{
+    path: '/inventory',
     component: InventoryContainer
-  },
-];
+  }],
+};
 
 export const RouteWithSubRoutes = (route) => (
   <Route path={route.path} render={props => (
@@ -23,7 +29,8 @@ export const RouteWithSubRoutes = (route) => (
   class App extends React.Component {
     render() {
       return (
-        <MainPage routes={routes}>
+        <MainPage routes={routes.logOn} routesLogOff={routes.logOff}>
+        <Redirect from="*" to="/" />
         </MainPage>
       );
     }
