@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import { Link, Switch, withRouter } from 'react-router-dom';
+import { Link, Switch, withRouter, Redirect} from 'react-router-dom';
 import { push } from 'react-router-redux';
 
 import {RouteWithSubRoutes} from './App';
@@ -25,7 +25,7 @@ class MainPage extends Component {
   componentDidMount() {
     if(!this.props.userLoggedOn) {
     store.dispatch(push("/login"));
-    }
+  }
   }
 
   render() {
@@ -39,7 +39,7 @@ class MainPage extends Component {
           {this.props.userLoggedOn ?
           (<button type="button" className="btn btn_blue btn-secondary btn-sm" styles="width:6rem; font-size: 1.1rem">EXIT</button>)
           :
-          (<button type="button" className="btn btn_blue btn-secondary btn-sm" styles="width:6rem; font-size: 1.1rem">login</button>)
+          (<button onClick={()=>store.dispatch(push("/login"))} type="button" className="btn btn_blue btn-secondary btn-sm" styles="width:6rem; font-size: 1.1rem">LOGIN</button>)
         }
         </nav>
         <div className="mt-4"/>
@@ -59,11 +59,12 @@ class MainPage extends Component {
               {this.props.routes.map((route, i) => (
                 <RouteWithSubRoutes key={i} {...route}/>
               ))}
+              <Redirect to="/inventory"/>
             </Switch>
           </div></div>) : (<div className="container">
           <Switch>
           {this.props.routesLogOff.map((route, i) => (
-            <RouteWithSubRoutes key={i} {...route}/>
+            <RouteWithSubRoutes key={i} userLogging={this.props.userLogging} userLoggedOn={this.props.userLoggedOn} {...route}/>
           ))}
         </Switch>
       </div>)}

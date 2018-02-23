@@ -1,22 +1,51 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
+
+import {doLogin} from '../../actions/appActions';
+import store from '../../index';
 
 export default class LoginForm extends React.Component {
+  static propTypes = {
+    userLoggedOn: React.propTypes.boolean,
+    userLogging: React.propTypes.boolean
+  }
+
+  static defaultProps = {
+    userLogging: false,
+    userLoggedOn: false
+  }
   constructor(props) {
     super(props);
   }
 
+  onLoginClick = (e) => {
+    e.preventDefault();
+    let login = e.target.form.elements.namedItem("loginPage__login").value;
+    let pass = e.target.form.elements.namedItem("loginPage__pass").value;
+    if(!login || !pass) {
+      return;
+    }
+    store.dispatch(doLogin(login, pass));
+  }
+
   render(){
     return (
-      <div>
-        <h2 className="alt-header">About</h2>
-        <p>
-          This example app is part of the <a href="https://github.com/coryhouse/react-slingshot">React-Slingshot
-          starter kit</a>.
-        </p>
-        <p>
-          Click this bad link to see the 404 page.
-        </p>
+      <form className="d-flex justify-content-center">
+        <div className="w-50">
+      <div className="form-group">
+        <label className="text-center w-100 h3" htmlFor="registration">Log In</label>
+          <div className="blank-2"/>
+          <input id="loginPage__login" required className="form-control" type="text" placeholder="Login"/>
       </div>
+      <div className="form-group">
+        <input id="loginPage__pass" required className="form-control" type="password" placeholder="Password"/>
+      </div>
+      <div className="form-group">
+      <button type="submit" className="btn btn_blue" onClick={this.onLoginClick} disabled={this.props.userLogging && "disabled"}>Sign In</button>
+        <Link to="/registration"><div className="h4 float-right">Registration</div></Link>
+        </div>
+      </div>
+      </form>
     );
   }
 }

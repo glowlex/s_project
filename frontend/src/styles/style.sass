@@ -29,6 +29,7 @@ body
 	color: $my_white
 	border-width: 0.07rem
 	border-color: $my_grey
+	cursor: pointer
 	&:hover
 		background-color: $my_darkgrey
 		border-color: $my_white
@@ -353,3 +354,11 @@ body
 .pagination__count
 	min-width: 3rem
 	text-align: center
+
+.btn_link
+	height: 100%
+	display: block
+	color: inherit
+	&:focus, &:active, &:hover
+		color: inherit
+		text-decoration: none

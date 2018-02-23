@@ -125,7 +125,8 @@ export function getInventory(parts, users = []) {
       }
       }
     } catch (e) {
-        console.log('getInventory error');
+      console.log('getInventory error');
+      return e;
     } finally {
       dispatch(requestInventory(users, false));
     }
