@@ -97,14 +97,6 @@ export function succesUserLogin(status) {
   };
 }
 
-export function updateUser(userInfo, userOptions) {
-  return {
-    type: types.APP_USER_UPDATE,
-    userInfo,
-    userOptions
-  };
-}
-
 export function getInventory(parts, users = []) {
   return async (dispatch) => {
     dispatch(requestInventory(users, true));
@@ -122,7 +114,7 @@ export function getInventory(parts, users = []) {
         }
         if(parts.length>1){
           dispatch(updateInventoryUser(u, parts[1]));
-      }
+        }
       }
     } catch (e) {
       console.log('getInventory error');

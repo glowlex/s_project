@@ -39,8 +39,8 @@ export default class InventoryPagePagination extends React.Component {
               <span className="glyphicon glyphicon-menu-left" aria-hidden="true"/>
             </button>
           </li>
-          <li className="page-item pagination__count">
-            <a className="page-link btn_blue btn-sm bag__pagination__page" href="#">{this.props.pageSelected+1}</a>
+          <li className="page-item bag__pagination__count">
+            <span className="page-link btn_blue btn-sm bag__pagination__page" >{this.props.pageSelected+1}</span>
           </li>
           <li className="page-item">
             <button type="button" className="btn page-link btn_blue btn-secondary btn-sm" aria-label="Previous" onClick={this.nextPage}>

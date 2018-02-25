@@ -106,9 +106,15 @@ body
 			border-color: $my_blue !important
 			box-shadow: 0 0 7px 0.05rem rgba($my_blue, 0.9), inset 0 0 3px 0.01rem rgba($my_blue, 0.9)
 
-.bag__pagination__page
+.bag__pagination__count
 	pointer-events: none
 	border-radius: 0
+	span
+		min-width: 3rem
+		text-align: center
+		height: 100%
+
+
 
 .bag
 	height: 68vh
@@ -275,11 +281,14 @@ body
 				order: 10
 
 .control-panel
-	border: 0.5rem ridge $my_black
+	border: 0.2rem solid $my_black
+	border-left: 0
+	border-right: 0
 	margin: 0
 	padding: 0.1rem
 	padding-top: 1rem
-	margin-top: 8vh
+	padding-bottom: 1rem
+	margin-top: 8.5vh
 	a
 		&:visited
 			color: inherit
@@ -340,7 +349,7 @@ body
 .control-panel__user__button__scroll
 	height: auto
 	max-height: 15rem
-	min-width: 8rem
+	min-width: 9rem
 	overflow-x: hidden
 	background-color: $my_white
 	a
@@ -350,10 +359,6 @@ body
 @for $i from 1 through 4
   .#{blank}-#{$i}
     height: #{$i}vh
-
-.pagination__count
-	min-width: 3rem
-	text-align: center
 
 .btn_link
 	height: 100%

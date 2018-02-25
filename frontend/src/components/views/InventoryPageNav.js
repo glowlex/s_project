@@ -20,12 +20,12 @@ class InventoryPageNav extends React.Component {
   }
 
 
-    constructor(props){
-      super(props);
-    }
+  constructor(props){
+    super(props);
+  }
 
-    componentDidMount() {
-    }
+  componentDidMount() {
+  }
 
   handleBagNext = (e, v=1) => {
     this._handleBag(e, v);

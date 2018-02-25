@@ -15,7 +15,7 @@ button.defaultProps = {
 };
 
 function handleButtonClick(e, user, partNo) {
-    store.dispatch(updateInventoryUser(user, partNo));
+  store.dispatch(updateInventoryUser(user, partNo));
 }
 
 export default function button(props) {

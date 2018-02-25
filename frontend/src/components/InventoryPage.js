@@ -11,10 +11,6 @@ import InventoryPagePagination from './views/InventoryPagePagination';
 
 class InventoryPage extends React.Component {
   static defaultProps = {
-    inventories: {},
-    inventoryParts: {},
-    inventoryUsersArr: [],
-    inventoryUsersObj: {},
   }
 
   static propTypes = {
@@ -106,7 +102,7 @@ const mapStateToProps = function(store) {
   return {
     inventories: store.inventoryState.inventories,
     inventoryParts: store.inventoryState.inventoryParts,
-    inventoryUsersArr: store.inventoryState.usersArr,
+    inventoryUsersArr: store.inventoryState.inventoryUsersArr,
     inventoryUsersObj: store.inventoryState.inventoryUsersObj
   };
 };
