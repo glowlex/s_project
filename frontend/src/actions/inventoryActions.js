@@ -1,7 +1,7 @@
 'use strict';
 import * as types from './actionTypes';
 import {getInventoryApi} from '../api/inventoryApi';
-import {isEmpty, keys} from 'lodash';
+import {isEmpty, keys, assign} from 'lodash';
 import store from '../index';
 
 export function requestInventory(users = [], inventoryLoading = false) {
@@ -97,16 +97,25 @@ export function succesUserLogin(status) {
   };
 }
 
+export function updateInventoryDescriptions(data) {
+  return {
+    type: types.INVENTORY_DESCRIPTIONS_UPDATE,
+    data
+  };
+}
+
 export function getInventory(parts, users = []) {
   return async (dispatch) => {
     dispatch(requestInventory(users, true));
     try {
       let data = await getInventoryApi(users);
       data = normalizeInventories(data);
+      normalizeDescriptions(data);
       dispatch(receiveInventory(data.inventories, true));
       if (!isEmpty(data.inventories)) {
         dispatch(updateInventoryUsersArr(data.usersArr));
         dispatch(updateInventoryUsersObj(data.usersObj));
+        dispatch(updateInventoryDescriptions(data.descriptions));
         let u = data.usersArr[0];
         dispatch(updateInventoryUser(u, parts[0]));
         if(data.usersArr.length > 1 ){
@@ -126,13 +135,33 @@ export function getInventory(parts, users = []) {
   };
 }
 
+function normalizeDescriptions(data) {
+  for(let u in data.usersObj) {
+    for(let b in data.inventories[u].bags){
+      for(let k in data.inventories[u].bags[b].items) {
+        data.descriptions[k] = data.descriptions[k] || {}; //TODO: решить что делать
+        data.descriptions[k].amount |= 0;
+        data.descriptions[k].amount += data.inventories[u].bags[b].items[k].amount;
+      }
+    }
+  }
+  return data;
+}
+
 function normalizeInventories(data) {
   data.usersObj = {};
+  let desc;
+  data.descriptions = {};
   data.inventories.forEach(i => {
     i.bags.forEach(j => {
-      j.items = subjectsToHash(j.items, 'classid');
+      j.items = subjectsToHash(j.items, 'classId');
     });
     i.bags = subjectsToHash(i.bags, 'name');
+    for(let k in i.bags) {
+    desc = subjectsToHash(i.bags[k].itemDescriptions, 'classId');
+    assign(data.descriptions, desc);
+    delete i.bags[k].itemDescriptions;
+  }
     data.usersObj[i.user] = keys(i.bags);
   });
   data.inventories = subjectsToHash(data.inventories, 'user');

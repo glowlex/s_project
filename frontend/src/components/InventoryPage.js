@@ -11,10 +11,12 @@ import InventoryPagePagination from './views/InventoryPagePagination';
 
 class InventoryPage extends React.Component {
   static defaultProps = {
+
   }
 
   static propTypes = {
     inventories: React.propTypes.object.isRequired,
+    inventoryDescriptions: React.propTypes.object,
     inventoryParts: React.propTypes.object.isRequired,
     inventoryUsersArr: React.propTypes.arrayOf(React.propTypes.string).isRequired,
     inventoryUsersObj: React.propTypes.arrayOf(React.propTypes.object).isRequired,
@@ -44,7 +46,7 @@ class InventoryPage extends React.Component {
         bags={keys(bags)}
          />);
        search = <InventoryPageSearch partNo={part} user={user}/>;
-       items = <InventoryPageItems id={id} pageSelected={page} items={bags[bagSelected].items} itemsSelected={this.props.inventoryParts[part].itemsSelected} partNo={part} />;
+       items = <InventoryPageItems descriptions={this.props.inventoryDescriptions} id={id} pageSelected={page} items={bags[bagSelected].items} itemsSelected={this.props.inventoryParts[part].itemsSelected} partNo={part} />;
        pagination = <InventoryPagePagination pageSelected={page} partNo={part} />;
   return(
       <div>
@@ -103,7 +105,8 @@ const mapStateToProps = function(store) {
     inventories: store.inventoryState.inventories,
     inventoryParts: store.inventoryState.inventoryParts,
     inventoryUsersArr: store.inventoryState.inventoryUsersArr,
-    inventoryUsersObj: store.inventoryState.inventoryUsersObj
+    inventoryUsersObj: store.inventoryState.inventoryUsersObj,
+    inventoryDescriptions : store.inventoryState.inventoryDescriptions
   };
 };
 export default connect(mapStateToProps)(InventoryPage);

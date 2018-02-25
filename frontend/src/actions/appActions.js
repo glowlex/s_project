@@ -56,7 +56,7 @@ export function doReg(login, email, pass) {
         dispatch(successAppReg(false));
       }
     } catch (e) {
-      dispatch(successAppReg(false))
+      dispatch(successAppReg(false));
     } finally {
       dispatch(requestAppReg(false));
     }

@@ -1,49 +1,15 @@
 #%RAML 1.0
 title: s_project
-version: 1.1
+version: 1.0
 baseUri: /api
 types:
-  basicObj_S:
-    properties:
-      status: string
-      errors?: errorList
-    example:
-      status: "200"
-
-  error_S:
-    properties:
-      status: string
-      errors: errorList
-
-  errorList:
-    properties: {
-      fieldName: error
-      }
-
-  error:
-    properties:
-      name: string
-      description: string
-    example:
-      name: "login"
-      description: "login already exists"
-
-  rsaKey_Q:
+  rsaKey:
     properties:
       time: number
-      pubKey: #тодо добавление шифрования на всё
-        type: string
-        description: свой pubkey
+      pubKey: string #тодо добавление шифрования на всё
     example:
       time: 1516618258
       pubKey: "Cq6UA076Sv1d..."
-
-  rsaKey_S:
-    properties:
-      pubKey: string
-    example:
-      pubKey: "QqfhFTUd..."
-
 
   userInfo:
     properties:
@@ -53,29 +19,17 @@ types:
       password:
         type: string
         description: шифрованный
+      time: number
     example:
       login: "9+K3xmRNTaXG9sV..."
+      time: 1516618258
       password: "dRTCq6UA076..."
 
   userInfoShort:
     properties:
-      login:
-        type: string
-    example:
-      login: "user3"
+      login: string
 
-  regInfo:
-    type: userInfo
-    properties:
-      email:
-        type: string
-        description: шифрованный
-    example:
-      login: "9+K3xmRNTaXG9sV..."
-      password: "dRTCq6UA076..."
-      email: "89C1SyUCOQm..."
-
-  userOptions_Q:
+  userOptions:
     properties:
       tGramm?:
         type: string
@@ -87,93 +41,56 @@ types:
         type: boolean
         default: 0
       tempPassDuration?: number
-      email?: string
       curPass?: string
       newPass?: string
-    example:
-      tGramm: "@gramm"
-      allowSendLogs: true
-      allowTempPass: true
-      tempPassDuration: 600
-      email: "a@a.ru"
-      curPass: "jK2TIwGoP/Za3N..."
-      newPass: "IBAAKBgQC..."
 
-  userOptions_S:
+  regInfo:
+    type: userInfo
     properties:
-      tGramm:
+      email:
         type: string
-        default: ""
-      allowSendLogs:
-        type: boolean
-        default: 0
-      allowTempPass:
-        type: boolean
-        default: 0
-      tempPassDuration: number
+        description: шифрованный
+    example:
+      login: "9+K3xmRNTaXG9sV..."
+      time: 1516618268
+      password: "dRTCq6UA076..."
+      email: "89C1SyUCOQm..."
+
+  accountInfoFull:
+    type: accountInfoShort
+    properties:
+      nick: string
       email: string
-      example:
-        tGramm: "@gramm"
-        allowSendLogs: true
-        allowTempPass: true
-        tempPassDuration: 600
-        email: "a@a.ru"
+      password?: string
+      level?: number
+      money?: number
+      tradePermission?: boolean
+      closeFriends?: string[]
 
   accountInfoShort:
     properties:
       login: string
-    example:
-        login: "user"
-
-  accountInfo:
-    type: accountInfoShort
-    properties:
-      login: string
-      email: string
-
-  accountInfo_PQ:
-    type: accountInfoShort
-    properties:
-      login: string
-      email: string
-      password: string
-
-  accountInfo_UQ:
-    type: accountInfoShort
-    properties:
-      login: string
-      email?: string
-      password?: string
-
-  accountInfo_S:
-    properties:
-      nick: string
-      email: string
-      level: number
-      money: number
-      tradePermission: boolean
-      closeFriends: string[]
 
   itemShort:
     properties:
-      assetId: number #тодо дописать поля
+      assetid: number #тодо дописать поля
 
   item:
     type: itemShort
     properties:
-      appId: number
-      amount: number
-      classId: number
-      contextId: number
-      instanceId: number
+      appid?: number
+      amount?: number
+      classid?: number
+      contextid?: number
+      instanceid?: number
       isCurrency: boolean
 
 
   itemDescription:
     properties:
-      appId: number
-      classId: number
-      instanceId?: number
+      appid?: number
+      classid?: number
+      instanceid?: number
       marketFeeApp?: number
       commodity?: number
       currency?: number
@@ -184,106 +101,36 @@ types:
       marketName?: string
       marketTradableRestriction?: number
       marketable?: number
-      name?: string
-      sellOffers?: number
-      buyOffers?: number
-      sellPerDay?: number
-      sellDayMax?: number
-      buyPriceMax?: number
-      buyPriceAvg?: number
-      sellOffersPrice?: number
-      sellOffersPriceMin?: number
-      sellOffersPriceAvg?: number
-
+      name?: number
 
   bag:
     properties:
-      id: number
-      name: string
-      items: item[]
-      itemDescriptions: itemDescription[]
-
-  bagShort:
-    properties:
-      items: itemShort[] #тодо (item | itemShort)[]
-
-  bag_GQ:
-    properties:
-      id: number
+      id?: number
+      name?: string
+      items: item[] #тодо (item | itemShort)[]
+      itemDescriptions?: itemDescription[]
+      asap?:
+        type: boolean
+        default: 0
 
   inventory:
     properties:
       user: string
       bags: bag[]
 
-  inventory_Bag_GQ:
+  exchangeQueryLite:
     properties:
-      user: string
-      bags: bag_GQ[]
+      id?: integer
+      bag?: bag
+      userFrom?: string
+      userTo?: string
 
-  inventory_Bag_GS:
-    properties:
-      user: string
-      bags: bag[]
-
-  exchangeQueryLite_PQ:
-    properties:
-      bag: bagShort
-      userFrom: string
-      userTo: string
-      asap:
-        type: boolean
-        default: 0
-
-  exchangeQueryLiteShort:
-    properties:
-      id: integer
-
-  exchangeQueryLite_PS:
-    properties:
-      id: integer
-      bag: bagShort
-      userFrom: string
-      userTo: string
-      asap:
-        type: boolean
-        default: 0
-
-  exchangeQueryLite_GS:
-    properties:
-      id: integer
-      bag: bag
-      userFrom: string
-      userTo: string
-      asap:
-        type: boolean
-        default: 0
-
-  exchangeQueryComplex_PQ:
+  exchangeQueryComplex:
     properties:
       exchangeQueries:
-        type: exchangeQueryLite_PQ[]
+        type: exchangeQueryLite[]
         description: Упорядочены строго по последовательности обмена
 
-  exchangeQueryComplex_PS:
-    properties:
-      exchangeQueries:
-        type: exchangeQueryLite_PS[]
-        description: Упорядочены строго по последовательности обмена
-
-  exchangeQueryComplex_GS:
-    properties:
-      exchangeQueries:
-        type: exchangeQueryLite_GS[]
-        description: Упорядочены строго по последовательности обмена
-
-  exchangeQueryComplex_DQ:
-    properties:
-      exchangeQueries:
-        type: exchangeQueryLiteShort[]
-
-  exchangeQueryComplex_DS:
-    type: exchangeQueryComplex_DQ
 
 /exchange:
   description: Запросить провести обмен
@@ -292,14 +139,14 @@ types:
       body:
         application/json:
           properties:
-            exchangeQueries: exchangeQueryComplex_PQ
+            exchangeQueries: exchangeQueryComplex
       responses:
         200:
           body:
             application/json:
               properties:
                 exchangeQueries:
-                  type: exchangeQueryComplex_PS
+                  type: exchangeQueryComplex
                   description: содержит успешно принятые сервером запросы
 
   /get:
@@ -314,7 +161,7 @@ types:
             application/json:
               properties:
                 exchangeQueries:
-                  type: exchangeQueryComplex_GS
+                  type: exchangeQueryComplex
                   description: содержит активные обмены
   /delete:
     post:
@@ -322,7 +169,7 @@ types:
       body:
         application/json:
           properties:
-            exchangeQuery: exchangeQueryComplex_DS
+            exchangeQuery: exchangeQueryLite
 
       responses:
         200:
@@ -330,7 +177,7 @@ types:
             application/json:
               properties:
                 exchangeQuery:
-                  type: exchangeQueryComplex_DS
+                  type: exchangeQueryLite
                   description: содержит отменённый обмен
 
 
@@ -358,14 +205,15 @@ types:
           application/json:
             properties:
               accountInfos:
-                type: inventory_Bag_GQ
+                type: inventory
                 description: Передаются ид сумок и имя юзера
 
         responses:
           200:
             body:
               application/json:
-                type: inventory_Bag_GS
+                properties:
+                  bags: bag[]
 
 /login:
   description: Аунтефикация
@@ -376,36 +224,48 @@ types:
         application/json:
           properties:
             userInfo: userInfo
+          example:
+              login: "user"
+              password: "jK2TIwbHtE7GoP/Za3N..."
+              time: 1516618278
       responses:
         200:
           body:
             application/json:
               properties:
                 userInfo: userInfoShort
-                userOptions: userOptions_S
-                status: string
+                userOptions: userOptions
         400:
           body:
-            application/json:
-              type: error_S
+            application/json: {}
   /put:
     post:
       description: Изменить настройки или пароль
       body:
         application/json:
           properties:
-            userOptions: userOptions_Q
-
+            userOptions: userOptions
+          example:
+            tGramm: "@gramm"
+            allowSendLogs: true
+            allowTempPass: true
+            tempPassDuration: 600
+            curPass?: "jK2TIwGoP/Za3N..."
+            newPass?: "IBAAKBgQC..."
       responses:
         200:
           body:
             application/json:
               properties:
-                userOptions: userOptions_S
+                userOptions: userOptions
+              example:
+                tGramm: "@gramm"
+                allowSendLogs: true
+                allowTempPass: true
+                tempPassDuration: 600
         400:
           body:
-            application/json:
-              type: error_S
+            application/json: {}
 
 
 /registration:
@@ -424,12 +284,10 @@ types:
             application/json:
               properties:
                 userInfo: userInfoShort
-                userOptions: userOptions_S
-                status: string
+                userOptions: userOptions
         400:
           body:
-            application/json:
-              type: error_S
+            application/json: {}
 
 /getrsakey:
   description: Получить ключ для шифрования
@@ -439,20 +297,17 @@ types:
       body:
         application/json:
           properties:
-            rsaKey: rsaKey_Q
+            rsaKey: rsaKey
 
       responses:
         200:
           description: Возвращает ключ, которым потом шифруются нужные данные
           body:
             application/json:
-              properties:
-                rsaKey: rsaKey_S
-                status: string
-        400:
-          body:
-            application/json:
-              type: error_S
+              type: rsaKey
+              example:
+                  time: 1516618268
+                  pubKey: "MIICWgIBAAKBgQC..."
 
 /account:
   description: Управление аккаунтами
@@ -464,17 +319,18 @@ types:
           properties:
             accountInfo:
               description: Поля шифруются
-              type: accountInfo_PQ
+              type: accountInfoFull
       responses:
         200:
           body:
             application/json:
               properties:
-                accountInfo: accountInfo_S
+                accountInfo: accountInfoShort
         400:
           body:
             application/json:
-              type: error_S
+              properties:
+                accountInfo: accountInfoShort
 
   /get:
     post:
@@ -487,11 +343,10 @@ types:
             application/json:
               properties:
                 accountInfos:
-                  type: accountInfo_S[]
+                  type: accountInfoFull[]
         400:
           body:
-            application/json:
-              type: error_S
+            application/json: {}
 
   /put:
     post:
@@ -500,20 +355,18 @@ types:
         application/json:
           properties:
             accountInfo:
-              type: accountInfo_UQ
+              type: accountInfoFull
       responses:
         200:
           body:
             application/json:
               properties:
-                accountInfo: accountInfo_S
+                accountInfo: accountInfoShort
         400:
           body:
             application/json:
               properties:
                 accountInfo: accountInfoShort
-                status: string
-                errors: errorList
 
   /delete:
     post:
@@ -523,7 +376,9 @@ types:
           properties:
             accountInfo:
               type: accountInfoShort
-
+          example:
+            accountInfo:
+              login: "user"
       responses:
         200:
           body:
@@ -535,5 +390,3 @@ types:
             application/json:
               properties:
                 accountInfo: accountInfoShort
-                status: string
-                errors: errorList

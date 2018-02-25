@@ -12,10 +12,12 @@ class InventoryPageItems extends React.Component {
     partNo: React.propTypes.string.isRequired,
     itemsSelected: React.propTypes.object,
     id: React.propTypes.string,
-    pageSelected: React.propTypes.number
+    pageSelected: React.propTypes.number,
+    descriptions: React.propTypes.object
   };
 
   static defaultProps = {
+    descriptions: {},
     itemsSelected: {},
     items: {},
     pageSelected: 0
@@ -25,7 +27,7 @@ class InventoryPageItems extends React.Component {
     super(props);
     this.lastPageSelected = 0;
   }
-  
+
   componentDidUpdate() {
     if(this.props.pageSelected !== this.lastPageSelected) {
       let elem = document.getElementById(this.props.id);
@@ -51,44 +53,45 @@ class InventoryPageItems extends React.Component {
       <tbody>
         {keys(this.props.items).map((k, i) => {
           let item = this.props.items[k];
+          let desc = this.props.descriptions[item.classId];
           return (
-            <tr key={item.classid} tabIndex={i}>
+            <tr key={item.classId} tabIndex={i}>
               <th scope="col-img">
-                <img src=".\96fx96f.png"  alt=""/>
+                <img src={desc.iconUrl}  alt=""/>
               </th>
               <th scope="col-bs-amount" >
                 <div>
-                  6756
+                  {desc.sellOffers}
                 </div>
                 <div>
-                  34
+                  {desc.buyOffers}
                 </div>
               </th>
               <th scope="col-sold" >
                 <div >
-                  63
+                  {desc.sellPerDay}
                 </div>
                 <div >
-                  281
+                  {desc.sellDayMax}
                 </div>
               </th>
               <th scope="col-buy-prices" >
                 <div >
-                  675.46
+                  {desc.buyPriceMax}
                 </div>
                 <div >
-                  542.21
+                  {desc.buyPriceAvg}
                 </div>
               </th>
               <th scope="col-sell-prices" >
                 <div >
-                  555.77
+                  {desc.sellOffersPrice}
                 </div>
                 <div >
-                  67546
+                  {desc.sellOffersPriceMin}
                 </div>
                 <div >
-                  675.46
+                  {desc.sellOffersPriceAvg}
                 </div>
               </th>
               <th scope="col-amount">
@@ -96,13 +99,13 @@ class InventoryPageItems extends React.Component {
                   {item.amount}
                 </div>
                 <div >
-                  198
+                  {desc.amount}
                 </div>
               </th>
               <th scope="col-trade-amount" >
                 <div className="table-scroll__trade">
                   <div className="table-scroll__trade__counter">
-                    {get(this.props, ['itemsSelected', item.classid, 'amountSelect'], 0)}
+                    {get(this.props, ['itemsSelected', item.classId, 'amountSelect'], 0)}
                   </div>
                   <div className="table-scroll__trade__arrows">
                     <div className="btn_blue" onClick={(e) => this.changeAmountUp(e, item, this.props.partNo)}>
