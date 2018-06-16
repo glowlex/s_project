@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import { Link, Switch, withRouter} from 'react-router-dom';
 import { push } from 'react-router-redux';
+import PropTypes from 'prop-types';
 
 import {RouteWithSubRoutes} from './App';
 import store from '../index';
@@ -10,10 +11,10 @@ import * as urls from '../constants/urlConsts';
 
 class MainPage extends Component {
   static propTypes = {
-    routes: React.PropTypes.array,
-    userLogging: React.propTypes.boolean,
-    userLoggedOn: React.propTypes.boolean,
-    routesLogOff: React.PropTypes.array
+    routes: PropTypes.array,
+    userLogging: PropTypes.bool,
+    userLoggedOn: PropTypes.bool,
+    routesLogOff: PropTypes.array
   };
   static defaultProps = {
     userLogging: false,

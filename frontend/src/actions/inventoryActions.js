@@ -4,6 +4,19 @@ import {getInventoryApi} from '../api/inventoryApi';
 import {isEmpty, keys, assign} from 'lodash';
 import store from '../index';
 
+export function clearInventoryItemsSelect() {
+  return {
+    type: types.INVENTORY_ITEMS_SELECT_CLEAR,
+  };
+}
+
+export function updateInventoryOfferPerform(status) {
+  return {
+    type: types.INVENTORY_OFFER_PERFORM_UPDATE,
+    status
+  };
+}
+
 export function requestInventory(users = [], inventoryLoading = false) {
   return {
     type: types.INVENTORY_REQUEST,
@@ -154,7 +167,7 @@ function normalizeInventories(data) {
   data.descriptions = {};
   data.inventories.forEach(i => {
     i.bags.forEach(j => {
-      j.items = subjectsToHash(j.items, 'classId');
+      j.items = subjectsToHash(j.items, 'assetId');
     });
     i.bags = subjectsToHash(i.bags, 'name');
     for(let k in i.bags) {

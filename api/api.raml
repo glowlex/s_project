@@ -167,6 +167,7 @@ types:
       contextId: number
       instanceId: number
       isCurrency: boolean
+      frozen: boolean
 
 
   itemDescription:
@@ -292,13 +293,12 @@ types:
       body:
         application/json:
           properties:
-            exchangeQueries: exchangeQueryComplex_PQ
+            type: exchangeQueryComplex_PQ
       responses:
         200:
           body:
             application/json:
               properties:
-                exchangeQueries:
                   type: exchangeQueryComplex_PS
                   description: содержит успешно принятые сервером запросы
 
@@ -313,7 +313,6 @@ types:
           body:
             application/json:
               properties:
-                exchangeQueries:
                   type: exchangeQueryComplex_GS
                   description: содержит активные обмены
   /delete:
@@ -322,14 +321,13 @@ types:
       body:
         application/json:
           properties:
-            exchangeQuery: exchangeQueryComplex_DS
+            type: exchangeQueryComplex_DS
 
       responses:
         200:
           body:
             application/json:
               properties:
-                exchangeQuery:
                   type: exchangeQueryComplex_DS
                   description: содержит отменённый обмен
 

@@ -140,6 +140,7 @@ body
 	tr
 		height: 4rem
 		border-bottom: 1px solid rgba($my_white, 1)
+		border-top: 1px solid rgba($my_white, 1)
 		&:first-child
 			//border-top: 1px solid rgba($my_white, 1)
 		&:focus, &:hover
@@ -199,6 +200,7 @@ body
 		overflow: hidden
 		text-overflow: ellipsis
 		white-space: nowrap
+		border: 0
 		&:hover
 			transform: none
 			box-shadow: none
@@ -217,6 +219,7 @@ body
 	>tr
 		height: 0
 		font-size: 0rem
+		border: 0
 		>td
 			height: 0
 			border: 0
@@ -262,6 +265,12 @@ body
 		&:hover
 			border: 0.07rem solid $my_white
 			cursor: pointer
+
+.table-scroll_item__frozen
+	color: grey
+
+.disable-events
+	pointer-events: none
 
 .bag-navigation
 	display: flex

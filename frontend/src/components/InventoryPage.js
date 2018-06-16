@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import {keys} from 'lodash';
 
 import store from '../index';
@@ -15,12 +16,12 @@ class InventoryPage extends React.Component {
   }
 
   static propTypes = {
-    inventories: React.propTypes.object.isRequired,
-    inventoryDescriptions: React.propTypes.object,
-    inventoryParts: React.propTypes.object.isRequired,
-    inventoryUsersArr: React.propTypes.arrayOf(React.propTypes.string).isRequired,
-    inventoryUsersObj: React.propTypes.arrayOf(React.propTypes.object).isRequired,
-    inventoryPartNo: React.propTypes.string.isRequired
+    inventories: PropTypes.object.isRequired,
+    inventoryDescriptions: PropTypes.object,
+    inventoryParts: PropTypes.object.isRequired,
+    inventoryUsersArr: PropTypes.arrayOf(PropTypes.string).isRequired,
+    inventoryUsersObj: PropTypes.object.isRequired,
+    inventoryPartNo: PropTypes.string.isRequired
   }
 
   constructor(props) {
@@ -56,7 +57,7 @@ class InventoryPage extends React.Component {
           <div className="bag__list row">
             <div className="table-scroll" id={id}>
               <table >
-                <thead className="table-scroll__head_static">
+                <thead className="table-scroll__head_static" style={{borderBottom:"0px"}}>
                   <tr>
                     <td scope="col-img">Icon </td>
                     <td scope="col-bs-amount">П/К</td>

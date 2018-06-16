@@ -1,12 +1,12 @@
 import React from 'react';
-
+import PropTypes from 'prop-types';
 class InventoryPageSearch extends React.Component {
   static defaultProps = {
   }
 
   static propTypes = {
-    partNo: React.propTypes.string.isRequired,
-    user: React.propTypes.string.isRequired
+    partNo: PropTypes.string.isRequired,
+    user: PropTypes.string.isRequired
   }
 
   constructor(props){

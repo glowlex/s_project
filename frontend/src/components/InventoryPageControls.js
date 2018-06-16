@@ -1,7 +1,10 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+import store from '../index';
 
 import InventoryPageControlsButtonList from './views/InventoryPageControlsButtonList';
+import {makeTradeOffer,} from '../actions/tradeActions';
 
 class InventoryPageControls extends React.Component {
   static defaultProps = {
@@ -10,12 +13,17 @@ class InventoryPageControls extends React.Component {
   }
 
   static propTypes = {
-    inventoryParts: React.propTypes.object,
-    inventoryUsersArr: React.propTypes.arrayOf(React.propTypes.string)
+    inventoryParts: PropTypes.object,
+    inventoryUsersArr: PropTypes.arrayOf(PropTypes.string)
   }
 
   constructor(props) {
     super(props);
+  }
+
+   handleSellClick = (e) => {
+    e.preventDefault();
+    store.dispatch(makeTradeOffer());
   }
 
   render () {
@@ -61,8 +69,8 @@ class InventoryPageControls extends React.Component {
         </div>
         <div className="blank-2"/>
         <div className="control-panel__buttons">
-          <button className="btn btn_blue " type="button" id="dropdownMenuButton" aria-expanded="false">
-            Прод/обмен
+          <button className={"btn btn_blue "+ (this.props.inventorySellRequest && "disabled")} type="button" id="dropdownMenuButton" aria-expanded="false" onClick={(e) => this.handleSellClick(e)}>
+            {this.props.inventoryTradePerform ? "Selling..." : "Прод/обмен"}
           </button>
           <div className="blank-2"/>
           <button className="btn btn_blue " type="button" id="dropdownMenuButton" aria-expanded="false">
@@ -77,7 +85,8 @@ class InventoryPageControls extends React.Component {
 const mapStateToProps = function(store) {
   return {
     inventoryParts: store.inventoryState.inventoryParts,
-    inventoryUsersArr: store.inventoryState.inventoryUsersArr
+    inventoryUsersArr: store.inventoryState.inventoryUsersArr,
+    inventoryTradePerform: store.inventoryState.inventoryTradePerform
   };
 };
 

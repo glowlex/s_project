@@ -1,6 +1,6 @@
 import React from 'react';
 import {keys, get} from 'lodash';
-
+import PropTypes from 'prop-types';
 import store from '../../index';
 import {addInventoryItemSelect, deleteInventoryItemSelect} from '../../actions/inventoryActions';
 import {convertRem} from '../../tools';
@@ -8,12 +8,12 @@ import {convertRem} from '../../tools';
 class InventoryPageItems extends React.Component {
 
   static propTypes = {
-    items: React.propTypes.arrayOf(React.propTypes.object).isRequired,
-    partNo: React.propTypes.string.isRequired,
-    itemsSelected: React.propTypes.object,
-    id: React.propTypes.string,
-    pageSelected: React.propTypes.number,
-    descriptions: React.propTypes.object
+    items: PropTypes.object.isRequired,
+    partNo: PropTypes.string.isRequired,
+    itemsSelected: PropTypes.object,
+    id: PropTypes.string,
+    pageSelected: PropTypes.number,
+    descriptions: PropTypes.object
   };
 
   static defaultProps = {
@@ -49,13 +49,14 @@ class InventoryPageItems extends React.Component {
 
 
   render () {
+    let nm = this.props.items
     return (
       <tbody>
         {keys(this.props.items).map((k, i) => {
           let item = this.props.items[k];
           let desc = this.props.descriptions[item.classId];
           return (
-            <tr key={item.classId} tabIndex={i}>
+            <tr key={item.classId} tabIndex={i} className={""+(item.frozen && "table-scroll_item__frozen")}>
               <th scope="col-img">
                 <img src={desc.iconUrl}  alt=""/>
               </th>
@@ -107,7 +108,7 @@ class InventoryPageItems extends React.Component {
                   <div className="table-scroll__trade__counter">
                     {get(this.props, ['itemsSelected', item.classId, 'amountSelect'], 0)}
                   </div>
-                  <div className="table-scroll__trade__arrows">
+                  <div className={"table-scroll__trade__arrows " + (item.frozen && "disable-events")}>
                     <div className="btn_blue" onClick={(e) => this.changeAmountUp(e, item, this.props.partNo)}>
                       <span className="glyphicon glyphicon-chevron-up"/>
                     </div>

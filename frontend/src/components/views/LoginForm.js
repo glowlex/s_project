@@ -1,16 +1,16 @@
 import React from 'react';
 import {Link, withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
-
+import PropTypes from 'prop-types';
 import {doLogin} from '../../actions/appActions';
 import store from '../../index';
 import * as urls from '../../constants/urlConsts';
 
 class LoginForm extends React.Component {
   static propTypes = {
-    userLoggedOn: React.propTypes.boolean,
-    userLogging: React.propTypes.boolean,
-    userLoginError: React.propTypes.boolean
+    userLoggedOn: PropTypes.boolean,
+    userLogging: PropTypes.boolean,
+    userLoginError: PropTypes.boolean
   }
 
   static defaultProps = {

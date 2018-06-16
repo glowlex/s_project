@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link, withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
-
+import PropTypes from 'prop-types';
 import store from '../../index';
 import {doReg} from '../../actions/appActions';
 import * as urls from '../../constants/urlConsts';
@@ -9,8 +9,8 @@ import * as urls from '../../constants/urlConsts';
 
 class RegForm extends React.Component {
   static propTypes = {
-    userSigningUp: React.propTypes.boolean,
-    userSignUpError: React.propTypes.boolean
+    userSigningUp: PropTypes.boolean,
+    userSignUpError: PropTypes.boolean
   }
 
   static defaultProps = {

@@ -1,13 +1,14 @@
 'use strict';
 import * as types from '../actions/actionTypes';
 import {assign, get, keys} from 'lodash';
-import {set, unset} from 'lodash/fp';
+import {set, unset, get as getfp} from 'lodash/fp';
 
 const initialState = {
   inventories: {},
   inventoryDescriptions: {},
   inventoryLoading: false,
   inventoryLoaded: false,
+  inventoryTradePerform: false,
   inventoryParts: {},
   inventoryUsersArr: [],
   inventoryUsersObj: {}
@@ -73,6 +74,19 @@ const inventoryReducer = function(state = initialState, action) {
 
     case types.INVENTORY_DESCRIPTIONS_UPDATE:
     return set('inventoryDescriptions', action.data, state);
+
+    case types.INVENTORY_OFFER_PERFORM_UPDATE:
+    return set('inventoryTradePerform', action.status, state);
+
+    case types.INVENTORY_ITEMS_SELECT_CLEAR:
+    t = get(state, ['inventoryParts',], {});
+    for(let k in t) {
+      //так не работает даже если значение из асайна
+      //t[k].itemsSelected = {};
+      t =set([k, 'itemsSelected'], {}, t);
+    }
+    t =set(['inventoryParts',], t, state);
+    return t;
 
     default:
     return state;

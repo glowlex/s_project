@@ -1,13 +1,13 @@
 import React from 'react';
-
+import PropTypes from 'prop-types';
 import store from '../../index';
 import {updateInventoryBagPage} from '../../actions/inventoryActions';
 
 export default class InventoryPagePagination extends React.Component {
   static propTypes = {
-    items: React.propTypes.number,
-    pageSelected: React.propTypes.number,
-    partNo: React.propTypes.string.isRequired
+    items: PropTypes.number,
+    pageSelected: PropTypes.number,
+    partNo: PropTypes.string.isRequired
   };
   static defaultProps = {
     items: 0,

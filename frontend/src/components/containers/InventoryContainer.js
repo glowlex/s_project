@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import InventoryPage from '../InventoryPage';
 import InventoryPageControls from '../InventoryPageControls';
@@ -14,8 +15,8 @@ class InventoryContainer extends React.Component {
   }
 
   static propTypes = {
-    inventoryLoading: React.propTypes.boolean,
-    inventoryLoaded: React.propTypes.boolean
+    inventoryLoading: PropTypes.bool,
+    inventoryLoaded: PropTypes.bool
   }
 
   constructor(props) {

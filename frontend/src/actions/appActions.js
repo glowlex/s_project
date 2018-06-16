@@ -65,6 +65,7 @@ export function doReg(login, email, pass) {
 
 export function doLogout() {
   return async (dispatch) => {
+    //TODO: logout
     dispatch(requestAppLogout());
   };
 }

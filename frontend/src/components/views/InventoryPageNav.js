@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 import {indexOf} from 'lodash';
+import PropTypes from 'prop-types';
 
 import store from '../../index';
 import {updateInventoryBag} from '../../actions/inventoryActions';
@@ -13,10 +14,10 @@ class InventoryPageNav extends React.Component {
   }
 
   static propTypes = {
-    user: React.propTypes.string.isRequired,
-    bagSelected: React.propTypes.string.isRequired,
-    bags: React.propTypes.arrayOf(React.propTypes.string).isRequired,
-    partNo: React.propTypes.string.isRequired
+    user: PropTypes.string.isRequired,
+    bagSelected: PropTypes.string.isRequired,
+    bags: PropTypes.arrayOf(PropTypes.string).isRequired,
+    partNo: PropTypes.string.isRequired
   }
 
 
