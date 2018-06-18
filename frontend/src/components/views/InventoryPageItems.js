@@ -97,6 +97,9 @@ class InventoryPageItems extends React.Component {
               </th>
               <th scope="col-amount">
                 <div >
+                  {item.amountAvailable}
+                </div>
+                <div >
                   {item.amount}
                 </div>
                 <div >

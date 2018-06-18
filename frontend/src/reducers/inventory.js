@@ -33,6 +33,9 @@ const inventoryReducer = function(state = initialState, action) {
       inventoryLoaded: action.inventoryLoaded
     });
 
+    case types.INVENTORY_UPDATE:
+    return set('inventories', action.data, state);
+
     case types.INVENTORY_BAG_UPDATE:
     //у lodash/fp аргументы идут иначе
     t = set(['inventoryParts', action.no, 'bag'], action.bagId, state);
@@ -49,7 +52,7 @@ const inventoryReducer = function(state = initialState, action) {
 
     case types.INVENTORY_ITEM_SELECT_ADD:
     amount = get(state, ['inventoryParts', action.no, 'itemsSelected', action.item.classId, 'amountSelect'], 0);
-    if(action.item.amount < amount+action.amount) {return state;}
+    if(action.item.amountAvailable < amount+action.amount) {return state;}
     amount+=action.amount;
     t = set(['inventoryParts', action.no, 'itemsSelected', action.item.classId], action.item, state);
     //так не работает

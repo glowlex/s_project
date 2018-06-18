@@ -2,8 +2,33 @@
 import * as types from './actionTypes';
 import {getInventoryApi} from '../api/inventoryApi';
 import {isEmpty, keys, assign} from 'lodash';
+import {get, has, set} from 'lodash/fp';
 import store from '../index';
+import {subjectsToHash} from 'myTools';
 
+export function updateInventory(data) {
+  let inv = get('inventories', store.getState().inventoryState);
+  for (let k in data) {
+    let ufrom = data[k].userFrom;
+    for (let i in data[k].bag.items){
+      let clid = data[k].bag.items[i].classId;
+      for (let b in inv[ufrom].bags) {
+      if (has(clid, inv[ufrom].bags[b].items)){
+        //ебануто но иначе срабатывает с 3 раза.
+        inv = set([ufrom,'bags',b,'items',clid,'amountAvailable'], inv[ufrom].bags[b].items[clid].amountAvailable-data[k].bag.items[i].amount, inv);
+        //if (inv[ufrom].bags[b].items[clid].amount<=0) {
+          //delete inv[ufrom].bags[b].items[clid];
+        //}
+        break;
+      }
+    }
+    }
+  }
+  return {
+    type: types.INVENTORY_UPDATE,
+    data: inv
+  };
+}
 export function clearInventoryItemsSelect() {
   return {
     type: types.INVENTORY_ITEMS_SELECT_CLEAR,
@@ -153,8 +178,8 @@ function normalizeDescriptions(data) {
     for(let b in data.inventories[u].bags){
       for(let k in data.inventories[u].bags[b].items) {
         data.descriptions[k] = data.descriptions[k] || {}; //TODO: решить что делать
-        data.descriptions[k].amount |= 0;
-        data.descriptions[k].amount += data.inventories[u].bags[b].items[k].amount;
+        data.descriptions[k].amount|= 0;
+        data.descriptions[k].amount+= data.inventories[u].bags[b].items[k].amount;
       }
     }
   }
@@ -167,7 +192,10 @@ function normalizeInventories(data) {
   data.descriptions = {};
   data.inventories.forEach(i => {
     i.bags.forEach(j => {
-      j.items = subjectsToHash(j.items, 'assetId');
+      j.items = subjectsToHash(j.items, 'classId');
+      for (let ch in j.items) {
+        j.items[ch].frozen = j.items[ch].amountAvailable>0 ? false: true;
+      }
     });
     i.bags = subjectsToHash(i.bags, 'name');
     for(let k in i.bags) {
@@ -180,10 +208,4 @@ function normalizeInventories(data) {
   data.inventories = subjectsToHash(data.inventories, 'user');
   data.usersArr = keys(data.inventories);
   return data;
-}
-
-function subjectsToHash(subjects, id){
-  let hash = {};
-  subjects.forEach(s => hash[s[id]] = s);
-  return hash;
 }
