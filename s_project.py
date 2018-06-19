@@ -27,9 +27,10 @@ def login():
         title = 'Sign In',
         form = form)
 
-@app.route('/api/get_users/', methods = ['GET'])
-def get_users():
-    u = get_db().get_users()
+@app.route('/api/get_accounts/', methods = ['GET'])
+def get_accounts():
+    u = get_db().get_accounts()
+    print(u)
     for i in u:
         i.pop('password')
     return jsonify({'status': 'ok', 'data': u})

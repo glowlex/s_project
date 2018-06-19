@@ -7,10 +7,10 @@ from flask import g
 import requests
 import time
 import json
-from Crypto.PublicKey.RSA import construct
+#from Crypto.PublicKey.RSA import construct
 from binascii import unhexlify
 from codecs import encode
-from Crypto.Signature import PKCS1_v1_5
+#from Crypto.Signature import PKCS1_v1_5
 import lp
 import rsa
 import base64
@@ -333,17 +333,20 @@ def parse_list_response(line):
 
 def test():
     db = DataBase()
-    us = SteamClient(lp.USERNAME, lp.PASSWORD, db)
-    db.add_user(lp.USERNAME, lp.PASSWORD, lp.ename)
-    us.db.add_cookie(lp.USERNAME, *(lp.sl))
-    us.db.add_cookie(lp.USERNAME, *(lp.sls))
-    us.db.add_cookie(lp.USERNAME, *(lp.sma))
-    us.db.add_cookie(lp.USERNAME, *(lp.srl))
-    us.get_email_authcode()
+    us = SteamClient(lp.ACCOUNTUSERNAME, lp.ACCOUNTPASSWORD, db)
+    db.add_user(lp.uname, lp.upass, lp.uemail)
+    db.add_account(lp.uname, lp.ACCOUNTUSERNAME, lp.ACCOUNTPASSWORD, lp.ename)
+    us.db.add_cookie(lp.ACCOUNTUSERNAME, *(lp.sl))
+    us.db.add_cookie(lp.ACCOUNTUSERNAME, *(lp.sls))
+    us.db.add_cookie(lp.ACCOUNTUSERNAME, *(lp.sma))
+    us.db.add_cookie(lp.ACCOUNTUSERNAME, *(lp.srl))
+    aaa = us.db.get_accounts(lp.uname)
+    ddd = us.get_inventory_from_db()
+    #us.get_email_authcode()
     return
     us.do_login()
     us.get_inventory_params()
-    db.update_user(login=lp.USERNAME, steamid = us.steamID)
+    db.update_account(login=lp.ACCOUNTUSERNAME, steamid = us.steamID)
     us.get_inventory_from_site()
     us.get_inventory_from_db()
     '''pwq = db.db.cursor().execute("select * from inventory").fetchall()

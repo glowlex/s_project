@@ -4,10 +4,10 @@ from flask import g
 import requests
 import time
 import json
-from Crypto.PublicKey.RSA import construct
+#from Crypto.PublicKey.RSA import construct
 from binascii import unhexlify
 from codecs import encode
-from Crypto.Signature import PKCS1_v1_5
+#from Crypto.Signature import PKCS1_v1_5
 import lp
 import rsa
 import base64
@@ -40,13 +40,21 @@ class DataBase:
         self.db.close()
 
     def _create_db_schema(self):
-        user_table = 'CREATE TABLE IF NOT EXISTS user (' \
+        account_table = 'CREATE TABLE IF NOT EXISTS account (' \
                      ' login VARCHAR(32) NOT NULL,' \
                      ' password VARCHAR(32) NOT NULL,' \
                      ' email VARCHAR(255) NOT NULL,' \
-                     ' money INTEGER DEFAULT 0 CHECK (money >=0),' \
+                     ' money INTEGER NOT NULL DEFAULT 0 CHECK (money >=0),' \
                      ' steamid INTEGER,' \
-                     ' CONSTRAINT user_pk PRIMARY KEY (login));'
+                     ' user VARCHAR(32) NOT NULL,' \
+                     ' CONSTRAINT pk_account PRIMARY KEY (login),'\
+                     ' CONSTRAINT fk_user FOREIGN KEY (user) REFERENCES user(login) ON DELETE CASCADE);'
+
+        user_table = 'CREATE TABLE IF NOT EXISTS user (' \
+                ' login VARCHAR(32) NOT NULL,' \
+                ' password VARCHAR(32) NOT NULL,' \
+                ' email VARCHAR(255) NOT NULL,' \
+                ' CONSTRAINT pk_user PRIMARY KEY (login));'
 
         cookie_table = 'CREATE TABLE IF NOT EXISTS cookie (' \
                        ' id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL DEFAULT 0,' \
@@ -54,14 +62,14 @@ class DataBase:
                        ' value VARCHAR(256),' \
                        ' domain VARCHAR(256),' \
                        ' login VARCHAR(32) NOT NULL,' \
-                       ' CONSTRAINT fk_user FOREIGN KEY (login) REFERENCES user(login) ON DELETE CASCADE,' \
+                       ' CONSTRAINT fk_account FOREIGN KEY (login) REFERENCES account(login) ON DELETE CASCADE,' \
                        ' CONSTRAINT cookie_un UNIQUE (login, name));'
 
         inventory_table = 'CREATE TABLE IF NOT EXISTS inventory(' \
                           ' login VARCHAR(32) NOT NULL,' \
                           ' appid INT NOT NULL,' \
                           ' amount INT NOT NULL DEFAULT 0 CHECK (amount>=0),' \
-                          ' CONSTRAINT fk_user FOREIGN KEY (login) REFERENCES user(login) ON DELETE CASCADE,' \
+                          ' CONSTRAINT fk_account FOREIGN KEY (login) REFERENCES account(login) ON DELETE CASCADE,' \
                           ' CONSTRAINT inventory_un UNIQUE (login, appid));'
 
         item_table = 'CREATE TABLE IF NOT EXISTS item(' \
@@ -98,6 +106,7 @@ class DataBase:
 
         #test
         '''self.db.cursor().execute('DROP table IF EXISTS  user')
+        self.db.cursor().execute('DROP table IF EXISTS  account')
         self.db.cursor().execute('DROP table IF EXISTS  cookie')
         self.db.cursor().execute('DROP table IF EXISTS  description')
         self.db.cursor().execute('DROP table IF EXISTS  inventory')
@@ -106,6 +115,7 @@ class DataBase:
 
         self.db.cursor().execute('PRAGMA foreign_keys = ON;')
         self.db.cursor().execute(user_table)
+        self.db.cursor().execute(account_table)
         self.db.cursor().execute(cookie_table)
         self.db.cursor().execute(inventory_table)
         self.db.cursor().execute(description_table)
@@ -127,12 +137,10 @@ class DataBase:
             self.__dict__['_table_'+name] = list([i['name'] for i in d])
         return
 
-
-    def add_user(self, login, password, email, money=None):
-        query = 'INSERT OR ABORT INTO user (login, password, email, money) ' \
-         'VALUES(?, ?, ?, ?)'
-        query_params = (login, password, email, money)
-        #self.db.cursor().execute(query, query_params)
+    def add_user(self, login, password, email):
+        query = 'INSERT OR ABORT INTO user (login, password, email) ' \
+        'VALUES(?,?,?)'
+        query_params = (login, password, email)
         try:
             self.db.cursor().execute(query, query_params)
         except sqlite3.IntegrityError as e:
@@ -141,9 +149,22 @@ class DataBase:
         self.db.commit()
         return True
 
-    def update_user(self, *args, **kwargs):
-        rr = self.get_users()
-        query = 'UPDATE user SET ' + '=?,'.join([x for x in kwargs if x != 'login']) +'=?' \
+    def add_account(self, user_login, login, password, email, money=0):
+        query = 'INSERT OR ABORT INTO account (login, password, email, money, user) ' \
+         'VALUES(?, ?, ?, ?, ?)'
+        query_params = (login, password, email, money, user_login)
+        #self.db.cursor().execute(query, query_params)
+        try:
+            self.db.cursor().execute(query, query_params)
+        except sqlite3.IntegrityError as e:
+            if e.args[0].find('UNIQUE') == -1:
+                print('add_account', e.args[0])
+        self.db.commit()
+        return True
+
+    def update_account(self, *args, **kwargs):
+        #rr = self.get_accounts()
+        query = 'UPDATE account SET ' + '=?,'.join([x for x in kwargs if x != 'login']) +'=?' \
         + ' WHERE login=?;'
         query_params = list([kwargs.get(x) for x in kwargs if x != 'login'] + [kwargs['login']])
         self.db.cursor().execute(query, query_params)
@@ -165,9 +186,9 @@ class DataBase:
         self.db.commit()
         return True
 
-    def get_users(self):
-        query = 'SELECT * FROM user'
-        r = self.db.cursor().execute(query).fetchall()
+    def get_accounts(self, login):
+        query = 'SELECT * FROM account WHERE user=?'
+        r = self.db.cursor().execute(query, (login,)).fetchall()
         return r
 
     def get_cookies(self, login):

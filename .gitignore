@@ -50,3 +50,5 @@ dist
 
 # Mac files
 .DS_Store
+
+venv
