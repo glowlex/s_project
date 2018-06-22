@@ -30,7 +30,8 @@ class Inventory{
   get_users(){
     $.ajax({
       type: 'GET',
-      url: "/api/get_users/",
+      url: "/api/get_accounts/",
+      data: {user: "luzer"},
       success: function(result) {
         this.users = result.data;
         if (this.users.length >0){

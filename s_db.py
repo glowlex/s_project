@@ -33,6 +33,13 @@ class DataBase:
             d[col[0]] = row[idx]
         return d
 
+    @staticmethod
+    def resp_to_dict_list(cursor, data):
+        r = []
+        for row in data:
+            r.append(DataBase.dict_factory(cursor, row))
+        return r
+
     def _get_db(self):
         return sqlite3.connect(DATABASE)
 
@@ -63,14 +70,23 @@ class DataBase:
                        ' domain VARCHAR(256),' \
                        ' login VARCHAR(32) NOT NULL,' \
                        ' CONSTRAINT fk_account FOREIGN KEY (login) REFERENCES account(login) ON DELETE CASCADE,' \
-                       ' CONSTRAINT cookie_un UNIQUE (login, name));'
+                       ' CONSTRAINT un_cookie UNIQUE (login, name));'
 
         inventory_table = 'CREATE TABLE IF NOT EXISTS inventory(' \
                           ' login VARCHAR(32) NOT NULL,' \
+                          ' name VARCHAR(32),' \
                           ' appid INT NOT NULL,' \
                           ' amount INT NOT NULL DEFAULT 0 CHECK (amount>=0),' \
                           ' CONSTRAINT fk_account FOREIGN KEY (login) REFERENCES account(login) ON DELETE CASCADE,' \
-                          ' CONSTRAINT inventory_un UNIQUE (login, appid));'
+                          ' CONSTRAINT un_inventory  UNIQUE (login, appid));'
+
+        bag_table = 'CREATE TABLE IF NOT EXISTS bag(' \
+                    ' from VARCHAR(32) NOT NULL,' \
+                    ' to VARCHAR(32) NOT NULL,' \
+                    ' id INT NOT NULL,' \
+                    ' CONSTRAINT fk_account FOREIGN KEY (from) REFERENCES account(login) ON DELETE CASCADE,' \
+                    ' CONSTRAINT fk_account1 FOREIGN KEY (to) REFERENCES account(login) ON DELETE CASCADE,' \
+                    ' CONSTRAINT un_bag  UNIQUE (id));'
 
         item_table = 'CREATE TABLE IF NOT EXISTS item(' \
                      ' login VARCHAR(32) NOT NULL,' \
@@ -78,11 +94,11 @@ class DataBase:
                      ' amount INT NOT NULL,' \
                      ' assetid BIGINT(20) NOT NULL,' \
                      ' classid INT NOT NULL,' \
-                     ' contextid INT NOT NULL,' \
-                     ' instanceid INT NOT NULL DEFAULT 0,' \
+                     ' bag INT,' \
                      ' CONSTRAINT fk_inventory FOREIGN KEY (login, appid) REFERENCES inventory(login, appid) ON DELETE CASCADE,' \
                      ' CONSTRAINT fk_class FOREIGN KEY (classid) REFERENCES description(classid) ON DELETE NO ACTION,' \
-                     ' CONSTRAINT item_un UNIQUE (assetid));'
+                     ' CONSTRAINT fk_bag FOREIGN KEY (bag) REFRENCES bag(id) ON DELETE NO ACTION,' \
+                     ' CONSTRAINT un_item UNIQUE (assetid));'
 
         item_index = 'CREATE INDEX IF NOT EXISTS item_index ON item (login, appid, classid);'
 
@@ -101,7 +117,7 @@ class DataBase:
                       ' market_name VARCHAR(45) NOT NULL,' \
                       ' marketable INT NOT NULL,' \
                       ' tradable INT NOT NULL,' \
-                      ' CONSTRAINT class_un UNIQUE (appid, classid));'
+                      ' CONSTRAINT un_class UNIQUE (appid, classid));'
 
 
         #test
@@ -121,6 +137,7 @@ class DataBase:
         self.db.cursor().execute(description_table)
         self.db.cursor().execute(item_table)
         self.db.cursor().execute(item_index)
+        
         #todo это чекает ключи
         self.db.cursor().execute('PRAGMA foreign_key_check;')
         ddd = self.db.cursor().execute('PRAGMA foreign_key_list(item);').fetchall()
@@ -271,10 +288,60 @@ class DataBase:
         self.db.commit()
         return
 
-    def get_inventories(self, login):
-        query = 'SELECT * FROM inventory WHERE login=?'
-        r = self.db.cursor().execute(query, (login, )).fetchall()
-        return r
+    def get_inventories(self, login, accounts):
+        nacc = []
+        if len(accounts) >1:
+            acc = self.db.cursor('SELECT login FROM account WHERE user=?', login).fetchall()
+            for k in accounts:
+                if k in acc:
+                    nacc.append(k)
+        query = 'select item.*, i.appid as bagId from user u join account a on u.login=a.user join inventory i on a.login=i.login ' \
+                'join item on (i.login=item.login and i.appid=item.appid) where u.login=? ' + ('and a.login in(?) ' if len(nacc)!=0 else '') + ' order by login, appid, classid'
+        query_params = [login,] + nacc
+        r = self.db.cursor().execute(query, query_params).fetchall()
+        return self._get_inventories_normalize(r)
+
+    def _get_inventories_normalize(self, data):
+        res = {}
+        res['inventories'] =[]
+        uobj = {}
+        bag = {}
+        lastrow = {}
+        item = {}
+        for row in data:
+            if lastrow.get('classid') != row['classid']:
+                if len(item.get('assetId', []))>0:
+                    bag['items'].append(item)
+                item = reducer(['appId', 'amount', 'classId', 'contextId', 'instanceId'], row)
+                item['assetId'] = []
+            item['assetId'].append(row['assetid']) 
+
+            if lastrow.get('bagId') != row['bagId']:
+                if len(bag.keys())>0:
+                    uobj['bags'].append(bag) 
+                bag ={}
+                bag['id'] = row['bagId']
+                #bag['name'] = row['bagName']
+                bag['items'] =[]
+                bag['itemDescriptions'] =[]
+
+            if lastrow.get('login') != row['login']:
+                if len(uobj.keys())>0:
+                    res['inventories'].append(uobj)
+                uobj = {}
+                uobj['user'] = row['login']
+                uobj['bags'] = []
+            
+            lastrow = row
+
+        if len(item.get('assetId', []))>0:
+            bag['items'].append(item)
+        if len(bag.keys())>0:
+            uobj['bags'].append(bag) 
+        if len(uobj.keys())>0:
+            res['inventories'].append(uobj)
+        return res
+
 
     def _add_inventory(self, login, appid):
         query = 'INSERT OR ABORT INTO inventory (login, appid, amount)' \
@@ -295,3 +362,10 @@ class DataBase:
             query = 'DELETE FROM inventory WHERE login = ? and appid = ?'
             self.db.cursor().executemany(query, [(login, x) for x in appids])
         self.db.commit()
+
+
+def reducer(keys, data):
+    res ={}
+    for k in keys:
+        res[k] = data[str.lower(k)]
+    return res

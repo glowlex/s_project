@@ -1,4 +1,6 @@
 flask
+flask_json
+flask_cors
 pytz
 rsa
 requests
