@@ -3,7 +3,7 @@ import {keys, get} from 'lodash';
 import PropTypes from 'prop-types';
 import store from '../../index';
 import {addInventoryItemSelect, deleteInventoryItemSelect} from '../../actions/inventoryActions';
-import {convertRem} from '../../tools';
+import {convertRem} from 'myTools';
 
 class InventoryPageItems extends React.Component {
 

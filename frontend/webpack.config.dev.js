@@ -64,6 +64,10 @@ export default {
 
     rules: [
       {
+      test: /\.json$/,
+      loader: 'json-loader'
+},
+      {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         use: {
@@ -78,6 +82,13 @@ export default {
         use: [{
           loader: 'expose-loader',
           options: 'React'
+        }]
+      },
+      {
+        test: require.resolve('axios'),
+        use: [{
+          loader: 'expose-loader',
+          options: 'axios'
         }]
       },
       {

@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Route, Redirect} from 'react-router-dom';
+import 'bootstrap';
 
 import InventoryContainer from './containers/InventoryContainer';
 import MainPage from './MainPage';
