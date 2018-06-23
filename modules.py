@@ -19,6 +19,7 @@ import datetime
 import quopri
 from imaplib import IMAP4_SSL
 import base64
+import json
 
 from s_db import DataBase
 
@@ -46,6 +47,10 @@ class SteamClient:
         self.steamID = None
         self.g_rgAppContextData = None
         self.inventory = None
+        self.test_data = {}
+        self.test_data['cookie'] = []
+        self.test_data['descriptions'] = []
+        self.test_data['assets'] = []
 
     def get_publick_key_n_timestamp(self):
         rsakey_url = LOGINURL+"/getrsakey/"
@@ -109,6 +114,7 @@ class SteamClient:
                     #TODO может разобраться с доменами
                     if n == 'sessionid':
                         continue
+                    #self.test_data['cookie'].append([self.login, n, v, self.session.cookies.list_domains()[0]])
                     self.db.add_cookie(self.login, n, v, self.session.cookies.list_domains()[0])
             return True
 
@@ -269,22 +275,38 @@ class SteamClient:
 
     def get_inventory_from_site(self):
         inventory = {}
+        invinfos = []
+        inf = {}
         for appid in self.g_rgAppContextData:
             rgContexts = self.g_rgAppContextData[appid]['rgContexts']
             inventory[appid] = {}
+            for k, v in self.g_rgAppContextData[appid].items():
+                if k != 'rgContexts':
+                    inf[k] = self.g_rgAppContextData[appid][k]
+            invinfos.append(inf)
+            inf = {}
             for rgid in rgContexts:
                 inventory[appid][rgid] = self._load_assets(appid, rgid)
                 if rgContexts[rgid]['asset_count'] != inventory[appid][rgid].get('total_inventory_count'):
                     print('get_inventory_from_site загружено не всё')
         self.inventory = inventory
-        self.save_inventory(inventory)
+        #self.save_json_to_file(self.g_rgAppContextData, 'site_data.json')
+        self.save_inventory(inventory, invinfos)
         return self.inventory
 
-    def save_inventory(self, inventory):
+    def save_inventory(self, inventory, invInfo):
+        for k in invInfo:
+            self.db.add_inventory(self.login, **k)
+        self.test_data['invInfo'] = invInfo
         for appid in inventory:
             for cid in inventory[appid]:
-                self.db.add_descriptions(inventory[appid][cid].get('descriptions', list()))
-                self.db.add_items(self.login, inventory[appid][cid].get('assets', list()))
+                #test
+                self.test_data['descriptions'].append(inventory[appid][cid].get('descriptions', list()))
+                #self.db.add_descriptions(inventory[appid][cid].get('descriptions', list()))
+                self.test_data['assets'].append(inventory[appid][cid].get('assets', list()))
+                #self.db.add_items(self.login, inventory[appid][cid].get('assets', list()))
+                #self.db.add_descriptions(self.test_data['descriptions'])
+                #self.db.add_items(self.login, self.test_data['assets'])
 
 
 
@@ -319,6 +341,23 @@ class SteamClient:
             return {}
         return result
 
+    def save_json_to_file(self, data, name = 'test_data.json'):
+        fp = open(name, 'a')
+        json.dump(data, fp)
+        fp.close()
+
+    def load_test_data(self, name = 'test_data.json'):
+        fp = open(name)
+        self.test_data = json.load(fp)
+        d =[]
+        for a in self.test_data['descriptions']:
+            d.extend(a)
+        self.test_data['descriptions'] = d
+        d =[]
+        for a in self.test_data['assets']:
+            d.extend(a)
+        self.test_data['assets'] = d
+        fp.close() 
 
 
 
@@ -331,17 +370,24 @@ def parse_list_response(line):
     return flags, delimiter, mailbox_name
 
 
+
 def test():
     db = DataBase()
+    #db.drop_db()
     us = SteamClient(lp.ACCOUNTUSERNAME, lp.ACCOUNTPASSWORD, db)
+    us.load_test_data()
     db.add_user(lp.uname, lp.upass, lp.uemail)
     db.add_account(lp.uname, lp.ACCOUNTUSERNAME, lp.ACCOUNTPASSWORD, lp.ename)
     us.db.add_cookie(lp.ACCOUNTUSERNAME, *(lp.sl))
     us.db.add_cookie(lp.ACCOUNTUSERNAME, *(lp.sls))
     us.db.add_cookie(lp.ACCOUNTUSERNAME, *(lp.sma))
     us.db.add_cookie(lp.ACCOUNTUSERNAME, *(lp.srl))
+    for k in  us.test_data['invInfo']:
+        us.db.add_inventory(us.login, **k)
+    db.add_descriptions(us.test_data['descriptions'])
+    db.add_items(us.login, us.test_data['assets'])
     aaa = us.db.get_accounts(lp.uname)
-    ddd = us.get_inventory_from_db()
+    ddd = us.db.get_inventories(lp.uname)
     #us.get_email_authcode()
     return
     us.do_login()

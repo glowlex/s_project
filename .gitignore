@@ -52,3 +52,5 @@ dist
 .DS_Store
 
 venv
+test_data.json
+site_data.json

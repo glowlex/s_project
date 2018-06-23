@@ -19,6 +19,28 @@ import base64
 
 
 DATABASE = 's.db'
+ITEM_FIELDS = {
+    'appid': 'appId',
+    'amount': 'amount',
+    'classid': 'classId'
+}
+DESCRIPTION_FIELDS = {
+    'classid': 'classId',
+    'appid': 'appId',
+    'commodity': 'commodity',
+    'currency': 'currency',
+    'icon_url': 'iconUrl',
+    'icon_url_large': 'iconUrlLarge',
+    'instanceid': 'instanceId',
+    'market_fee_app': 'marketFeeApp',
+    'name': 'name',
+    'market_hash_name': 'marketHashName', 
+    'market_marketable_restriction': 'marketMarketableRestriction', 
+    'market_name': 'marketName',
+    'marketable': 'marketable', 
+    'tradable': 'tradable'
+}
+
 class DataBase:
 
     def __init__(self):
@@ -52,10 +74,10 @@ class DataBase:
                      ' password VARCHAR(32) NOT NULL,' \
                      ' email VARCHAR(255) NOT NULL,' \
                      ' money INTEGER NOT NULL DEFAULT 0 CHECK (money >=0),' \
-                     ' steamid INTEGER,' \
+                     ' steamid INTEGER UNIQUE,' \
                      ' user VARCHAR(32) NOT NULL,' \
                      ' CONSTRAINT pk_account PRIMARY KEY (login),'\
-                     ' CONSTRAINT fk_user FOREIGN KEY (user) REFERENCES user(login) ON DELETE CASCADE);'
+                     ' CONSTRAINT fk_user_login FOREIGN KEY (user) REFERENCES user(login) ON DELETE CASCADE);'
 
         user_table = 'CREATE TABLE IF NOT EXISTS user (' \
                 ' login VARCHAR(32) NOT NULL,' \
@@ -65,40 +87,39 @@ class DataBase:
 
         cookie_table = 'CREATE TABLE IF NOT EXISTS cookie (' \
                        ' id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL DEFAULT 0,' \
-                       ' name VARCHAR(256),' \
-                       ' value VARCHAR(256),' \
-                       ' domain VARCHAR(256),' \
+                       ' name VARCHAR(255),' \
+                       ' value VARCHAR(255),' \
+                       ' domain VARCHAR(255),' \
                        ' login VARCHAR(32) NOT NULL,' \
                        ' CONSTRAINT fk_account FOREIGN KEY (login) REFERENCES account(login) ON DELETE CASCADE,' \
                        ' CONSTRAINT un_cookie UNIQUE (login, name));'
 
         inventory_table = 'CREATE TABLE IF NOT EXISTS inventory(' \
                           ' login VARCHAR(32) NOT NULL,' \
+                          ' id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL DEFAULT 0,' \
                           ' name VARCHAR(32),' \
                           ' appid INT NOT NULL,' \
-                          ' amount INT NOT NULL DEFAULT 0 CHECK (amount>=0),' \
-                          ' CONSTRAINT fk_account FOREIGN KEY (login) REFERENCES account(login) ON DELETE CASCADE,' \
+                          ' icon VARCHAR(255),' \
+                          ' inventory_logo VARCHAR(255),' \
+                          ' CONSTRAINT fk_account_login FOREIGN KEY (login) REFERENCES account(login) ON DELETE CASCADE,' \
                           ' CONSTRAINT un_inventory  UNIQUE (login, appid));'
 
         bag_table = 'CREATE TABLE IF NOT EXISTS bag(' \
-                    ' from VARCHAR(32) NOT NULL,' \
-                    ' to VARCHAR(32) NOT NULL,' \
-                    ' id INT NOT NULL,' \
-                    ' CONSTRAINT fk_account FOREIGN KEY (from) REFERENCES account(login) ON DELETE CASCADE,' \
-                    ' CONSTRAINT fk_account1 FOREIGN KEY (to) REFERENCES account(login) ON DELETE CASCADE,' \
-                    ' CONSTRAINT un_bag  UNIQUE (id));'
+                    ' sender VARCHAR(32) NOT NULL,' \
+                    ' reciver VARCHAR(32) NOT NULL,' \
+                    ' id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,' \
+                    ' CONSTRAINT fk_account_login FOREIGN KEY (sender) REFERENCES account(login) ON DELETE CASCADE,' \
+                    ' CONSTRAINT fk_account_login1 FOREIGN KEY (reciver) REFERENCES account(login) ON DELETE CASCADE);'
 
         item_table = 'CREATE TABLE IF NOT EXISTS item(' \
-                     ' login VARCHAR(32) NOT NULL,' \
-                     ' appid INT NOT NULL,' \
-                     ' amount INT NOT NULL,' \
-                     ' assetid BIGINT(20) NOT NULL,' \
+                     ' inventory_id INT NOT NULL,' \
+                     ' amount INT NOT NULL DEFAULT 1,' \
+                     ' assetid BIGINT(20) NOT NULL PRIMARY KEY,' \
                      ' classid INT NOT NULL,' \
-                     ' bag INT,' \
-                     ' CONSTRAINT fk_inventory FOREIGN KEY (login, appid) REFERENCES inventory(login, appid) ON DELETE CASCADE,' \
-                     ' CONSTRAINT fk_class FOREIGN KEY (classid) REFERENCES description(classid) ON DELETE NO ACTION,' \
-                     ' CONSTRAINT fk_bag FOREIGN KEY (bag) REFRENCES bag(id) ON DELETE NO ACTION,' \
-                     ' CONSTRAINT un_item UNIQUE (assetid));'
+                     ' bag_id INT,' \
+                     ' CONSTRAINT fk_inventory_id FOREIGN KEY (inventory_id) REFERENCES inventory(id) ON DELETE CASCADE,' \
+                     ' CONSTRAINT fk_description_classid FOREIGN KEY (classid) REFERENCES description(classid) ON DELETE NO ACTION,' \
+                     ' CONSTRAINT fk_bag_id FOREIGN KEY (bag_id) REFERENCES bag(id) ON DELETE NO ACTION);'
 
         item_index = 'CREATE INDEX IF NOT EXISTS item_index ON item (login, appid, classid);'
 
@@ -107,27 +128,16 @@ class DataBase:
                       ' appid INT NOT NULL,' \
                       ' commodity INT NOT NULL,' \
                       ' currency INT NOT NULL,' \
-                      ' icon_url VARCHAR(128) NOT NULL,' \
-                      ' icon_url_large VARCHAR(128) NOT NULL,' \
+                      ' icon_url VARCHAR(255) NOT NULL,' \
+                      ' icon_url_large VARCHAR(255) NOT NULL,' \
                       ' instanceid INT NOT NULL DEFAULT 0,' \
                       ' market_fee_app INT,' \
-                      ' name VARCHAR(45) NOT NULL,' \
-                      ' market_hash_name VARCHAR(45) NOT NULL,' \
+                      ' name VARCHAR(63) NOT NULL,' \
+                      ' market_hash_name VARCHAR(63) NOT NULL,' \
                       ' market_marketable_restriction INT,' \
-                      ' market_name VARCHAR(45) NOT NULL,' \
+                      ' market_name VARCHAR(63) NOT NULL,' \
                       ' marketable INT NOT NULL,' \
-                      ' tradable INT NOT NULL,' \
-                      ' CONSTRAINT un_class UNIQUE (appid, classid));'
-
-
-        #test
-        '''self.db.cursor().execute('DROP table IF EXISTS  user')
-        self.db.cursor().execute('DROP table IF EXISTS  account')
-        self.db.cursor().execute('DROP table IF EXISTS  cookie')
-        self.db.cursor().execute('DROP table IF EXISTS  description')
-        self.db.cursor().execute('DROP table IF EXISTS  inventory')
-        self.db.cursor().execute('DROP table IF EXISTS  item')
-        self.db.cursor().execute('DROP index IF EXISTS  item_index')'''
+                      ' tradable INT NOT NULL);'
 
         self.db.cursor().execute('PRAGMA foreign_keys = ON;')
         self.db.cursor().execute(user_table)
@@ -136,7 +146,8 @@ class DataBase:
         self.db.cursor().execute(inventory_table)
         self.db.cursor().execute(description_table)
         self.db.cursor().execute(item_table)
-        self.db.cursor().execute(item_index)
+        self.db.cursor().execute(bag_table)
+        #self.db.cursor().execute(item_index)
         
         #todo это чекает ключи
         self.db.cursor().execute('PRAGMA foreign_key_check;')
@@ -144,6 +155,17 @@ class DataBase:
         self.db.commit()
         self._add_queries_names()
         return
+
+    def drop_db(self):
+        self.db.cursor().execute('DROP table IF EXISTS user')
+        self.db.cursor().execute('DROP table IF EXISTS account')
+        self.db.cursor().execute('DROP table IF EXISTS cookie')
+        self.db.cursor().execute('DROP table IF EXISTS inventory')
+        self.db.cursor().execute('DROP table IF EXISTS description')
+        self.db.cursor().execute('DROP table IF EXISTS item')
+        self.db.cursor().execute('DROP index IF EXISTS item_index')
+        self.db.commit()
+
 
     def _add_queries_names(self):
         query = 'PRAGMA table_info({table})'
@@ -153,7 +175,7 @@ class DataBase:
             d = self.db.cursor().execute(query.format(table=name)).fetchall()
             self.__dict__['_table_'+name] = list([i['name'] for i in d])
         return
-
+#ok
     def add_user(self, login, password, email):
         query = 'INSERT OR ABORT INTO user (login, password, email) ' \
         'VALUES(?,?,?)'
@@ -163,7 +185,8 @@ class DataBase:
         except sqlite3.IntegrityError as e:
             if e.args[0].find('UNIQUE') == -1:
                 print('add_user', e.args[0])
-        self.db.commit()
+        else:
+            self.db.commit()
         return True
 
     def add_account(self, user_login, login, password, email, money=0):
@@ -176,7 +199,8 @@ class DataBase:
         except sqlite3.IntegrityError as e:
             if e.args[0].find('UNIQUE') == -1:
                 print('add_account', e.args[0])
-        self.db.commit()
+        else:
+            self.db.commit()
         return True
 
     def update_account(self, *args, **kwargs):
@@ -200,9 +224,10 @@ class DataBase:
         except sqlite3.IntegrityError as e:
             if e.args[0].find('UNIQUE') == -1:
                 print('add_cookie', e.args[0])
-        self.db.commit()
+        else:
+            self.db.commit()
         return True
-
+#ok
     def get_accounts(self, login):
         query = 'SELECT * FROM account WHERE user=?'
         r = self.db.cursor().execute(query, (login,)).fetchall()
@@ -212,18 +237,20 @@ class DataBase:
         query = 'SELECT * FROM cookie WHERE login=?'
         r = self.db.cursor().execute(query, (login,)).fetchall()
         return r
-
+#ok
     def add_items(self, login, items):
-        inv = self.get_inventories(login)
-        appids = []
+        inv = self.db.cursor().execute('select appid, id from inventory where login=?', (login,)).fetchall()
+        appids = {}
         for i in inv:
-            appids.append(str(i['appid']))
-        query = 'INSERT OR ABORT INTO item (' + ', '.join(self._table_item) + ') VALUES(' + ''.join([r'?,' for _ in self._table_item])[0:-1] + ');'
+            appids[i['appid']] = i['id']
+        names = [x for x in self._table_item]
+        query = 'INSERT OR ABORT INTO item (' + ', '.join(names) + ') VALUES(' + ''.join([r'?,' for _ in names])[0:-1] + ');'
         for i in items:
-            if not i['appid'] in appids:
-                self._add_inventory(login, i['appid'])
+            if appids.get(i['appid']) == None:
+                r = self.add_inventory(login, i['appid'])
+                appids[i['appid']] = r
             try:
-                query_params = list([login]+[i.get(x) for x in self._table_item if x != 'login'])
+                query_params = list([appids[i['appid']]]+[i.get(x) for x in names if x != 'inventory_id'])
                 self.db.cursor().execute(query, query_params)
             except sqlite3.IntegrityError as e:
                 if e.args[0].find('UNIQUE') == -1:
@@ -263,7 +290,7 @@ class DataBase:
         query = 'SELECT * FROM description'
         r = self.db.cursor().execute(query).fetchall()
         return r
-
+#ok
     def add_descriptions(self, descs):
         query = 'INSERT OR ABORT INTO description (' + ', '.join(self._table_description) + ') VALUES(' + ''.join([r'?,' for _ in self._table_description])[0:-1] + ');'
         for i in descs:
@@ -285,22 +312,24 @@ class DataBase:
         except sqlite3.IntegrityError as e:
             if e.args[0].find('UNIQUE') == -1:
                 print('add_descriptions', e.args[0])
-        self.db.commit()
+        else:
+            self.db.commit()
         return
-
-    def get_inventories(self, login, accounts):
+#ok
+    def get_inventories(self, login, accounts=[]):
         nacc = []
         if len(accounts) >1:
             acc = self.db.cursor('SELECT login FROM account WHERE user=?', login).fetchall()
             for k in accounts:
                 if k in acc:
                     nacc.append(k)
-        query = 'select item.*, i.appid as bagId from user u join account a on u.login=a.user join inventory i on a.login=i.login ' \
-                'join item on (i.login=item.login and i.appid=item.appid) where u.login=? ' + ('and a.login in(?) ' if len(nacc)!=0 else '') + ' order by login, appid, classid'
+        query = 'select a.login, item.*, i.appid as bagId, i.name as bagName, i.icon, d.* from user u join account a on u.login=a.user' \
+         ' join inventory i on a.login=i.login join item on i.id=item.inventory_id join description d on d.classid=item.classid' \
+         ' where u.login=? ' + ('and a.login in(?) ' if len(nacc)!=0 else '') + ' order by a.login, appid, classid'
         query_params = [login,] + nacc
         r = self.db.cursor().execute(query, query_params).fetchall()
         return self._get_inventories_normalize(r)
-
+#ok
     def _get_inventories_normalize(self, data):
         res = {}
         res['inventories'] =[]
@@ -308,22 +337,28 @@ class DataBase:
         bag = {}
         lastrow = {}
         item = {}
+        descs = []
         for row in data:
             if lastrow.get('classid') != row['classid']:
                 if len(item.get('assetId', []))>0:
                     bag['items'].append(item)
-                item = reducer(['appId', 'amount', 'classId', 'contextId', 'instanceId'], row)
+                item = reducer(ITEM_FIELDS, row)
                 item['assetId'] = []
+                descs.append(reducer(DESCRIPTION_FIELDS, row))
             item['assetId'].append(row['assetid']) 
 
             if lastrow.get('bagId') != row['bagId']:
                 if len(bag.keys())>0:
+                    bag['itemDescriptions'] = descs
                     uobj['bags'].append(bag) 
                 bag ={}
                 bag['id'] = row['bagId']
+                bag['name'] = row['bagName']
+                bag['icon'] = row['icon']
                 #bag['name'] = row['bagName']
                 bag['items'] =[]
                 bag['itemDescriptions'] =[]
+                descs = []
 
             if lastrow.get('login') != row['login']:
                 if len(uobj.keys())>0:
@@ -335,6 +370,7 @@ class DataBase:
             lastrow = row
 
         if len(item.get('assetId', []))>0:
+            bag['itemDescriptions'] = descs
             bag['items'].append(item)
         if len(bag.keys())>0:
             uobj['bags'].append(bag) 
@@ -342,17 +378,22 @@ class DataBase:
             res['inventories'].append(uobj)
         return res
 
-
-    def _add_inventory(self, login, appid):
-        query = 'INSERT OR ABORT INTO inventory (login, appid, amount)' \
-                'VALUES(?, ?, ?);'
-        query_params = (login, appid, 0)
+#ok
+    def add_inventory(self, login, appid, **kwargs):
+        kwargs['login'] = login
+        kwargs['appid'] = appid
+        names = [x for x in self._table_inventory if x !='id']
+        query = 'INSERT OR ABORT INTO inventory (' + ', '.join(names) + ') VALUES(' + ''.join([r'?,' for _ in names])[0:-1] + ');'
+        query_params = [kwargs.get(x) for x in names]
+        r = None
         try:
-            self.db.cursor().execute(query, query_params)
+            r = self.db.cursor().execute(query, query_params)
         except sqlite3.IntegrityError as e:
             if e.args[0].find('UNIQUE') == -1:
-                print('_add_inventory', e.args[0])
-        self.db.commit()
+                print('add_inventory', e.args[0])
+        else:
+            self.db.commit()
+        return r.lastrowid if r else None
 
     def drop_inventories(self, login, appids = None):
         if appids is None:
@@ -366,6 +407,6 @@ class DataBase:
 
 def reducer(keys, data):
     res ={}
-    for k in keys:
-        res[k] = data[str.lower(k)]
+    for k, v in keys.items():
+        res[v] = data[k]
     return res
