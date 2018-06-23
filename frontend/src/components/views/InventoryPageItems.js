@@ -58,7 +58,7 @@ class InventoryPageItems extends React.Component {
           return (
             <tr key={item.classId} tabIndex={i} className={""+(item.frozen && "table-scroll_item__frozen")}>
               <th scope="col-img">
-                <img src={desc.iconUrl}  alt=""/>
+                <img src={'https://steamcommunity-a.akamaihd.net/economy/image/' + desc.iconUrl + '/96fx96f'}  alt=""/>
               </th>
               <th scope="col-bs-amount" >
                 <div>

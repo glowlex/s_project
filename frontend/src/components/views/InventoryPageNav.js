@@ -2,6 +2,7 @@
 import React from 'react';
 import {indexOf} from 'lodash';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 import store from '../../index';
 import {updateInventoryBag} from '../../actions/inventoryActions';
@@ -17,7 +18,8 @@ class InventoryPageNav extends React.Component {
     user: PropTypes.string.isRequired,
     bagSelected: PropTypes.string.isRequired,
     bags: PropTypes.arrayOf(PropTypes.string).isRequired,
-    partNo: PropTypes.string.isRequired
+    partNo: PropTypes.string.isRequired,
+    inventories: PropTypes.object,
   }
 
 
@@ -56,7 +58,7 @@ class InventoryPageNav extends React.Component {
           </li>
           <li className="nav-item mr-auto">
             <label htmlFor="bag-name">
-              <img className="mx-2" width="32" src="./styles/img.svg" alt=""/>
+              <img className="mx-2" width="32" src={this.props.inventories[this.props.user].bags[this.props.bagSelected].icon} alt=""/>
               {this.props.bagSelected}
             </label>
           </li>
@@ -71,4 +73,10 @@ class InventoryPageNav extends React.Component {
   }
 }
 
-export default InventoryPageNav;
+const mapStateToProps = function (store) {
+  return {
+    inventories: store.inventoryState.inventories,
+  };
+};
+
+export default connect(mapStateToProps)(InventoryPageNav);
