@@ -8,9 +8,9 @@ import * as urls from '../../constants/urlConsts';
 
 class LoginForm extends React.Component {
   static propTypes = {
-    userLoggedOn: PropTypes.boolean,
-    userLogging: PropTypes.boolean,
-    userLoginError: PropTypes.boolean
+    userLoggedOn: PropTypes.bool,
+    userLogging: PropTypes.bool,
+    userLoginError: PropTypes.bool
   }
 
   static defaultProps = {

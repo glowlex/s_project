@@ -3,7 +3,7 @@ import {set} from 'lodash/fp';
 
 
 const initialState = {
-  userLoggedOn: true, //test
+  userLoggedOn: false, //test
   userLogging: false,
   userLoginError: false,
   userSigningUp: false,

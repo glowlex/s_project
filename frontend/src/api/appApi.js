@@ -1,9 +1,21 @@
 import * as testData from './testData';
+import * as urls from '../constants/urlConsts';
 
-export function doLoginApi(user, pass) {
-    user.length;
-    pass.length;
-    return Promise.resolve(testData.testLogin);
+export function doLoginApi(login, password) {
+    let req = {
+      'userInfo': {
+      login,
+      password
+    }
+    };
+    return axios.post(urls.URL_SERVER_API+urls.URL_LOGIN+'/post', req).then( (response) => {
+      if (response.data.status == 200){
+      Cookies.set('accessToken', response.data.accessToken);
+      Cookies.set('refreshToken', response.data.refreshToken);
+      Cookies.set('expires', response.data.expires);
+    }
+      return response.data;
+    });
 }
 
 export function doRegApi(login, email, pass) {
