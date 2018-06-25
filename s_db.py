@@ -70,20 +70,20 @@ class DataBase:
 
     def _create_db_schema(self):
         account_table = 'CREATE TABLE IF NOT EXISTS account (' \
-                     ' login VARCHAR(32) NOT NULL,' \
-                     ' password VARCHAR(32) NOT NULL,' \
-                     ' email VARCHAR(255) NOT NULL,' \
-                     ' money INTEGER NOT NULL DEFAULT 0 CHECK (money >=0),' \
-                     ' steamid INTEGER UNIQUE,' \
-                     ' user VARCHAR(32) NOT NULL,' \
-                     ' CONSTRAINT pk_account PRIMARY KEY (login),'\
-                     ' CONSTRAINT fk_user_login FOREIGN KEY (user) REFERENCES user(login) ON DELETE CASCADE);'
+                        ' login VARCHAR(32) NOT NULL,' \
+                        ' password VARCHAR(32) NOT NULL,' \
+                        ' email VARCHAR(255) NOT NULL,' \
+                        ' money INTEGER NOT NULL DEFAULT 0 CHECK (money >=0),' \
+                        ' steamid INTEGER UNIQUE,' \
+                        ' user VARCHAR(32) NOT NULL,' \
+                        ' CONSTRAINT pk_account PRIMARY KEY (login),'\
+                        ' CONSTRAINT fk_user_login FOREIGN KEY (user) REFERENCES user(login) ON DELETE CASCADE);'
 
         user_table = 'CREATE TABLE IF NOT EXISTS user (' \
-                ' login VARCHAR(32) NOT NULL,' \
-                ' password VARCHAR(32) NOT NULL,' \
-                ' email VARCHAR(255) NOT NULL,' \
-                ' CONSTRAINT pk_user PRIMARY KEY (login));'
+                    ' login VARCHAR(32) NOT NULL,' \
+                    ' password VARCHAR(32) NOT NULL,' \
+                    ' email VARCHAR(255) NOT NULL,' \
+                    ' CONSTRAINT pk_user PRIMARY KEY (login));'
 
         cookie_table = 'CREATE TABLE IF NOT EXISTS cookie (' \
                        ' id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL DEFAULT 0,' \
@@ -119,25 +119,32 @@ class DataBase:
                      ' bag_id INT,' \
                      ' CONSTRAINT fk_inventory_id FOREIGN KEY (inventory_id) REFERENCES inventory(id) ON DELETE CASCADE,' \
                      ' CONSTRAINT fk_description_classid FOREIGN KEY (classid) REFERENCES description(classid) ON DELETE NO ACTION,' \
-                     ' CONSTRAINT fk_bag_id FOREIGN KEY (bag_id) REFERENCES bag(id) ON DELETE NO ACTION);'
+                     ' CONSTRAINT fk_bag_id FOREIGN KEY (bag_id) REFERENCES bag(id) ON DELETE SET NULL);'
 
         item_index = 'CREATE INDEX IF NOT EXISTS item_index ON item (login, appid, classid);'
 
         description_table = 'CREATE TABLE IF NOT EXISTS description(' \
-                      ' classid INT NOT NULL UNIQUE,' \
-                      ' appid INT NOT NULL,' \
-                      ' commodity INT NOT NULL,' \
-                      ' currency INT NOT NULL,' \
-                      ' icon_url VARCHAR(255) NOT NULL,' \
-                      ' icon_url_large VARCHAR(255) NOT NULL,' \
-                      ' instanceid INT NOT NULL DEFAULT 0,' \
-                      ' market_fee_app INT,' \
-                      ' name VARCHAR(63) NOT NULL,' \
-                      ' market_hash_name VARCHAR(63) NOT NULL,' \
-                      ' market_marketable_restriction INT,' \
-                      ' market_name VARCHAR(63) NOT NULL,' \
-                      ' marketable INT NOT NULL,' \
-                      ' tradable INT NOT NULL);'
+                            ' classid INT NOT NULL UNIQUE,' \
+                            ' appid INT NOT NULL,' \
+                            ' commodity INT NOT NULL,' \
+                            ' currency INT NOT NULL,' \
+                            ' icon_url VARCHAR(255) NOT NULL,' \
+                            ' icon_url_large VARCHAR(255) NOT NULL,' \
+                            ' instanceid INT NOT NULL DEFAULT 0,' \
+                            ' market_fee_app INT,' \
+                            ' name VARCHAR(63) NOT NULL,' \
+                            ' market_hash_name VARCHAR(63) NOT NULL,' \
+                            ' market_marketable_restriction INT,' \
+                            ' market_name VARCHAR(63) NOT NULL,' \
+                            ' marketable INT NOT NULL,' \
+                            ' tradable INT NOT NULL);'
+
+        access_token_table = 'CREATE TABLE IF NOT EXISTS access_token (' \
+                            ' access_token LONGTEXT NOT NULL,' \
+                            ' refresh_token LONGTEXT NOT NULL UNIQUE,' \
+                            ' login VARCHAR(32) NOT NULL,' \
+                            ' CONSTRAINT fk_user_login FOREIGN KEY (login) REFERENCES user(login) ON DELETE CASCADE);'
+
 
         self.db.cursor().execute('PRAGMA foreign_keys = ON;')
         self.db.cursor().execute(user_table)
@@ -147,6 +154,7 @@ class DataBase:
         self.db.cursor().execute(description_table)
         self.db.cursor().execute(item_table)
         self.db.cursor().execute(bag_table)
+        self.db.cursor().execute(access_token_table)
         #self.db.cursor().execute(item_index)
         
         #todo это чекает ключи
@@ -163,6 +171,7 @@ class DataBase:
         self.db.cursor().execute('DROP table IF EXISTS inventory')
         self.db.cursor().execute('DROP table IF EXISTS description')
         self.db.cursor().execute('DROP table IF EXISTS item')
+        self.db.cursor().execute('DROP table IF EXISTS access_token')
         self.db.cursor().execute('DROP index IF EXISTS item_index')
         self.db.commit()
 
@@ -175,6 +184,44 @@ class DataBase:
             d = self.db.cursor().execute(query.format(table=name)).fetchall()
             self.__dict__['_table_'+name] = list([i['name'] for i in d])
         return
+
+    def get_access_tokens(self, login):
+        query = 'SELECT * FROM access_token WHERE login=?'
+        r = self.db.cursor().execute(query, (login,)).fetchall()
+        return r
+
+    def add_access_tokens(self, login, access, refresh):
+        query = 'INSERT OR ABORT INTO access_token (login=?, access_token=?, refresh_token=?)'
+        query_params = (login, access, refresh)
+        try:
+            r = self.db.cursor().execute(query, query_params)
+        except sqlite3.DatabaseError as e:
+            print('add_access_token', e.args[0])
+        else:
+            self.db.commit()
+        return r.lastrow if r else None
+
+    def delete_access_tokens(self, login, refresh):
+        query = 'DELETE FROM access_token WHERE login=? AND refresh_token=?'
+        try:
+            r = self.db.cursor().execute(query, (login, refresh))
+        except sqlite3.DatabaseError as e:
+            print('delete_access_token', e.args[0])
+        else:
+            self.db.commit()
+        return r.rowsaffected if r else None
+
+    def update_access_token(self, access, refresh=None):
+        query = 'UPDATE access_token SET access_token=?' + (' refresh_token=?' if refresh else '') + 'WHERE refresh_token=?'
+        query_params = (access, refresh, refresh) if refresh else (access, refresh)
+        try:
+            r = self.db.cursor().execute(query, query_params)
+        except sqlite3.DatabaseError as e:
+            print('update_access_token', e.args[0])
+        else:
+            self.db.commit()
+        return r.rowsaffected if r else None
+
 #ok
     def add_user(self, login, password, email):
         query = 'INSERT OR ABORT INTO user (login, password, email) ' \
@@ -310,8 +357,7 @@ class DataBase:
         try:
             self.db.cursor().executemany(query, query_params)
         except sqlite3.IntegrityError as e:
-            if e.args[0].find('UNIQUE') == -1:
-                print('add_descriptions', e.args[0])
+            print('delete_items', e.args[0])
         else:
             self.db.commit()
         return

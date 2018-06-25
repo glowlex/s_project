@@ -289,6 +289,29 @@ types:
   exchangeQueryComplex_DS:
     type: exchangeQueryComplex_DQ
 
+
+/access_token:
+  description: Обновить access token имея refresh token
+  /get:
+    post:
+      body:
+        application/json:
+          properties: 
+            refreshToken: string
+      responses: 
+        200:
+          body:
+            application/json:
+              properties: 
+                accessToken: string
+                refreshToken?: string
+                expires: number
+        401:
+          description: Неверный refresh token
+          body:
+            application/json:
+              type: error_S
+
 /exchange:
   description: Запросить провести обмен
   /post:
@@ -385,6 +408,9 @@ types:
                 userInfo: userInfoShort
                 userOptions: userOptions_S
                 status: string
+                accessToken: string
+                refreshToken: string
+                expires: number
         400:
           body:
             application/json:
