@@ -1,5 +1,6 @@
 import * as testData from './testData';
 import * as urls from '../constants/urlConsts';
+import Cookies from 'js-cookie';
 
 export function doLoginApi(login, password) {
     let req = {
@@ -16,6 +17,13 @@ export function doLoginApi(login, password) {
     }
       return response.data;
     });
+}
+
+export function doLogoutApi(){
+  let req = {
+    'refreshToken': Cookies.get('refreshToken')
+  };
+  return axios.post(urls.URL_SERVER_API+urls.URL_LOGOUT+'/post', req);
 }
 
 export function doRegApi(login, email, pass) {

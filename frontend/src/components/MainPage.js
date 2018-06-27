@@ -6,8 +6,9 @@ import PropTypes from 'prop-types';
 
 import {RouteWithSubRoutes} from './App';
 import store from '../index';
-import {doLogout} from '../actions/appActions';
+import {doLogout, successAppLogin} from '../actions/appActions';
 import * as urls from '../constants/urlConsts';
+import {jwt_handler} from 'myTools';
 
 class MainPage extends Component {
   static propTypes = {
@@ -23,6 +24,11 @@ class MainPage extends Component {
 
   constructor(props) {
     super(props);
+    jwt_handler(()=>{
+      store.dispatch(successAppLogin(true));
+    }, ()=> {
+      store.dispatch(doLogout());
+    });
   }
 
   componentDidMount() {

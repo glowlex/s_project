@@ -27,7 +27,10 @@ class LoginForm extends React.Component {
     let login = e.target.form.elements.namedItem("loginPage__login").value;
     let pass = e.target.form.elements.namedItem("loginPage__pass").value;
     if(!login || !pass) {
-      return;
+      // TODO: test
+      login = 'luzer';
+      pass = 'a';
+      //return;
     }
     store.dispatch(doLogin(login, pass));
   }

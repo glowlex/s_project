@@ -1,6 +1,7 @@
 import * as types from './actionTypes';
-import {doLoginApi, doRegApi} from '../api/appApi';
+import {doLoginApi, doRegApi, doLogoutApi} from '../api/appApi';
 import {has} from 'lodash';
+import Cookies from 'js-cookie';
 
 export function requestAppLogin(status) {
   return {
@@ -66,6 +67,10 @@ export function doReg(login, email, pass) {
 export function doLogout() {
   return async (dispatch) => {
     //TODO: logout
+    doLogoutApi();
+    Cookies.remove('accessToken');
+    Cookies.remove('refreshToken');
+    Cookies.remove('expires');
     dispatch(requestAppLogout());
   };
 }

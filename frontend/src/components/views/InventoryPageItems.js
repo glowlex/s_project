@@ -56,7 +56,7 @@ class InventoryPageItems extends React.Component {
           let item = this.props.items[k];
           let desc = this.props.descriptions[item.classId];
           return (
-            <tr key={item.classId} tabIndex={i} className={""+(item.frozen && "table-scroll_item__frozen")}>
+            <tr key={item.classId} tabIndex={i} title={desc.name} className={""+((item.frozen || !desc.tradable) && "table-scroll_item__frozen")}>
               <th scope="col-img">
                 <img src={'https://steamcommunity-a.akamaihd.net/economy/image/' + desc.iconUrl + '/96fx96f'}  alt=""/>
               </th>
