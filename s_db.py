@@ -191,15 +191,16 @@ class DataBase:
         return r
 
     def add_access_tokens(self, login, access, refresh):
-        query = 'INSERT OR ABORT INTO access_token (login=?, access_token=?, refresh_token=?)'
+        query = 'INSERT OR ABORT INTO access_token (login, access_token, refresh_token) values(?, ? ,?)'
         query_params = (login, access, refresh)
+        r = None
         try:
             r = self.db.cursor().execute(query, query_params)
         except sqlite3.DatabaseError as e:
             print('add_access_token', e.args[0])
         else:
             self.db.commit()
-        return r.lastrow if r else None
+        return r.lastrowid if r else None
 
     def delete_access_tokens(self, login, refresh):
         query = 'DELETE FROM access_token WHERE login=? AND refresh_token=?'
@@ -209,18 +210,29 @@ class DataBase:
             print('delete_access_token', e.args[0])
         else:
             self.db.commit()
-        return r.rowsaffected if r else None
+        return r.rowcount if r else None
 
-    def update_access_token(self, access, refresh=None):
-        query = 'UPDATE access_token SET access_token=?' + (' refresh_token=?' if refresh else '') + 'WHERE refresh_token=?'
-        query_params = (access, refresh, refresh) if refresh else (access, refresh)
+    def update_access_token(self, access, refresh):
+        query = 'UPDATE access_token SET access_token=? WHERE refresh_token=?'
+        query_params = (access, refresh)
         try:
             r = self.db.cursor().execute(query, query_params)
         except sqlite3.DatabaseError as e:
             print('update_access_token', e.args[0])
         else:
             self.db.commit()
-        return r.rowsaffected if r else None
+        return r.rowcount if r else None
+
+    def update_access_tokens(self, access, refresh):
+        query = 'UPDATE access_token SET access_token=?, refresh_token=? WHERE refresh_token=?'
+        query_params = (access, refresh, refresh)
+        try:
+            r = self.db.cursor().execute(query, query_params)
+        except sqlite3.DatabaseError as e:
+            print('update_access_tokens', e.args[0])
+        else:
+            self.db.commit()
+        return r.arraysize if r else None
 
 #ok
     def add_user(self, login, password, email):
@@ -387,6 +399,8 @@ class DataBase:
         for row in data:
             if lastrow.get('classid') != row['classid']:
                 if len(item.get('assetId', []))>0:
+                    #todo доделать
+                    item['amountAvailable'] = item['amount']
                     bag['items'].append(item)
                 item = reducer(ITEM_FIELDS, row)
                 item['assetId'] = []

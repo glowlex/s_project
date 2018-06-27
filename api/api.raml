@@ -391,6 +391,19 @@ types:
               application/json:
                 type: inventory_Bag_GS
 
+/logout:
+  /post:
+    post:
+      body:
+        application/json:
+          properties: 
+            refreshToken: string
+      responses: 
+        200:
+          body:
+            application/json:
+              
+
 /login:
   description: Аунтефикация
   /post:

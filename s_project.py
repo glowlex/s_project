@@ -2,8 +2,10 @@ from flask import Flask
 from flask import render_template, flash, redirect, g, jsonify, request
 from flask_cors import CORS, cross_origin
 from flask_json import FlaskJSON, JsonError, json_response, as_json
-from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity, create_refresh_token, decode_token, fresh_jwt_required
+from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity, \
+ create_refresh_token, decode_token, fresh_jwt_required
 import time
+import datetime
  
 import s_db
 from modules import *
@@ -11,10 +13,13 @@ from modules import *
 app = Flask(__name__)
 app.config.from_object('config')
 app.config['SECRET_KEY'] = 'lel-kek-cheburek'
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(seconds=30)
+app.config['JWT_REFRESH_TOKEN_EXPIRES'] = datetime.timedelta(seconds=600)
 jwt = JWTManager(app)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 FlaskJSON(app)
 
+REFRESH_TOKEN_OLD = 60
 
 users = {
     lp.uname: {
@@ -53,37 +58,58 @@ def login(method):
     access_token = create_access_token(identity={'login':user['login']})
     refresh = create_refresh_token({'login':user['login']})
     dc = decode_token(access_token)
-    return {'userInfo': {'login':user['login']}, 'accessToken': access_token, 'refreshToken': refresh, 'expires': dc.expires}, 200
+    get_db().add_access_tokens(dc['identity']['login'], access_token, refresh)
+    return {'userInfo': {'login':user['login']}, 'accessToken': access_token, 'refreshToken': refresh, 'expires': dc['exp']}, 200
+
+
+@app.route('/api/logout/post', methods = ['POST'])
+@as_json
+def logout():
+    jsn = request.get_json()
+    access = jsn.get('refreshToken')
+    if not access:
+        return {}, 200
+
+    decoded = decode_token(jsn['refreshToken'])
+    user = decoded['identity']
+    get_db().delete_access_tokens(user['login'], access)
+    return {}, 200
+
+
 
 
 @app.route('/api/access_token/get', methods=['POST'])
 @as_json
-def update_access_token(method):
+def update_access_token():
     jsn = request.get_json()
     tkn = check_token(jsn['refreshToken'])
     if not tkn:
-        return {}, 401
-    drt = decode_token(tkn['refresh_token'])
-    if drt['expires'] < time.time():
-        get_db().delete_access_tokens(drt['login'], tkn['refresh_token'])
-        return {}, 401
+        return {'status': 401}, 401
+
+    refresh_d = decode_token(tkn['refresh_token'])
+    identity = refresh_d['identity']
+    print(refresh_d['exp'] - time.time())
+    if refresh_d['exp'] < time.time():
+        get_db().delete_access_tokens(identity['login'], tkn['refresh_token'])
+        return {'status': 401}, 401
     
     refresh = tkn['refresh_token']
-    access = create_access_token(drt['login'])
-    if drt['expires'] - time.time() < 3600*10:
-        refresh = create_refresh_token(drt['login'])
-        get_db().add_refresh_token(drt['login'], access, refresh)
+    access = create_access_token(identity)
+    if refresh_d['exp'] - time.time() < REFRESH_TOKEN_OLD:
+        refresh = create_refresh_token(identity)
+        get_db().add_access_tokens(identity['login'], access, refresh)
     else:
-        get_db().add_refresh_token(drt['login'], access)
+        get_db().update_access_token(access, refresh)
+
     dc = decode_token(access)
-    return {'accessToken': access, 'refreshToken': refresh, 'expires': dc.expires}, 200
+    return {'accessToken': access, 'refreshToken': refresh, 'expires': dc['exp']}, 200
         
         
     
 
 def check_token(refresh):
     dc = decode_token(refresh)
-    tokns = get_db().get_access_tokens(dc['login'])
+    tokns = get_db().get_access_tokens(dc['identity']['login'])
     for k in tokns:
         if k['refresh_token'] == refresh:
             return k
@@ -123,8 +149,8 @@ def get_db_direct():
 @app.teardown_appcontext
 def close_connection(exception):
     db = getattr(g, '_database', None)
-    '''if db is not None:
-        db.close()'''
+    if db is not None:
+        db.close()
 
 
 
