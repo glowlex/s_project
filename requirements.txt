@@ -5,3 +5,5 @@ flask_jwt
 pytz
 rsa
 requests
+jsonschema
+jsonref

@@ -1,0 +1,10 @@
+{
+    "title": "itemShort",
+    "type": "object",
+    "properties": {
+        "assetId": {"type": "number"},
+        "classId": {"type": "number"},
+        "amount": {"type": "number"}
+    },
+    "required": ["classId", "amount"]
+}

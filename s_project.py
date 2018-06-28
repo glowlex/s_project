@@ -6,6 +6,11 @@ from flask_jwt_extended import JWTManager, jwt_required, create_access_token, ge
  create_refresh_token, decode_token, fresh_jwt_required
 import time
 import datetime
+from jsonschema import validate, exceptions 
+import jsonref
+from os.path import join, dirname, isfile
+from os import listdir
+
  
 import s_db
 from modules import *
@@ -20,21 +25,17 @@ cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 FlaskJSON(app)
 
 REFRESH_TOKEN_OLD = 60
-
-users = {
-    lp.uname: {
-    'login': lp.uname,
-    'password': "a",
-    'id': '112'
-    }
-}
-
+JSON_SCHEMAS = {}
 
 
 @app.before_request
 def testapp():
     #g.user = get_jwt_identity()
     pass
+
+@app.before_first_request
+def init():
+    load_json_schemas()
 
 @app.route('/')
 @app.route('/index')
@@ -47,12 +48,23 @@ def index():
         title = 'Home',
         user = user)
 
+def load_json_schemas():
+    absolute_path = join(dirname(__file__), 'schema')
+    
+    base_uri = 'file:///{}/'.format(absolute_path.replace(':', '|'))
+
+    for k in listdir(absolute_path):
+        p = join(absolute_path, k)
+        if isfile(p):
+            with open(p) as schema_file:
+                JSON_SCHEMAS[k] = jsonref.loads(schema_file.read(), base_uri=base_uri, jsonschema=True)
 
 @app.route('/api/login/<method>', methods = ['GET', 'POST'])
 @as_json
 def login(method):
     jsn = request.get_json()
-    user = users.get(jsn['userInfo']['login'])
+    t = jsn.get('userInfo', {})
+    user = get_db().get_user(t.get('login'), t.get('password'))
     if not user:
         return {}, 400
     access_token = create_access_token(identity={'login':user['login']})
@@ -104,8 +116,23 @@ def update_access_token():
     dc = decode_token(access)
     return {'accessToken': access, 'refreshToken': refresh, 'expires': dc['exp']}, 200
         
-        
-    
+
+
+@app.route('/api/exchange/<method>', methods=['POST'])
+@jwt_required
+@as_json
+def make_exchange(method):
+    user = get_jwt_identity()
+    jsn = request.get_json()
+    try:
+        validate(jsn, JSON_SCHEMAS['exchangeQueryLite_PQ.json'])
+    except exceptions.ValidationError as e:
+        print("make_exchange", e.message)
+        return {}, 400
+    else:
+        r = get_db().add_exchange(user['login'], jsn['exchangeQueries'])
+        return {'exchangeQueries': r}, 200
+
 
 def check_token(refresh):
     dc = decode_token(refresh)

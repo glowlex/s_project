@@ -374,6 +374,7 @@ def parse_list_response(line):
 def test():
     db = DataBase()
     #db.drop_db()
+    db.get_inventories(lp.uname, [lp.ACCOUNTUSERNAME,'lol'])
     us = SteamClient(lp.ACCOUNTUSERNAME, lp.ACCOUNTPASSWORD, db)
     us.load_test_data()
     db.add_user(lp.uname, lp.upass, lp.uemail)

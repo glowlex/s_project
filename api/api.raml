@@ -232,9 +232,10 @@ types:
 
   exchangeQueryLite_PQ:
     properties:
-      bag: bagShort
-      accountFrom: string
-      accountTo: string
+      senderBag: bagShort
+      receiverBag: bagShort
+      sender: string
+      receiver: string
       asap:
         type: boolean
         default: 0
@@ -246,9 +247,10 @@ types:
   exchangeQueryLite_PS:
     properties:
       id: integer
-      bag: bagShort
-      accountFrom: string
-      accountTo: string
+      senderBag: bagShort
+      receiverBag: bagShort
+      sender: string
+      receiver: string
       asap:
         type: boolean
         default: 0
@@ -256,9 +258,10 @@ types:
   exchangeQueryLite_GS:
     properties:
       id: integer
-      bag: bag
-      accountFrom: string
-      accountTo: string
+      senderBag: bag
+      receiverBag: bag
+      sender: string
+      receiver: string
       asap:
         type: boolean
         default: 0

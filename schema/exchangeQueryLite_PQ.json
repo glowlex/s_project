@@ -1,0 +1,45 @@
+{
+    "title": "exchangeQueryLite_PQ",
+    "type": "object",
+    "properties": {
+        "exchangeQueries": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "senderBag": {
+                        "type": "object",
+                        "properties":{
+                            "items": {
+                                "type": "array",
+                                "items": {
+                                "$ref": "itemShort.json"
+                                }
+                            }
+                        },
+                        "required": ["items"]
+                    },
+                    "receiverBag": {
+                        "type": "object",
+                        "properties":{
+                            "items": {
+                                "type": "array",
+                                "items": {
+                                "$ref": "itemShort.json"
+                                }
+                            }
+                        },
+                        "required": ["items"]
+                    },
+                    "sender": {"type": "string"},
+                    "receiver": {"type": "string"},
+                    "asap": {"type": "boolean"}
+                },
+                "required": ["sender", "receiver", "asap", "senderBag", "receiverBag"]
+                
+            },
+            "minItems": 1
+        }
+    },
+    "required": ["exchangeQueries"]
+}

@@ -106,10 +106,10 @@ class DataBase:
 
         bag_table = 'CREATE TABLE IF NOT EXISTS bag(' \
                     ' sender VARCHAR(32) NOT NULL,' \
-                    ' reciver VARCHAR(32) NOT NULL,' \
+                    ' receiver VARCHAR(32) NOT NULL,' \
                     ' id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,' \
                     ' CONSTRAINT fk_account_login FOREIGN KEY (sender) REFERENCES account(login) ON DELETE CASCADE,' \
-                    ' CONSTRAINT fk_account_login1 FOREIGN KEY (reciver) REFERENCES account(login) ON DELETE CASCADE);'
+                    ' CONSTRAINT fk_account_login1 FOREIGN KEY (receiver) REFERENCES account(login) ON DELETE CASCADE);'
 
         item_table = 'CREATE TABLE IF NOT EXISTS item(' \
                      ' inventory_id INT NOT NULL,' \
@@ -185,6 +185,38 @@ class DataBase:
             self.__dict__['_table_'+name] = list([i['name'] for i in d])
         return
 
+
+    def add_exchange(self, login, data):
+        accs = list_to_dict(self._get_accounts(login), 'login')
+        r = []
+        for v in data:
+            sender = accs.get(v['sender'])
+            receiver = accs.get(v['receiver'])
+            if not (sender and receiver):
+                r.append({})
+                continue
+            sitems = self._check_items_for_trade(sender, [x.classid for x in v['senderBag']['items']])
+            ritems = self._check_items_for_trade(sender, [x.classid for x in v['receiverBag']['items']])
+
+    def _check_items_for_trade(self, login, class_ids, can_trade = True, can_markt = True, free = True):
+        query = 'SELECT i.assetid FROM item i JOIN description d ON i.classid=d.classid WHERE login=?'
+        if can_trade:
+            query+=' AND d.tradable>0'
+        
+        if can_markt:
+            query+=' AND d.marketable>0'
+
+        if free:
+            query+=' AND i.bag_id IS NULL'
+
+        query+=' AND i.classid IN(' + ''.join([r'?,' for _ in class_ids])[:-1] +')'
+        query_params = [login] + class_ids
+        r = self.execute(query, query_params).fetchall()
+        return r
+
+    def execute(self, query, query_params):
+        return self.db.cursor().execute(query, query_params)
+
     def get_access_tokens(self, login):
         query = 'SELECT * FROM access_token WHERE login=?'
         r = self.db.cursor().execute(query, (login,)).fetchall()
@@ -248,6 +280,17 @@ class DataBase:
             self.db.commit()
         return True
 
+    def get_user(self, login, password):
+        query = 'SELECT * FROM user WHERE login=? AND password=?'
+        query_params = (login, password)
+        try:
+            r = self.db.cursor().execute(query, query_params).fetchall()
+        except sqlite3.IntegrityError as e:
+            print('get_user', e.args[0])
+        else:
+            return r[0] if len(r)>0 else {}
+
+
     def add_account(self, user_login, login, password, email, money=0):
         query = 'INSERT OR ABORT INTO account (login, password, email, money, user) ' \
          'VALUES(?, ?, ?, ?, ?)'
@@ -287,7 +330,7 @@ class DataBase:
             self.db.commit()
         return True
 #ok
-    def get_accounts(self, login):
+    def _get_accounts(self, login):
         query = 'SELECT * FROM account WHERE user=?'
         r = self.db.cursor().execute(query, (login,)).fetchall()
         return r
@@ -322,7 +365,7 @@ class DataBase:
         r = self.db.cursor().execute(query, (login, appid)).fetchall()
         return r
 
-    def get_items(self, login, appid = None, contextid = None):
+    def _get_items(self, login, appid = None, contextid = None, without_restrictions = None):
         query = 'SELECT * FROM item WHERE login=?'
         query_params = (login,)
         if appid is not None:
@@ -332,8 +375,11 @@ class DataBase:
         if contextid is not None:
             query += ' AND contextid=?'
             query_params += (contextid,)
+        if not without_restrictions:
+            query += ' AND bag_id IS NULL'
         r = self.db.cursor().execute(query, query_params).fetchall()
         return r
+
 
     def get_descriptions(self, login, appid, contextid = None):
         query = 'SELECT * FROM description WHERE appid=?'
@@ -377,13 +423,14 @@ class DataBase:
     def get_inventories(self, login, accounts=[]):
         nacc = []
         if len(accounts) >1:
-            acc = self.db.cursor('SELECT login FROM account WHERE user=?', login).fetchall()
+            acc = self.db.cursor().execute('SELECT login FROM account WHERE user=?', [login,]).fetchall()
+            acc = list_to_dict(acc, 'login')
             for k in accounts:
                 if k in acc:
                     nacc.append(k)
-        query = 'select a.login, item.*, i.appid as bagId, i.name as bagName, i.icon, d.* from user u join account a on u.login=a.user' \
+        query = 'SELECT a.login, item.*, i.appid as bagId, i.name as bagName, i.icon, d.* FROM user u join account a on u.login=a.user' \
          ' join inventory i on a.login=i.login join item on i.id=item.inventory_id join description d on d.classid=item.classid' \
-         ' where u.login=? ' + ('and a.login in(?) ' if len(nacc)!=0 else '') + ' order by a.login, appid, classid'
+         ' WHERE u.login=? ' + ('and a.login IN(' + ''.join(['?,' for _ in nacc])[:-1] +') ' if len(nacc)!=0 else '') + ' ORDER BY a.login, appid, classid'
         query_params = [login,] + nacc
         r = self.db.cursor().execute(query, query_params).fetchall()
         return self._get_inventories_normalize(r)
@@ -470,3 +517,9 @@ def reducer(keys, data):
     for k, v in keys.items():
         res[v] = data[k]
     return res
+
+def list_to_dict(data, field):
+    r = {}
+    for v in data:
+        r[v[field]] = v
+    return r
