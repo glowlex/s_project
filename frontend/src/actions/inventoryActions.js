@@ -9,13 +9,16 @@ import {subjectsToHash} from 'myTools';
 export function updateInventory(data) {
   let inv = get('inventories', store.getState().inventoryState);
   for (let k in data) {
-    let ufrom = data[k].userFrom;
-    for (let i in data[k].bag.items){
-      let clid = data[k].bag.items[i].classId;
+    let role = ['sender', 'receiver'];
+    for(let r in role) {
+      let ufrom = data[k][role[r]];
+      let rolebag = role[r]+'Bag';
+    for (let i in data[k][rolebag].items){
+      let clid = data[k][rolebag].items[i].classId;
       for (let b in inv[ufrom].bags) {
       if (has(clid, inv[ufrom].bags[b].items)){
         //ебануто но иначе срабатывает с 3 раза.
-        inv = set([ufrom,'bags',b,'items',clid,'amountAvailable'], inv[ufrom].bags[b].items[clid].amountAvailable-data[k].bag.items[i].amount, inv);
+        inv = set([ufrom,'bags',b,'items',clid,'amountAvailable'], inv[ufrom].bags[b].items[clid].amountAvailable-data[k][rolebag].items[i].amount, inv);
         //if (inv[ufrom].bags[b].items[clid].amount<=0) {
           //delete inv[ufrom].bags[b].items[clid];
         //}
@@ -23,6 +26,8 @@ export function updateInventory(data) {
       }
     }
     }
+  }
+
   }
   return {
     type: types.INVENTORY_UPDATE,

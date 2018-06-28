@@ -29,7 +29,7 @@ class LoginForm extends React.Component {
     if(!login || !pass) {
       // TODO: test
       login = 'luzer';
-      pass = 'a';
+      pass = 'pass';
       //return;
     }
     store.dispatch(doLogin(login, pass));

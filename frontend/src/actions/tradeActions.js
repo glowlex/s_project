@@ -55,27 +55,33 @@ function prepareTradeOffer(data) {
   if (keys.length < 2) {
     throw new Error("недостаточно участников для обмена");
   }
-  if(Object.keys(data[keys[0]].itemsSelected).length >0){
-    offers.push(_prepareTradeOfferObj(data[keys[0]].user, data[keys[1]].user, data[keys[0]].itemsSelected));
-  }
-  if(Object.keys(data[keys[1]].itemsSelected).length >0){
-    offers.push(_prepareTradeOfferObj(data[keys[1]].user, data[keys[0]].user, data[keys[1]].itemsSelected));
-  }
+
+  offers.push(_prepareTradeOfferObj(data[keys[0]].user, data[keys[1]].user, data[keys[0]].itemsSelected, data[keys[1]].itemsSelected));
+
   return offers;
 }
 
-function _prepareTradeOfferObj(ufrom, uto, items) {
+function _prepareTradeOfferObj(ufrom, uto, itemsfrom, itemsto) {
   let offer = {};
-  offer.userFrom = ufrom;
-  offer.userTo = uto;
+  offer.sender = ufrom;
+  offer.receiver = uto;
   offer.asap=true;
-  offer.bag = {};
-  offer.bag.items=[];
-  for(let k in items) {
-    let t = pick(['classId',],items[k]);
-    t.amount = items[k].amountSelect;
-    offer.bag.items.push(t);
+  offer.senderBag = {};
+  offer.senderBag.items=[];
+  for(let k in itemsfrom) {
+    let t = pick(['classId',],itemsfrom[k]);
+    t.amount = itemsfrom[k].amountSelect;
+    offer.senderBag.items.push(t);
   }
+
+  offer.receiverBag = {};
+  offer.receiverBag.items = [];
+  for(let k in itemsto) {
+    let t = pick(['classId',],itemsto[k]);
+    t.amount = itemsto[k].amountSelect;
+    offer.receiverBag.items.push(t);
+  }
+
   return offer;
 }
 

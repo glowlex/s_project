@@ -1,6 +1,7 @@
 import * as testData from './testData';
 import * as urls from '../constants/urlConsts';
 import Cookies from 'js-cookie';
+import axios from 'axios';
 
 export function doLoginApi(login, password) {
     let req = {

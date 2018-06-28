@@ -49,7 +49,6 @@ class InventoryPageItems extends React.Component {
 
 
   render () {
-    let nm = this.props.items
     return (
       <tbody>
         {keys(this.props.items).map((k, i) => {

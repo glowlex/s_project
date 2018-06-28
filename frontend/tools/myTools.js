@@ -1,7 +1,6 @@
-import store from '../src/index';
-import {requestAppLogout} from '../src/actions/appActions';
 import * as urls from '../src/constants/urlConsts';
 import Cookies from 'js-cookie';
+import axios from 'axios';
 
 export function subjectsToHash(subjects, id){
   let hash = {};

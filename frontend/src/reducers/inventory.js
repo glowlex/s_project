@@ -1,7 +1,7 @@
 'use strict';
 import * as types from '../actions/actionTypes';
 import {assign, get, keys} from 'lodash';
-import {set, unset, get as getfp} from 'lodash/fp';
+import {set, unset} from 'lodash/fp';
 
 const initialState = {
   inventories: {},

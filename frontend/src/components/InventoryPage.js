@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {keys} from 'lodash';
 
-import store from '../index';
 import InventoryPageNav from './views/InventoryPageNav';
 import InventoryPageSearch from './views/InventoryPageSearch';
 import InventoryPageItems from './views/InventoryPageItems';
